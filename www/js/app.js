@@ -18,7 +18,39 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         }
         //db = $cordovaSQLite.openDB("face.db"); For android device
         db = window.openDatabase("face.db", "1.0", "Dev Database", 10000); //To test in web browser with ionic serve
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word (id integer primary key, mot text)");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word(id INTEGER PRIMARY KEY, frenchWord TEXT, englishWord TEXT, idSignLSF INTEGER, idSignASL INTEGER,FOREIGN KEY(idSignLSF) REFERENCES sign(id), FOREIGN KEY(idSignASL) REFERENCES sign(id))");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS sign(id INTEGER PRIMARY KEY, language INTEGER, idVideo INTEGER, FOREIGN KEY(idVideo) REFERENCES video(id))");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS configuration(id INTEGER PRIMARY KEY, language INTEGER, imageURL TEXT)");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS position(id INTEGER PRIMARY KEY, positionName TEXT)");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS wording(id INTEGER PRIMARY KEY, wordID INTEGER, videoID INTEGER, subtitleID INTEGER, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(videoID) REFERENCES video(id), FOREIGN KEY(subtitleID) REFERENCES subtitle(id))");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS video(id INTEGER PRIMARY KEY, language INTEGER, videoID INTEGER, FOREIGN KEY(videoID) REFERENCES video(id))");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS video(id INTEGER PRIMARY KEY, youtubeURL TEXT, localURL TEXT)");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS subtitle(id INTEGER PRIMARY KEY, timer DATE)");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS sentenceQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, sentence TEXT, videoIDALSF INTEGER,videoIDAASL INTEGER, videoIDBLSF INTEGER, videoIDBASL INTEGER, videoIDCLSF INTEGER, videoIDCASL INTEGER, videoIDDLSF INTEGER, videoIDDASL INTEGER,goodAnswer TEXT, FOREIGN KEY(videoIDALSF) REFERENCES video(id), FOREIGN KEY(videoIDAASL) REFERENCES video(id), FOREIGN KEY(videoIDBLSF) REFERENCES video(id), FOREIGN KEY(videoIDBASL) REFERENCES video(id), FOREIGN KEY(videoIDCLSF) REFERENCES video(id), FOREIGN KEY(videoIDCASL) REFERENCES video(id), FOREIGN KEY(videoIDDLSF) REFERENCES video(id), FOREIGN KEY(videoIDDASL) REFERENCES video(id))");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS videoQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, videoIDLSF INTEGER, videoIDASL INTEGER,sentenceA TEXT, sentenceB TEXT, sentenceC TEXT, sentenceD TEXT, goodAnswer TEXT, FOREIGN KEY(videoIDLSF) REFERENCES video(id), FOREIGN KEY(videoIDASL) REFERENCES video(id))");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS genealogy(id INTEGER PRIMARY KEY, difficultyLevel INTEGER)");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS wordingWord(wordID INTEGER PRIMARY KEY, wordingID INTEGER PRIMARY KEY, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(wordingID) REFERENCES wording(id))");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS LSFDialogueWord(wordID INTEGER PRIMARY KEY, dialogueID INTEGER PRIMARY KEY, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(dialogueID) REFERENCES dialogue(id))");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS ASLDialogueWord(wordID INTEGER PRIMARY KEY, dialogueID INTEGER PRIMARY KEY, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(dialogueID) REFERENCES dialogue(id))");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS configurationSign(signID INTEGER PRIMARY KEY, configurationID INTEGER PRIMARY KEY, FOREIGN KEY(signID) REFERENCES sign(id), FOREIGN KEY(configurationID) REFERENCES configuration(id))");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS positionConfigurationSign(signID INTEGER PRIMARY KEY, configurationID INTEGER PRIMARY KEY, positionID INTEGER PRIMARY KEY, FOREIGN KEY(signID) REFERENCES sign(id), FOREIGN KEY(configurationID) REFERENCES configuration(id), FOREIGN KEY(positionID) REFERENCES position(id))");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS subtitleDialogue(dialogueID INTEGER PRIMARY KEY, subtitleID INTEGER PRIMARY KEY, FOREIGN KEY(dialogueID) REFERENCES dialogue(id), FOREIGN KEY(subtitleID) REFERENCES subtitle(id))");
     });
 });
 
