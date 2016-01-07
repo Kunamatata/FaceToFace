@@ -115,6 +115,22 @@ app.controller("LSFSearch", function($scope, $ionicLoading, $http) {
 
 });
 
+
+app.controller("ASLSearch", function($scope, $ionicLoading, $http) {
+
+    $scope.images = [];
+
+    /*Ici on chargera les images de la base de données pour affichée la grille des signes*/
+    $scope.loadImages = function() {
+        for (var i = 0; i < 48; i++) {
+            $scope.images.push({
+                src: "http://"
+            });
+        };
+    }
+
+});
+
 app.config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider.state('home', {
@@ -138,7 +154,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider.state('asl-search', {
         url: '/asl-search',
         templateUrl: 'templates/asl-search.html',
-        // controller: 'HomeCtrl'
+        controller: 'ASLSearch'
     })
 
     $stateProvider.state('en-search', {
