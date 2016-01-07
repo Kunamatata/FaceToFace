@@ -1,9 +1,12 @@
 // Ionic Starter App
 
+
+var db = null;
+
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('myApp', ['ionic']).run(function($ionicPlatform) {
+var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPlatform, $cordovaSQLite) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -13,10 +16,13 @@ var app = angular.module('myApp', ['ionic']).run(function($ionicPlatform) {
         if (window.StatusBar) {
             StatusBar.styleDefault();
         }
+        //db = $cordovaSQLite.openDB("face.db"); For android device
+        db = window.openDatabase("face.db", "1.0", "Dev Database", 10000); //To test in web browser with ionic serve
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word (id integer primary key, mot text)");
     });
 });
 
-app.controller("HomeCtrl", function($scope, $ionicLoading, $http) {
+app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite) {
 
     var list = [{
         name: 'Max',
@@ -26,22 +32,39 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http) {
         age: '22'
     }]
 
-    $scope.search = function(request) {
-        $scope.list = [];
-        $http({
-            method: 'jsonp',
-            url: 'http://api.openweathermap.org/data/2.5/weather?q=' + request + ',uk&appid=2de143494c0b295cca9337e1e96b00e0&callback=JSON_CALLBACK'
-        }).success(function(data) {
-            console.log(data);
-        })
-
-        list.forEach(function(element, index) {
-            if (request == element.name) {
-                $scope.list.push(element);
+    $scope.search = function(mot) {
+        var query = "SELECT mot FROM word WHERE mot = ?";
+        $cordovaSQLite.execute(db, query, [mot]).then(function(res) {
+            if (res.rows.length > 0) {
+                console.log("SELECTED -> " + res.rows.item(0).mot);
+            } else {
+                console.log("No results found");
             }
+        }, function(err) {
+            console.error(err);
         });
-        return $scope.list;
     };
+
+    $scope.insert = function(mot) {
+        var query = "INSERT INTO word (mot) values(?)";
+        $cordovaSQLite.execute(db, query, [mot]).then(function(res) {
+            console.log("Word successfully added -> " + res.insertId);
+        }, function(err) {
+            console.error(err);
+        });
+    }
+
+    $scope.delete = function(mot) {
+        var query = "DELETE FROM word where mot = ?";
+        $cordovaSQLite.execute(db, query, [mot]).then(function(res) {
+            console.log("Successful delete " + res);
+        }, function(err) {
+            console.error(err);
+        });
+    }
+
+    $scope.insert("Romain");
+    $scope.delete("Romain");
 
 });
 

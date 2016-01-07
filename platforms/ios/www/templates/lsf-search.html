@@ -1,0 +1,9 @@
+<ion-view view-title="">
+    <ion-content>
+        <div class="grid-container" ng-init="loadImages()">
+            <div class="col-4" ng-repeat="image in images">
+                <img ng-src="{{image.src}}" class="lsf-grid" />
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

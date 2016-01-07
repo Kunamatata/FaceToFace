@@ -30,9 +30,9 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http) {
         $scope.list = [];
         $http({
             method: 'jsonp',
-            url: 'http://api.openweathermap.org/data/2.5/weather?q='+ request +',uk&appid=2de143494c0b295cca9337e1e96b00e0&callback=JSON_CALLBACK'
+            url: 'http://api.openweathermap.org/data/2.5/weather?q=' + request + ',uk&appid=2de143494c0b295cca9337e1e96b00e0&callback=JSON_CALLBACK'
         }).success(function(data) {
-              console.log(data);
+            console.log(data);
         })
 
         list.forEach(function(element, index) {
@@ -45,6 +45,21 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http) {
 
 });
 
+app.controller("LSFSearch", function($scope, $ionicLoading, $http) {
+
+    $scope.images = [];
+
+    /*Ici on chargera les images de la base de données pour affichée la grille des signes*/
+    $scope.loadImages = function() {
+        for (var i = 0; i < 16; i++) {
+            $scope.images.push({
+                src: "http://"
+            });
+        };
+    }
+
+});
+
 app.config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider.state('home', {
@@ -53,12 +68,29 @@ app.config(function($stateProvider, $urlRouterProvider) {
         controller: 'HomeCtrl'
     })
 
-    $stateProvider.state('about', {
-        url: '/about',
-        templateUrl: 'templates/about.html',
+    $stateProvider.state('lsf-search', {
+        url: '/lsf-search',
+        templateUrl: 'templates/lsf-search.html',
+        controller: 'LSFSearch'
+    })
+
+    $stateProvider.state('fr-search', {
+        url: '/fr-search',
+        templateUrl: 'templates/fr-search.html',
         // controller: 'HomeCtrl'
     })
 
+    $stateProvider.state('asl-search', {
+        url: '/asl-search',
+        templateUrl: 'templates/asl-search.html',
+        // controller: 'HomeCtrl'
+    })
+
+    $stateProvider.state('en-search', {
+        url: '/en-search',
+        templateUrl: 'templates/en-search.html'
+            // controller: 'HomeCtrl'
+    })
     $urlRouterProvider.otherwise('/home')
 
 });
