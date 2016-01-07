@@ -74,7 +74,7 @@ app.controller("LSFSearch", function($scope, $ionicLoading, $http) {
 
     /*Ici on chargera les images de la base de données pour affichée la grille des signes*/
     $scope.loadImages = function() {
-        for (var i = 0; i < 16; i++) {
+        for (var i = 0; i < 48; i++) {
             $scope.images.push({
                 src: "http://"
             });

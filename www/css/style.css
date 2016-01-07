@@ -21,11 +21,11 @@ a {
 .lsf-grid {
     background-color: #e3e3e3;
     width: 100%;
-    height: 150px;
+    height: 125px;
 }
 
-.grid-container{
-  margin: 20px;
+.grid-container {
+    margin: 20px;
 }
 
 .col-4 {
@@ -34,14 +34,23 @@ a {
     width: calc(25% - 5px);
 }
 
+.col-8 {
+    float: left;
+    margin: 2px;
+    width: calc(12.5% - 5px);
+}
 
 .video-container {
     position: relative;
     padding-bottom: 56.25%;
-    padding-top: 30px; height: 0; overflow: hidden;
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden;
 }
 
-.video-container iframe, .video-container object, .video-container embed {
+.video-container iframe,
+.video-container object,
+.video-container embed {
     position: absolute;
     top: 0;
     left: 0;
