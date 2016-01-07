@@ -38,7 +38,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS videoQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, videoIDLSF INTEGER, videoIDASL INTEGER,sentenceA TEXT, sentenceB TEXT, sentenceC TEXT, sentenceD TEXT, goodAnswer TEXT, FOREIGN KEY(videoIDLSF) REFERENCES video(id), FOREIGN KEY(videoIDASL) REFERENCES video(id))");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS genealogy(id INTEGER PRIMARY KEY, difficultyLevel INTEGER)");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS genealogy(id INTEGER PRIMARY KEY, wordID INTEGER, frenchDescription TEXT, englishDescrption TEXT, LSFDescription TEXT, ASLDescription TEXT, FOREIGN KEY (wordID) REFERENCES word(id))");
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS wordingWord(wordID INTEGER PRIMARY KEY, wordingID INTEGER PRIMARY KEY, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(wordingID) REFERENCES wording(id))");
 
@@ -46,9 +46,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS ASLDialogueWord(wordID INTEGER PRIMARY KEY, dialogueID INTEGER PRIMARY KEY, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(dialogueID) REFERENCES dialogue(id))");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS configurationSign(signID INTEGER PRIMARY KEY, configurationID INTEGER PRIMARY KEY, FOREIGN KEY(signID) REFERENCES sign(id), FOREIGN KEY(configurationID) REFERENCES configuration(id))");
-
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS positionConfigurationSign(signID INTEGER PRIMARY KEY, configurationID INTEGER PRIMARY KEY, positionID INTEGER PRIMARY KEY, FOREIGN KEY(signID) REFERENCES sign(id), FOREIGN KEY(configurationID) REFERENCES configuration(id), FOREIGN KEY(positionID) REFERENCES position(id))");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS positionConfigurationSign(signID INTEGER PRIMARY KEY, configurationID INTEGER PRIMARY KEY, positionID INTEGER PRIMARY KEY, FOREIGN KEY(signID) REFERENCES sign(id), FOREIGN KEY(configurationID) REFERENCES configuration(id), order INTEGER, FOREIGN KEY(positionID) REFERENCES position(id))");
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS subtitleDialogue(dialogueID INTEGER PRIMARY KEY, subtitleID INTEGER PRIMARY KEY, FOREIGN KEY(dialogueID) REFERENCES dialogue(id), FOREIGN KEY(subtitleID) REFERENCES subtitle(id))");
     });
@@ -64,11 +62,68 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         age: '22'
     }]
 
-    $scope.search = function(mot) {
-        var query = "SELECT mot FROM word WHERE mot = ?";
+    /* Requêtes de recherches dans la table word */
+    $scope.searchFrenchWord = function(mot) {
+        var query = "SELECT * FROM word WHERE frenchWord = ?";
         $cordovaSQLite.execute(db, query, [mot]).then(function(res) {
             if (res.rows.length > 0) {
-                console.log("SELECTED -> " + res.rows.item(0).mot);
+                console.log("SELECTED -> " + res.rows.item(0));
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
+    $scope.searchEnglishWord = function(mot) {
+        var query = "SELECT * FROM word WHERE englishWord = ?";
+        $cordovaSQLite.execute(db, query, [mot]).then(function(res) {
+            if (res.rows.length > 0) {
+                console.log("SELECTED -> " + res.rows.item(0));
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
+
+    /* Requêtes de recherches dans la table video */
+        $scope.searchVideo = function(videoID) {
+        var query = "SELECT * FROM video WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [videoID]).then(function(res) {
+            if (res.rows.length > 0) {
+                console.log("SELECTED -> " + res.rows.item(0));
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
+    /* Requêtes de recherches dans la table configuration */
+        $scope.searchConfiguration = function(configurationID, language) {
+        var query = "SELECT * FROM configuration WHERE id = ? AND language = ?";
+        $cordovaSQLite.execute(db, query, [configurationID, language]).then(function(res) {
+            if (res.rows.length > 0) {
+                console.log("SELECTED -> " + res.rows.item(0));
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
+    /* Requêtes de recherches dans la table wording */
+        $scope.searchWordingsByWordID = function(wordID) {
+        var query = "SELECT * FROM wording WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [wordID]).then(function(res) {
+            if (res.rows.length > 0) {
+                console.log("SELECTED -> " + res.rows.item(0));
             } else {
                 console.log("No results found");
             }
