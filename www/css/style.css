@@ -57,3 +57,28 @@ a {
     width: 100%;
     height: 100%;
 }
+
+.configuration-row {
+    display: block;
+    margin: 0 auto;
+}
+
+/* Bug ici */
+
+#first-configuration {
+    position: relative;
+    float: left;
+    height: 125px;
+    width: calc(12.5% - 5px);
+    margin: 0 auto;
+    background-color: #000;
+}
+
+#second-configuration {
+    position: relative;
+    display: inline-block;
+    height: 125px;
+    margin: 0 auto;
+    width: calc(12.5% - 5px);
+    background-color: #000;
+}
