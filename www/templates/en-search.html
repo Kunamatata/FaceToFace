@@ -1,5 +1,15 @@
 <ion-view view-title="">
-    <ion-content>
+    <ion-content class="padding">
+        <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="text" placeholder="Search" ng-model="request">
+        </label>
+        <button class="button button-block button-positive" ng-click="searchEnglishWord(request)">
+            Envoyer
+        </button>
+    <div ng-repeat="pers in list">
+      {{word.frenchWord}}
+    </div>
         <p>A propos de moi</p>
         <ion-list>
             <div class="card">
