@@ -1,13 +1,5 @@
 <ion-view view-title="">
     <ion-content>
-        <div class="configuration-row">
-            <div id="first-configuration">
-                <img src="" />
-            </div>
-            <div id="second-configuration">
-                <img src="" />
-            </div>
-        </div>
         <div class="grid-container" ng-init="loadImages()">
             <div class="col-8" ng-repeat="image in images">
                 <img ng-src="{{image.src}}" class="lsf-grid" />
