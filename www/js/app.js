@@ -215,15 +215,38 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
 
 app.controller("LSFSearch", function($scope, $ionicLoading, $http) {
 
+    var _getAllFilesFromFolder = function(dir) {
+
+        var filesystem = require("fs");
+        var results = [];
+
+        filesystem.readdirSync(dir).forEach(function(file) {
+
+            file = dir+'/'+file;
+            var stat = filesystem.statSync(file);
+
+            if (stat && stat.isDirectory()) {
+                results = results.concat(_getAllFilesFromFolder(file))
+            } else results.push(file);
+
+        });
+
+        return results;
+
+    };
+
     $scope.images = [];
 
     /*Ici on chargera les images de la base de données pour affichée la grille des signes*/
     $scope.loadImages = function() {
-        for (var i = 0; i < 48; i++) {
-            $scope.images.push({
-                src: "http://"
-            });
-        };
+        if($scope.images.length == 0)
+        {
+            for (var i = 1; i < 47; i++) {
+                $scope.images.push({
+                    src: "../img/sign_config/config_" + i.toString() + ".jpg"
+                });
+            };
+        }
     }
 
 });
@@ -365,8 +388,6 @@ app.controller("WordPresentation", function($scope, $sce, $ionicLoading, $http, 
     $scope.setWordingChoice = function(number){
         SharingWordInformation.setWordingChoice(number);
     }
-
-    $scope.prepareWordInformation();
 });
 
 app.controller("WordingPresentation", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite, SharingWordInformation) {

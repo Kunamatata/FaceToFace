@@ -1,5 +1,24 @@
 <ion-view view-title="">
     <ion-content>
+      <div class="row">
+        <div class="col col-33">
+            <div class="row">
+              <img class="center" src="../img/hand.png">
+            </div>
+            <div class="row">
+              <div class="center">Première main</div>
+            </div>
+        </div>
+        <div class="col col-33 col-offset-33">
+            <div class="row">
+              <img class="center" src="../img/hand.png">
+            </div>
+            <div class="row">
+              <div class="center">Deuxième main</div>
+            </div>
+        </div>
+      </div>
+
         <div class="grid-container" ng-init="loadImages()">
             <div class="col-8" ng-repeat="image in images">
                 <img ng-src="{{image.src}}" class="lsf-grid" />
