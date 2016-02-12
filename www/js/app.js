@@ -20,10 +20,11 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         db = window.openDatabase("face.db", "1.0", "Dev Database", 10000); //To test in web browser with ionic serve
 
 /* A RETIRER *//* A RETIRER *//* A RETIRER *//* A RETIRER *//* A RETIRER *//* A RETIRER *//* A RETIRER *//* A RETIRER */
-$cordovaSQLite.execute(db, "DROP table word");
-$cordovaSQLite.execute(db, "DROP table sign");
-$cordovaSQLite.execute(db, "DROP table video");
-$cordovaSQLite.execute(db, "DROP table wording");
+//$cordovaSQLite.execute(db, "DROP table word");
+//$cordovaSQLite.execute(db, "DROP table sign");
+//$cordovaSQLite.execute(db, "DROP table video");
+//$cordovaSQLite.execute(db, "DROP table wording");
+//$cordovaSQLite.execute(db, "DROP table configuration");
 
 /*___________________*/
 
@@ -146,6 +147,17 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
+    $scope.insertConfiguration = function(language, imageURL) {
+        var query = "INSERT INTO configuration (language, imageURL) values(?, ?)";
+        $cordovaSQLite.execute(db, query, [language, imageURL]).then(function(res) {
+            console.log("Configuration successfully added -> " + res.insertId + " " + imageURL);
+            return res.insertId;
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
     $scope.deleteWord = function(mot) {
         var query = "DELETE FROM word where frenchWord = ?";
         $cordovaSQLite.execute(db, query, [mot]).then(function(res) {
@@ -197,10 +209,15 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
-    $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/Y2Ow3eqFbLg", "https://www.youtube.com/embed/2gwAR_KON90");
-    $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/Y2Ow3eqFbLg", "https://www.youtube.com/embed/2gwAR_KON90");
+    //$scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
+    //$scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
 
-    $scope.insertNewWording(1, "https://www.youtube.com/embed/Y2Ow3eqFbLg", "https://www.youtube.com/embed/2gwAR_KON90", "https://www.youtube.com/embed/B2jVbSI9H4o", "https://www.youtube.com/embed/YHL_Bk60F_4");
+    //$scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
+
+    /*for(i = 0; i < 46; i++)
+    {
+        $scope.insertConfiguration(0, "../config_" + (i+1) + ".jpg");
+    }*/
 
     /*$scope.searchFrenchWord("Romain");
     setTimeout(function(){
@@ -213,31 +230,18 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
 
 });
 
-app.controller("LSFSearch", function($scope, $ionicLoading, $http) {
-
-    var _getAllFilesFromFolder = function(dir) {
-
-        var filesystem = require("fs");
-        var results = [];
-
-        filesystem.readdirSync(dir).forEach(function(file) {
-
-            file = dir+'/'+file;
-            var stat = filesystem.statSync(file);
-
-            if (stat && stat.isDirectory()) {
-                results = results.concat(_getAllFilesFromFolder(file))
-            } else results.push(file);
-
-        });
-
-        return results;
-
-    };
+app.controller("LSFSearch", function($scope, $ionicLoading, $http, $ionicScrollDelegate) {
 
     $scope.images = [];
+    $scope.selectedHand = "";
 
-    /*Ici on chargera les images de la base de données pour affichée la grille des signes*/
+
+    // Scroll to the top of the page
+    scrollTop = function() {
+        $ionicScrollDelegate.scrollTop(true);
+    };
+
+    // Loading french sign configurations in scope.images
     $scope.loadImages = function() {
         if($scope.images.length == 0)
         {
@@ -247,7 +251,33 @@ app.controller("LSFSearch", function($scope, $ionicLoading, $http) {
                 });
             };
         }
-    }
+    };
+
+    $scope.activateSelection = function(handDivisionID)
+    {
+        $scope.selectedHand = handDivisionID;
+
+        document.getElementById("configuration-grid").style.visibility = 'visible';
+    };
+
+    $scope.configurationSelected = function(image, index)
+    {
+        if($scope.selectedHand != "")
+        {
+            document.getElementById($scope.selectedHand).style="background-image: url(" + image.src + ");";
+
+            $scope.selectedHand = "";
+
+            document.getElementById("configuration-grid").style.visibility = 'hidden';
+
+            scrollTop();
+        }
+    };
+
+    $scope.deleteChosenConfiguration = function(handDivisionID)
+    {
+        document.getElementById(handDivisionID).style="background-image: url('../img/hand.png');";
+    };
 
 });
 
@@ -433,19 +463,15 @@ app.controller("WordingPresentation", function($scope, $sce, $ionicLoading, $htt
                         {
                             case videoIDLSF1:
                                 $scope.word.wordingLSF[0] = res.rows.item(i);
-                                console.log("1");
                                 break;
                             case videoIDASL1:
                                 $scope.word.wordingASL[0] = res.rows.item(i);
-                                console.log("2");
                                 break;
                             case videoIDLSF2:
                                 $scope.word.wordingLSF[1] = res.rows.item(i);
-                                console.log("3");
                                 break;
                             case videoIDASL2:
                                 $scope.word.wordingASL[1] = res.rows.item(i);
-                                console.log("4");
                                 break;
                         }
                     }

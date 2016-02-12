@@ -25,7 +25,9 @@ a {
 }
 
 .grid-container {
-    margin: 20px;
+    padding: 20px;
+    display: inline-block;
+    width: 100%;
 }
 
 .col-4 {
@@ -37,7 +39,10 @@ a {
 .col-8 {
     float: left;
     margin: 2px;
+    height: 185px;
     width: calc(12.5% - 5px);
+    background-size: cover;
+    background-position: center center;
 }
 
 .video-container {
@@ -62,4 +67,41 @@ a {
     margin-left: auto;
     margin-right: auto;
     display: block;
+}
+
+#first-hand-picture {
+    position: relative;
+    background-image: url('../img/hand.png');
+    width: 100px;
+    height: 100px;
+    background-position: center center;
+    background-size: cover;
+}
+
+#second-hand-picture {
+    position: relative;
+    background-image: url('../img/hand.png');
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center center;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+    transform: scaleX(-1);
+    -ms-filter: "FlipH";
+    filter: FlipH;
+}
+
+.fa.fa-times {
+    position: absolute !important;
+    right: 0;
+    color: red !important;
+}
+
+@media (max-width: 768px) {
+    [class^="col-"] {
+        width: calc(25% - 5px);
+    }
 }

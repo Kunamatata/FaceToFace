@@ -2,44 +2,49 @@
 <ion-content class="padding">
 
 
-<div class="row">
-  <div class="center">
-          <button class="button button-positive" ng-click="setWordingChoice(0)" ui-sref="wording-presentation({id:word.id, number:1})">
-              Enoncé n°1
+
+  <div class="row">
+    <div class="center">
+            <button class="button button-positive" ng-click="setWordingChoice(0)" ui-sref="wording-presentation({id:word.id, number:1})">
+                Enoncé n°1
+            </button>
+            <button class="button button-positive" ng-click="setWordingChoice(1)" ui-sref="wording-presentation({id:word.id, number:2})">
+                Enoncé n°2
+            </button>
+          <button class="button button-positive" ng-click="">
+              Dialogues
           </button>
-          <button class="button button-positive" ng-click="setWordingChoice(1)" ui-sref="wording-presentation({id:word.id, number:2})">
-              Enoncé n°2
-          </button>
-        <button class="button button-positive" ng-click="">
-            Dialogues
-        </button>
-  </div>
-</div>
-
-
-<div class="row">
-
-  <div class="col">
-    <div class="row">
-        <h2>LSF</h2>
-        <img src="../img/France-Flag-icon.png">
-    </div>
-    <div class="row">
-      <iframe class="center" src="{{trustUrl(word.wordingLSF[wordingChoice].youtubeURL)}}" frameborder="0"></iframe>
     </div>
   </div>
 
-  <div class="col">
-    <div class="row">
-        <h2>ASL</h2>
-        <img src="../img/United-States-Flag-icon.png">
-    </div>
-    <div class="row">
-      <iframe class="center" src="{{trustUrl(word.wordingASL[wordingChoice].youtubeURL)}}" frameborder="0"></iframe>
-    </div>
-  </div>
 
-</div>
+  <div class="row responsive-sm">
+
+    <div class="col">
+      <div class="row">
+        <h2 class="center">LSF</h2>
+      </div>
+      <div class="row">
+        <img class="center" src="../img/France-Flag-icon.png">
+      </div>
+      <div class="row">
+        <iframe class="center" src="{{trustUrl(word.wordingLSF[wordingChoice].youtubeURL)}}" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="row">
+        <h2 class="center">ASL</h2>
+      </div>
+      <div class="row">
+        <img class="center" src="../img/United-States-Flag-icon.png">
+      </div>
+      <div class="row">
+        <iframe class="center" src="{{trustUrl(word.wordingASL[wordingChoice].youtubeURL)}}" frameborder="0"></iframe>
+      </div>
+    </div>
+
+  </div>
 
 </ion-content>
 </ion-view>
