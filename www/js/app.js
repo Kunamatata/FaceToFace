@@ -25,7 +25,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
 //$cordovaSQLite.execute(db, "DROP table video");
 //$cordovaSQLite.execute(db, "DROP table wording");
 //$cordovaSQLite.execute(db, "DROP table configuration");
-
+//$cordovaSQLite.execute(db, "DROP table dialog");
 /*___________________*/
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word(id INTEGER PRIMARY KEY, frenchWord TEXT, englishWord TEXT, idSignLSF INTEGER, idSignASL INTEGER,FOREIGN KEY(idSignLSF) REFERENCES sign(id), FOREIGN KEY(idSignASL) REFERENCES sign(id))");
@@ -48,13 +48,9 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS genealogy(id INTEGER PRIMARY KEY, wordID INTEGER, frenchDescription TEXT, englishDescrption TEXT, LSFDescription TEXT, ASLDescription TEXT, FOREIGN KEY (wordID) REFERENCES word(id))");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS LSFDialogueWord(wordID INTEGER PRIMARY KEY, dialogueID INTEGER PRIMARY KEY, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(dialogueID) REFERENCES dialogue(id))");
-
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS ASLDialogueWord(wordID INTEGER PRIMARY KEY, dialogueID INTEGER PRIMARY KEY, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(dialogueID) REFERENCES dialogue(id))");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS dialog(id INTEGER PRIMARY KEY, wordID INTEGER, language INTEGER, videoID INTEGER, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(videoID) REFERENCES video(id))");
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS positionConfigurationSign(signID INTEGER PRIMARY KEY, configurationID INTEGER PRIMARY KEY, positionID INTEGER PRIMARY KEY, FOREIGN KEY(signID) REFERENCES sign(id), FOREIGN KEY(configurationID) REFERENCES configuration(id), order INTEGER, FOREIGN KEY(positionID) REFERENCES position(id))");
-
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS subtitleDialogue(dialogueID INTEGER PRIMARY KEY, subtitleID INTEGER PRIMARY KEY, FOREIGN KEY(dialogueID) REFERENCES dialogue(id), FOREIGN KEY(subtitleID) REFERENCES subtitle(id))");
     });
 });
 
@@ -118,6 +114,33 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         var query = "INSERT INTO wording (wordID, videoIDLSF, videoIDASL) values(?, ?, ?),(?, ?, ?)";
         $cordovaSQLite.execute(db, query, [idWord, idVideoLSF1, idVideoASL1, idWord, idVideoLSF2, idVideoASL2]).then(function(res) {
             console.log("Wordings successfully added -> " + res.insertId);
+            return res.insertId;
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    // Insert new dialog and all the corresponding information
+    $scope.insertNewDialog = function(wordID, language, youtubeURL) {
+        var answer = $scope.insertDialogVideos(wordID, language, youtubeURL, $scope.insertDialog);
+    };
+
+    $scope.insertDialogVideos = function(wordID, language, youtubeURL, callback) {
+        var query = "INSERT INTO video (youtubeURL) values (?)";
+        $cordovaSQLite.execute(db, query, [youtubeURL]).then(function(res) {
+            console.log("Videos successfully added -> " + res.insertId);
+            return callback(wordID, language, res.insertId);
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.insertDialog = function(wordID, language, videoID) {
+        var query = "INSERT INTO dialog (wordID, language, videoID) VALUES(?, ?, ?)";
+        $cordovaSQLite.execute(db, query, [wordID, language, videoID]).then(function(res) {
+            console.log("Dialog successfully added -> " + res.insertId);
             return res.insertId;
         }, function(err) {
             console.error(err);
@@ -214,6 +237,8 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
 
     //$scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
 
+    //$scope.insertNewDialog(1, 1, "https://www.youtube.com/embed/yhy19VUoKAY");
+
     /*for(i = 0; i < 46; i++)
     {
         $scope.insertConfiguration(0, "../config_" + (i+1) + ".jpg");
@@ -302,6 +327,8 @@ app.factory('SharingWordInformation', function()
 {
     var word = {};
     var wordingChoice = 0;
+    var dialogChoice = 0;
+    var dialogLanguageChoice = 0;
 
         return {
         getWord: function () {
@@ -321,6 +348,22 @@ app.factory('SharingWordInformation', function()
         setWordingChoice : function(number)
         {
             wordingChoice = number;
+        },
+        getDialogChoice : function()
+        {
+            return dialogChoice;
+        },
+        setWordingChoice : function(number)
+        {
+            dialogChoice = number;
+        },
+        getDialogLanguageChoice : function()
+        {
+            return dialogLanguageChoice;
+        },
+        setDialogLanguageChoice : function(number)
+        {
+            dialogLanguageChoice = number;
         }
     };
 });
@@ -388,7 +431,7 @@ app.controller("WordPresentation", function($scope, $sce, $ionicLoading, $http, 
         var query = "SELECT language, youtubeURL, localURL FROM sign, video WHERE (sign.id = ? OR sign.id = ?) AND sign.idVideo = video.id";
             $cordovaSQLite.execute(db, query, [idSignLSF, idSignASL]).then(function(res) {
                 if (res.rows.length == 2) {
-                    console.log("searchYoutubeURLBySignIDs : SELECTED -> " + res.rows.item(0));
+                    console.log("searchYoutubeURLBySignIDs : SELECTED -> " + res.rows.length);
 
                     if(res.rows.item(0).language = 0)
                     {
@@ -432,7 +475,7 @@ app.controller("WordingPresentation", function($scope, $sce, $ionicLoading, $htt
             var query = "SELECT * FROM wording WHERE wordID = ?";
                 $cordovaSQLite.execute(db, query, [$scope.word.id]).then(function(res) {
                     if (res.rows.length > 0) {
-                        console.log("prepareWordingInformation : SELECTED -> " + res.rows.item(0));
+                        console.log("prepareWordingInformation : SELECTED -> " + res.rows.length);
 
                         $scope.searchYoutubeURLByIDs(res.rows.item(0).videoIDLSF, res.rows.item(0).videoIDASL, res.rows.item(1).videoIDLSF, res.rows.item(1).videoIDASL);
 
@@ -454,7 +497,7 @@ app.controller("WordingPresentation", function($scope, $sce, $ionicLoading, $htt
                     $scope.word.wordingLSF = [];
                     $scope.word.wordingASL = [];
 
-                    console.log("searchYoutubeURLBySignIDs : SELECTED -> " + res.rows.item(0));
+                    console.log("searchYoutubeURLBySignIDs : SELECTED -> " + res.rows.length);
 
                     for(var i = 0; i < 4; i++)
                     {
@@ -490,11 +533,59 @@ app.controller("WordingPresentation", function($scope, $sce, $ionicLoading, $htt
         return $sce.trustAsResourceUrl(url);
     }
 
+    $scope.setWord = function() {
+        SharingWordInformation.setWord($scope.word);
+    };
+
     $scope.setWordingChoice = function(number){
         SharingWordInformation.setWordingChoice(number);
     }
 
     $scope.prepareWordingInformation();
+});
+
+app.controller("DialogList", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite, SharingWordInformation) {
+
+        $scope.searchDialogs = function() {
+        $scope.word = SharingWordInformation.getWord();
+
+        // If we don't have the word's wordings information in memory, we execute a search query
+        if($scope.word.frenchDialogList == undefined && $scope.word.englishDialogList == undefined)
+        {
+            var query = "SELECT * FROM dialog WHERE wordID = ?";
+                $cordovaSQLite.execute(db, query, [$scope.word.id]).then(function(res) {
+                    if (res.rows.length > 0) {
+                        console.log("searchDialogs : SELECTED -> " + res.rows.length);
+
+                        $scope.word.frenchDialogList = [];
+                        $scope.word.englishDialogList = [];
+
+                        for(i = 0; i < res.rows.length; i++)
+                        {
+                            if(res.rows.item(i).language == 0)
+                                $scope.word.frenchDialogList.push(res.rows.item(i));
+                            else
+                                $scope.word.englishDialogList.push(res.rows.item(i));
+                        }
+
+                    } else {
+                        console.log("No results found");
+                    }
+                }, function(err) {
+                    console.error(err);
+            });
+        }
+    };
+
+    $scope.setWord = function() {
+        SharingWordInformation.setWord($scope.word);
+    };
+
+    $scope.setDialogChoice = function(number, language){
+        SharingWordInformation.setDialogChoice(number);
+        SharingWordInformation.setDialogLanguageChoice(language);
+    };
+
 });
 
 app.config(function($stateProvider, $urlRouterProvider) {
@@ -539,6 +630,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
         url: '/word/:id/wording/:number',
         templateUrl: 'templates/wording-presentation.html',
         controller: 'WordingPresentation'
+    })
+
+    $stateProvider.state('dialog-list', {
+        url: '/word/:id/dialogs/',
+        templateUrl: 'templates/dialog-list.html',
+        controller: 'DialogList'
     })
 
     $urlRouterProvider.otherwise('/home')

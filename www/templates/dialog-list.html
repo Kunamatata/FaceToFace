@@ -1,8 +1,6 @@
 <ion-view view-title="">
 <ion-content class="padding">
 
-
-
   <div class="row">
     <div class="center">
             <button class="button button-positive" ng-click="setWordChoice(); setWordingChoice(0)" ui-sref="wording-presentation({id:word.id, number:1})">
@@ -17,33 +15,28 @@
     </div>
   </div>
 
-
-  <div class="row responsive-sm">
-
+  <div class="row responsive-sm" ng-init="searchDialogs()">
     <div class="col">
-      <div class="row">
-        <h2 class="center">LSF</h2>
-      </div>
       <div class="row">
         <img class="center" src="../img/France-Flag-icon.png">
       </div>
-      <div class="row">
-        <iframe class="center" src="{{trustUrl(word.wordingLSF[wordingChoice].youtubeURL)}}" frameborder="0"></iframe>
+      <div ng-repeat="dialog in word.frenchDialogList track by $index">
+        <div class="row">
+          <a class="center">Dialogue {{$index +1}}</a>
+        </div>
       </div>
     </div>
 
     <div class="col">
       <div class="row">
-        <h2 class="center">ASL</h2>
-      </div>
-      <div class="row">
         <img class="center" src="../img/United-States-Flag-icon.png">
       </div>
-      <div class="row">
-        <iframe class="center" src="{{trustUrl(word.wordingASL[wordingChoice].youtubeURL)}}" frameborder="0"></iframe>
+      <div ng-repeat="dialog in word.englishDialogList track by $index">
+        <div class="row">
+          <a class="center">Dialogue {{$index +1}}</a>
+        </div>
       </div>
     </div>
-
   </div>
 
 </ion-content>
