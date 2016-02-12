@@ -2,38 +2,17 @@
     <ion-content class="padding">
         <label class="item item-input">
             <i class="icon ion-search placeholder-icon"></i>
-            <input type="text" placeholder="Search" ng-model="request">
+            <input type="text" placeholder="Search" ng-keyup="searchPotentialWords(request, 1)" ng-model="request">
         </label>
-        <button class="button button-block button-positive" ng-click="searchEnglishWord(request)">
+        <!--<button class="button button-block button-positive" ng-click="searchFrenchWord(request)">
             Envoyer
-        </button>
-    <div ng-repeat="pers in list">
-      {{word.frenchWord}}
+        </button>-->
+    <div ng-repeat="potentialWord in words">
+      <label class="item" ui-sref="word-presentation({id:potentialWord.id})" ng-click="setWord(potentialWord)">
+            <img src="../img/United-States-Flag-icon-little.png">
+            {{potentialWord.englishWord}}
+        </label>
     </div>
-        <p>A propos de moi</p>
-        <ion-list>
-            <div class="card">
-                <ion-item>
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/wyVM1evRxNw" frameborder="0" width="560" height="315"></iframe>
-                    </div>
-                </ion-item>
-            </div>
-            </div>
-            <div class="card">
-                <ion-item>
-                    <div class="video-container">
-                        <iframe src="https://www.youtube.com/embed/gvI2ClWqHO0" frameborder="0" width="560" height="315"></iframe>
-                    </div>
-                </ion-item>
-            </div>
-            <div class="card">
-                <ion-item>
-                    <div class="video-container">
-                        <iframe src="http://www.youtube.com/embed/uJAWaE11Jf4" frameborder="0" width="560" height="315"></iframe>
-                    </div>
-                </ion-item>
-            </div>
-        </ion-list>
     </ion-content>
 </ion-view>
+

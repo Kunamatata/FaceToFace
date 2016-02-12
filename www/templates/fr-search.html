@@ -2,7 +2,7 @@
     <ion-content class="padding">
         <label class="item item-input">
             <i class="icon ion-search placeholder-icon"></i>
-            <input type="text" placeholder="Search" ng-keyup="searchPotentialWords(request)" ng-model="request">
+            <input type="text" placeholder="Search" ng-keyup="searchPotentialWords(request, 0)" ng-model="request">
         </label>
         <!--<button class="button button-block button-positive" ng-click="searchFrenchWord(request)">
             Envoyer
@@ -11,8 +11,6 @@
       <label class="item" ui-sref="word-presentation({id:potentialWord.id})" ng-click="setWord(potentialWord)">
             <img src="../img/France-Flag-icon-little.png">
             {{potentialWord.frenchWord}}
-            <img src="../img/United-States-Flag-icon-little.png">
-            {{potentialWord.englishWord}}
         </label>
     </div>
     </ion-content>

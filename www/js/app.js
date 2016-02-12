@@ -328,13 +328,13 @@ app.factory('SharingWordInformation', function()
 app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLite, $state, SharingWordInformation) {
 
     // Search potential words which start like the
-    $scope.searchPotentialWords = function(searchedWord) {
+    $scope.searchPotentialWords = function(searchedWord, language) {
         $scope.words = [];
 
         if(searchedWord != "")
         {
-            var query = "SELECT id, englishWord, frenchWord FROM word WHERE englishWord LIKE ? OR frenchWord LIKE ?";
-            $cordovaSQLite.execute(db, query, [searchedWord + "%",searchedWord + "%"]).then(function(res) {
+            var query = "SELECT id, englishWord, frenchWord FROM word WHERE " + (language==0?"frenchWord":"englishWord") + " LIKE ?";
+            $cordovaSQLite.execute(db, query, [searchedWord + "%"]).then(function(res) {
                 if (res.rows.length > 0) {
                     console.log("SearchPotentialWords : SELECTED -> " + res.rows.length);
 
