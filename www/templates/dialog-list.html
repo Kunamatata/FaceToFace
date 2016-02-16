@@ -22,7 +22,7 @@
       </div>
       <div ng-repeat="dialog in word.frenchDialogList track by $index">
         <div class="row">
-          <a class="center">Dialogue {{$index +1}}</a>
+          <a ng-click="setDialogChoice($index,0)" ui-sref="dialog-presentation({id:word.id, language:'french', number:$index})" class="center">Dialogue {{$index +1}}</a>
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@
       </div>
       <div ng-repeat="dialog in word.englishDialogList track by $index">
         <div class="row">
-          <a class="center">Dialogue {{$index +1}}</a>
+          <a ng-click="setDialogChoice($index,1)" ui-sref="dialog-presentation({id:word.id, language:'english', number:$index})" class="center">Dialogue {{$index +1}}</a>
         </div>
       </div>
     </div>

@@ -353,7 +353,7 @@ app.factory('SharingWordInformation', function()
         {
             return dialogChoice;
         },
-        setWordingChoice : function(number)
+        setDialogChoice : function(number)
         {
             dialogChoice = number;
         },
@@ -547,34 +547,34 @@ app.controller("WordingPresentation", function($scope, $sce, $ionicLoading, $htt
 app.controller("DialogList", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite, SharingWordInformation) {
 
         $scope.searchDialogs = function() {
-        $scope.word = SharingWordInformation.getWord();
+            $scope.word = SharingWordInformation.getWord();
 
-        // If we don't have the word's wordings information in memory, we execute a search query
-        if($scope.word.frenchDialogList == undefined && $scope.word.englishDialogList == undefined)
-        {
-            var query = "SELECT * FROM dialog WHERE wordID = ?";
-                $cordovaSQLite.execute(db, query, [$scope.word.id]).then(function(res) {
-                    if (res.rows.length > 0) {
-                        console.log("searchDialogs : SELECTED -> " + res.rows.length);
+            // If we don't have the word's wordings information in memory, we execute a search query
+            if($scope.word.frenchDialogList == undefined && $scope.word.englishDialogList == undefined)
+            {
+                var query = "SELECT * FROM dialog WHERE wordID = ?";
+                    $cordovaSQLite.execute(db, query, [$scope.word.id]).then(function(res) {
+                        if (res.rows.length > 0) {
+                            console.log("searchDialogs : SELECTED -> " + res.rows.length);
 
-                        $scope.word.frenchDialogList = [];
-                        $scope.word.englishDialogList = [];
+                            $scope.word.frenchDialogList = [];
+                            $scope.word.englishDialogList = [];
 
-                        for(i = 0; i < res.rows.length; i++)
-                        {
-                            if(res.rows.item(i).language == 0)
-                                $scope.word.frenchDialogList.push(res.rows.item(i));
-                            else
-                                $scope.word.englishDialogList.push(res.rows.item(i));
+                            for(i = 0; i < res.rows.length; i++)
+                            {
+                                if(res.rows.item(i).language == 0)
+                                    $scope.word.frenchDialogList.push(res.rows.item(i));
+                                else
+                                    $scope.word.englishDialogList.push(res.rows.item(i));
+                            }
+
+                        } else {
+                            console.log("No results found");
                         }
-
-                    } else {
-                        console.log("No results found");
-                    }
-                }, function(err) {
-                    console.error(err);
-            });
-        }
+                    }, function(err) {
+                        console.error(err);
+                });
+            }
     };
 
     $scope.setWord = function() {
@@ -586,6 +586,48 @@ app.controller("DialogList", function($scope, $sce, $ionicLoading, $http, $cordo
         SharingWordInformation.setDialogLanguageChoice(language);
     };
 
+});
+
+app.controller("DialogPresentation", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite, SharingWordInformation) {
+
+    $scope.youtubeURL = {};
+
+    // Search for the youtube URL of the sign videos
+    $scope.searchYoutubeURL = function() {
+
+        $scope.word = SharingWordInformation.getWord();
+        $scope.dialogChoice = SharingWordInformation.getDialogChoice();
+        $scope.dialogLanguageChoice = SharingWordInformation.getDialogLanguageChoice();
+
+        var videoID;
+
+        // Get the video ID of the corresponding dialog
+        if($scope.dialogLanguageChoice == 0)
+            videoID = $scope.word.frenchDialogList[$scope.dialogChoice].videoID;
+        else
+            videoID = $scope.word.englishDialogList[$scope.dialogChoice].videoID;
+
+        var query = "SELECT youtubeURL, localURL FROM video WHERE id=?";
+        $cordovaSQLite.execute(db, query, [videoID]).then(function(res) {
+            if (res.rows.length == 1) {
+                console.log("searchYoutubeURLBySignIDs : SELECTED -> " + res.rows.length);
+
+                // Store the youtube url
+                $scope.youtubeURL = res.rows.item(0).youtubeURL;
+
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
+
+    // Enable to trust the URL so Angular can load the corresponding template
+    $scope.trustUrl = function(url) {
+        return $sce.trustAsResourceUrl(url);
+    };
 });
 
 app.config(function($stateProvider, $urlRouterProvider) {
@@ -636,6 +678,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
         url: '/word/:id/dialogs/',
         templateUrl: 'templates/dialog-list.html',
         controller: 'DialogList'
+    })
+
+        $stateProvider.state('dialog-presentation', {
+        url: '/word/:id/dialogs/:language/:number',
+        templateUrl: 'templates/dialog-presentation.html',
+        controller: 'DialogPresentation'
     })
 
     $urlRouterProvider.otherwise('/home')
