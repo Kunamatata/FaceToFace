@@ -1,5 +1,115 @@
-<ion-view view-title="QCM Phrases">
+<ion-view view-title="QCM Videos">
     <ion-content>
+
+    <div class="row">
+      <div class="center">
+              <button class="button button-positive" ui-sref="qcm-video({difficulty : difficultyLevel})">
+                  QCM Vidéos
+              </button>
+              <button class="button button-positive" ui-sref="qcm-sentence({difficulty : difficultyLevel})">
+                  QCM Phrases
+              </button>
+            <button class="button button-positive" ui-sref="qcm-difficulty-selection">
+                Choix du niveau
+            </button>
+      </div>
+    </div>
+
+      <button id="buttonAnswerA" class="button button-block button-positive button-qcm" ng-disabled="buttonsDisabled" ng-click="checkVideoQCMAnswer('A', 'buttonAnswerA')">
+        <div class="row row-center">
+
+          <div class="col col-10">
+            <h1>A</h1>
+          </div>
+
+          <div class="col">
+
+              <div class="row">
+                English : {{actualQuestion.englishSentenceA}}
+              </div>
+              <div class="row">
+                French : {{actualQuestion.frenchSentenceA}}
+
+            </div>
+          </div>
+
+        </div>
+      </button>
+
+
+      <button id="buttonAnswerB" class="button button-block button-positive button-qcm" ng-disabled="buttonsDisabled" ng-click="checkVideoQCMAnswer('B', 'buttonAnswerB')">
+        <div class="row row-center">
+
+          <div class="col col-10">
+            <h1>B</h1>
+          </div>
+
+          <div class="col">
+
+              <div class="row">
+                English : {{actualQuestion.englishSentenceB}}
+              </div>
+              <div class="row">
+                French : {{actualQuestion.frenchSentenceB}}
+
+            </div>
+          </div>
+
+        </div>
+      </button>
+
+      <button id="buttonAnswerC" class="button button-block button-positive button-qcm" ng-disabled="buttonsDisabled" ng-click="checkVideoQCMAnswer('C', 'buttonAnswerC')">
+        <div class="row row-center">
+
+          <div class="col col-10">
+            <h1>C</h1>
+          </div>
+
+          <div class="col">
+
+              <div class="row">
+                English : {{actualQuestion.englishSentenceC}}
+              </div>
+              <div class="row">
+                French : {{actualQuestion.frenchSentenceC}}
+
+            </div>
+          </div>
+
+        </div>
+      </button>
+
+      <button id="buttonAnswerD" class="button button-block button-positive button-qcm" ng-disabled="buttonsDisabled" ng-click="checkVideoQCMAnswer('D', 'buttonAnswerD')">
+        <div class="row row-center">
+
+          <div class="col col-10">
+            <h1>D</h1>
+          </div>
+
+          <div class="col">
+
+              <div class="row">
+                English : {{actualQuestion.englishSentenceD}}
+              </div>
+              <div class="row">
+                French : {{actualQuestion.frenchSentenceD}}
+
+            </div>
+          </div>
+
+        </div>
+      </button>
+
+      <button id="buttonResult" class="button center" style="visibility: hidden;" ng-click="updateVideoQCM()" ng-init="loadVideoQuestions()"></button>
+
+      <div class="row">
+        <div class="col">
+          <iframe id="videoLSF" class="center" src="{{trustUrl(videoLSF.youtubeURL)}}" frameborder="0"></iframe>
+        </div>
+        <div class="col">
+          <iframe id="videoASL" class="center" src="{{trustUrl(videoASL.youtubeURL)}}" frameborder="0"></iframe>
+        </div>
+      </div>
 
     </ion-content>
 </ion-view>

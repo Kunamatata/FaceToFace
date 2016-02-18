@@ -109,6 +109,17 @@ a {
     color: red !important;
 }
 
+.flex-center{
+    display: flex;
+    align-items: center;
+    justify-content : center;
+}
+
+.button-qcm{
+    padding-left: 0;
+    padding-right: 0;
+}
+
 @media (max-width: 768px) {
     [class^="col-"] {
         width: calc(25% - 5px);

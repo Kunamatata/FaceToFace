@@ -27,6 +27,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
 //$cordovaSQLite.execute(db, "DROP table configuration");
 //$cordovaSQLite.execute(db, "DROP table dialog");
 //$cordovaSQLite.execute(db, "DROP table genealogy");
+//$cordovaSQLite.execute(db, "DROP table videoQCM");
 /*___________________*/
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word(id INTEGER PRIMARY KEY, frenchWord TEXT, englishWord TEXT, idSignLSF INTEGER, idSignASL INTEGER,FOREIGN KEY(idSignLSF) REFERENCES sign(id), FOREIGN KEY(idSignASL) REFERENCES sign(id))");
@@ -45,7 +46,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS sentenceQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, sentence TEXT, videoIDALSF INTEGER,videoIDAASL INTEGER, videoIDBLSF INTEGER, videoIDBASL INTEGER, videoIDCLSF INTEGER, videoIDCASL INTEGER, videoIDDLSF INTEGER, videoIDDASL INTEGER,goodAnswer TEXT, FOREIGN KEY(videoIDALSF) REFERENCES video(id), FOREIGN KEY(videoIDAASL) REFERENCES video(id), FOREIGN KEY(videoIDBLSF) REFERENCES video(id), FOREIGN KEY(videoIDBASL) REFERENCES video(id), FOREIGN KEY(videoIDCLSF) REFERENCES video(id), FOREIGN KEY(videoIDCASL) REFERENCES video(id), FOREIGN KEY(videoIDDLSF) REFERENCES video(id), FOREIGN KEY(videoIDDASL) REFERENCES video(id))");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS videoQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, videoIDLSF INTEGER, videoIDASL INTEGER,sentenceA TEXT, sentenceB TEXT, sentenceC TEXT, sentenceD TEXT, goodAnswer TEXT, FOREIGN KEY(videoIDLSF) REFERENCES video(id), FOREIGN KEY(videoIDASL) REFERENCES video(id))");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS videoQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, videoIDLSF INTEGER, videoIDASL INTEGER, englishSentenceA TEXT, frenchSentenceA TEXT, englishSentenceB TEXT, frenchSentenceB TEXT, englishSentenceC TEXT, frenchSentenceC TEXT, englishSentenceD TEXT, frenchSentenceD TEXT, goodAnswer TEXT, FOREIGN KEY(videoIDLSF) REFERENCES video(id), FOREIGN KEY(videoIDASL) REFERENCES video(id))");
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS genealogy(id INTEGER PRIMARY KEY, wordID INTEGER, frenchDescription TEXT, englishDescrption TEXT, videoIDLSFDescription INTEGER, videoIDASLDescription INTEGER, FOREIGN KEY (wordID) REFERENCES word(id),FOREIGN KEY (videoIDLSFDescription) REFERENCES video(id), FOREIGN KEY (videoIDASLDescription) REFERENCES video(id))");
 
@@ -132,6 +133,37 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         $cordovaSQLite.execute(db, query, [youtubeURL]).then(function(res) {
             console.log("Videos successfully added -> " + res.insertId);
             return callback(wordID, language, res.insertId);
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    //Insert new video QCM and all the corresponding information
+    $scope.insertNewVideoQCM = function(difficultyLevel, youtubeURLLSF, youtubeURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer) {
+        $scope.insertVideoQCMVideos(difficultyLevel, youtubeURLLSF, youtubeURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer, $scope.insertVideoQCM);
+    };
+
+    $scope.insertVideoQCMVideos = function(difficultyLevel, youtubeURLLSF, youtubeURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer, callback)
+    {
+        var query = "INSERT INTO video (youtubeURL) values (?),(?)";
+        $cordovaSQLite.execute(db, query, [youtubeURLLSF, youtubeURLASL]).then(function(res) {
+            console.log("VideoQCM successfully added -> " + res.insertId);
+            return callback(difficultyLevel, res.insertId -1, res.insertId, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer);
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.insertVideoQCM = function(difficultyLevel, videoIDLSF, videoIDASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer) {
+        var query = "INSERT INTO videoQCM (difficultyLevel, videoIDLSF, videoIDASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $cordovaSQLite.execute(db, query, [difficultyLevel, videoIDLSF, videoIDASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer]).then(function(res) {
+
+            console.log("Videos successfully added -> " + res.insertId);
+
+            return res.insertId;
+
         }, function(err) {
             console.error(err);
             return -1;
@@ -244,6 +276,8 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
     {
         $scope.insertConfiguration(0, "../config_" + (i+1) + ".jpg");
     }*/
+
+    //$scope.insertNewVideoQCM(1, "https://www.youtube.com/embed/9mp2E58UlR4", "https://www.youtube.com/embed/YVP6M2u2sf0", "Maybe", "Peut-être", "Not sure", "Pas sûr", "Oh yes", "Oh oui", "Cat", "Chat", "B");
 
     /*$scope.searchFrenchWord("Romain");
     setTimeout(function(){
@@ -648,17 +682,72 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
     var videoQCMList = [];
     var sentenceQCMList = [];
 
+    $scope.actualQuestion = {};
+    $scope.buttonsDisabled = false;
+
+    // Check the answer given by the user
+    $scope.checkVideoQCMAnswer = function (userAnswer, buttonAnswerID) {
+
+        // If the user had the good answer, tells him he is correct
+        if(userAnswer == $scope.actualQuestion.goodAnswer)
+        {
+            document.getElementById(buttonAnswerID).style.backgroundColor = "#2BBD2D";
+            document.getElementById("buttonResult").style.backgroundColor = "#2BBD2D";
+            document.getElementById("buttonResult").innerHTML = "Correct !";
+        }
+        // If he's uncorrect, tells him and show him the good answer
+        else
+        {
+            document.getElementById(buttonAnswerID).style.backgroundColor = "#C00000";
+            document.getElementById("buttonResult").style.backgroundColor = "#C00000"
+            document.getElementById("buttonAnswer" + $scope.actualQuestion.goodAnswer).style.backgroundColor = "#2BBD2D";
+            document.getElementById("buttonResult").innerHTML = "Uncorrect !";
+        }
+
+        // Disable click on buttons
+        $scope.buttonsDisabled = true;
+
+        document.getElementById("buttonResult").style.visibility = 'visible';
+    };
+
+    // Ask a new video QCM question to the user
     $scope.updateVideoQCM = function () {
+
+        // Enable click on buttons
+        $scope.buttonsDisabled = false;
+
+        // Reset all the buttons states
+        document.getElementById("buttonResult").style.visibility = 'hidden';
+        document.getElementById("buttonAnswerA").style.backgroundColor = "";
+        document.getElementById("buttonAnswerB").style.backgroundColor = "";
+        document.getElementById("buttonAnswerC").style.backgroundColor = "";
+        document.getElementById("buttonAnswerD").style.backgroundColor = "";
+
+        // Choose a random question between all the available ones
+        var numberChosen = parseInt((Math.random()*videoQCMList.length))%videoQCMList.length;
+
+        if(videoQCMList[numberChosen].id == $scope.actualQuestion.id)
+        {
+            numberChosen = (numberChosen + 1)%videoQCMList.length;
+        }
+
+        $scope.actualQuestion = videoQCMList[numberChosen];
+
+        // Search the corresponding video IDs for the question
+        $scope.searchURLByIDs($scope.actualQuestion.videoIDLSF, $scope.actualQuestion.videoIDASL);
+    };
+
+    $scope.updateSentenceQCM = function () {
         // Select a random question in the list of questions
         // search the corresponding videos, and update view
     };
 
     // Load all the Videos QCM questions with the corresponding difficulty level
     $scope.loadVideoQuestions = function () {
-        difficultyLevel = SharingQCMInformation.getDifficultyLevel();
+        $scope.difficultyLevel = SharingQCMInformation.getDifficultyLevel();
 
         var query = "SELECT * from videoQCM where difficultyLevel = ?";
-        $cordovaSQLite.execute(db, query, [difficultyLevel]).then(function(res) {
+        $cordovaSQLite.execute(db, query, [$scope.difficultyLevel]).then(function(res) {
             if (res.rows.length > 0) {
                 console.log("loadVideoQuestions : SELECTED -> " + res.rows.length);
 
@@ -667,6 +756,8 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
                 {
                     videoQCMList.push(res.rows.item(i));
                 };
+
+                $scope.updateVideoQCM();
 
             } else {
                 console.log("No results found");
@@ -678,7 +769,7 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
 
     // Load all the Sentences QCM questions with the corresponding difficulty level
     $scope.loadSentencesQuestions = function () {
-        difficultyLevel = SharingQCMInformation.getDifficultyLevel();
+        $scope.difficultyLevel = SharingQCMInformation.getDifficultyLevel();
 
         var query = "SELECT * from sentenceQCM where difficultyLevel = ?";
         $cordovaSQLite.execute(db, query, [difficultyLevel]).then(function(res) {
@@ -699,9 +790,46 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
         });
     };
 
+    $scope.searchURLByIDs = function(videoIDLSF, videoIDASL) {
+
+        var query = "SELECT * FROM video WHERE id = ? OR id = ?";
+            $cordovaSQLite.execute(db, query, [videoIDLSF, videoIDASL]).then(function(res) {
+                if (res.rows.length == 2) {
+                    $scope.videoLSF = {};
+                    $scope.videoASL = {};
+
+                    console.log("searchYoutubeURLBySignIDs : SELECTED -> " + res.rows.length);
+
+                    for(var i = 0; i < 2; i++)
+                    {
+                        switch(res.rows.item(i).id)
+                        {
+                            case videoIDLSF:
+                                $scope.videoLSF = res.rows.item(i);
+                                break;
+                            case videoIDASL:
+                                $scope.videoASL = res.rows.item(i);
+                                break;
+                        }
+                    }
+
+                } else {
+                    console.log("No results found");
+                }
+            }, function(err) {
+                console.error(err);
+            }
+        );
+    };
+
     $scope.setDifficultyLevel = function (level) {
         SharingQCMInformation.setDifficultyLevel(level);
-    }
+    };
+
+        // Enable to trust the URL so Angular can load the corresponding template
+    $scope.trustUrl = function(url) {
+        return $sce.trustAsResourceUrl(url);
+    };
 
 });
 
