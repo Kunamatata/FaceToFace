@@ -646,23 +646,49 @@ app.controller("DialogPresentation", function($scope, $sce, $ionicLoading, $http
 app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite, SharingQCMInformation) {
 
     var videoQCMList = [];
+    var sentenceQCMList = [];
 
     $scope.updateVideoQCM = function () {
         // Select a random question in the list of questions
         // search the corresponding videos, and update view
     };
 
-    $scope.loadSentencesQuestion = function () {
+    // Load all the Videos QCM questions with the corresponding difficulty level
+    $scope.loadVideoQuestions = function () {
         difficultyLevel = SharingQCMInformation.getDifficultyLevel();
 
         var query = "SELECT * from videoQCM where difficultyLevel = ?";
         $cordovaSQLite.execute(db, query, [difficultyLevel]).then(function(res) {
             if (res.rows.length > 0) {
-                console.log("loadSentencesQuestion : SELECTED -> " + res.rows.length);
+                console.log("loadVideoQuestions : SELECTED -> " + res.rows.length);
 
-                // Store each sentences
-                for (var i = 0; i < res.rows.length; i++) {
-                videoQCMList.push(res.rows.item(i));
+                // Store each question in the list
+                for (var i = 0; i < res.rows.length; i++)
+                {
+                    videoQCMList.push(res.rows.item(i));
+                };
+
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
+    // Load all the Sentences QCM questions with the corresponding difficulty level
+    $scope.loadSentencesQuestions = function () {
+        difficultyLevel = SharingQCMInformation.getDifficultyLevel();
+
+        var query = "SELECT * from sentenceQCM where difficultyLevel = ?";
+        $cordovaSQLite.execute(db, query, [difficultyLevel]).then(function(res) {
+            if (res.rows.length > 0) {
+                console.log("loadSentencesQuestions : SELECTED -> " + res.rows.length);
+
+                // Store each question in the list
+                for (var i = 0; i < res.rows.length; i++)
+                {
+                    sentenceQCMList.push(res.rows.item(i));
                 };
 
             } else {
