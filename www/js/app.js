@@ -26,6 +26,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
 //$cordovaSQLite.execute(db, "DROP table wording");
 //$cordovaSQLite.execute(db, "DROP table configuration");
 //$cordovaSQLite.execute(db, "DROP table dialog");
+//$cordovaSQLite.execute(db, "DROP table genealogy");
 /*___________________*/
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word(id INTEGER PRIMARY KEY, frenchWord TEXT, englishWord TEXT, idSignLSF INTEGER, idSignASL INTEGER,FOREIGN KEY(idSignLSF) REFERENCES sign(id), FOREIGN KEY(idSignASL) REFERENCES sign(id))");
@@ -46,7 +47,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS videoQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, videoIDLSF INTEGER, videoIDASL INTEGER,sentenceA TEXT, sentenceB TEXT, sentenceC TEXT, sentenceD TEXT, goodAnswer TEXT, FOREIGN KEY(videoIDLSF) REFERENCES video(id), FOREIGN KEY(videoIDASL) REFERENCES video(id))");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS genealogy(id INTEGER PRIMARY KEY, wordID INTEGER, frenchDescription TEXT, englishDescrption TEXT, LSFDescription TEXT, ASLDescription TEXT, FOREIGN KEY (wordID) REFERENCES word(id))");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS genealogy(id INTEGER PRIMARY KEY, wordID INTEGER, frenchDescription TEXT, englishDescrption TEXT, videoIDLSFDescription INTEGER, videoIDASLDescription INTEGER, FOREIGN KEY (wordID) REFERENCES word(id),FOREIGN KEY (videoIDLSFDescription) REFERENCES video(id), FOREIGN KEY (videoIDASLDescription) REFERENCES video(id))");
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS dialog(id INTEGER PRIMARY KEY, wordID INTEGER, language INTEGER, videoID INTEGER, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(videoID) REFERENCES video(id))");
 
@@ -249,10 +250,67 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         console.log($scope.word.frenchWord);
         //$scope.deleteWord("Romain");
     }, 2000);*/
+});
 
+// Factory service to share word between controllers
+app.factory('SharingWordInformation', function()
+{
+    var word = {};
+    var wordingChoice = 0;
+    var dialogChoice = 0;
+    var dialogLanguageChoice = 0;
 
+        return {
+        getWord: function () {
+            return word;
+        },
+        setWord: function (newWord) {
+            // If the word we want to search is not set or if it is not the last one we searched
+            if(word.id == undefined || (word.id != undefined && word.id != newWord.id))
+            {
+                word = newWord;
+            }
+        },
+        getWordingChoice : function()
+        {
+            return wordingChoice;
+        },
+        setWordingChoice : function(number)
+        {
+            wordingChoice = number;
+        },
+        getDialogChoice : function()
+        {
+            return dialogChoice;
+        },
+        setDialogChoice : function(number)
+        {
+            dialogChoice = number;
+        },
+        getDialogLanguageChoice : function()
+        {
+            return dialogLanguageChoice;
+        },
+        setDialogLanguageChoice : function(number)
+        {
+            dialogLanguageChoice = number;
+        }
+    };
+});
 
+// Factory service to share qcm information between controllers
+app.factory('SharingQCMInformation', function()
+{
+    var difficultyLevel = 0;
 
+        return {
+        getDifficultyLevel: function () {
+            return difficultyLevel;
+        },
+        setDifficultyLevel: function (level) {
+            difficultyLevel = level;
+        }
+    };
 });
 
 app.controller("LSFSearch", function($scope, $ionicLoading, $http, $ionicScrollDelegate) {
@@ -322,51 +380,7 @@ app.controller("ASLSearch", function($scope, $ionicLoading, $http) {
 
 });
 
-// Factory service to share word between controllers
-app.factory('SharingWordInformation', function()
-{
-    var word = {};
-    var wordingChoice = 0;
-    var dialogChoice = 0;
-    var dialogLanguageChoice = 0;
 
-        return {
-        getWord: function () {
-            return word;
-        },
-        setWord: function (newWord) {
-            // If the word we want to search is not set or if it is not the last one we searched
-            if(word.id == undefined || (word.id != undefined && word.id != newWord.id))
-            {
-                word = newWord;
-            }
-        },
-        getWordingChoice : function()
-        {
-            return wordingChoice;
-        },
-        setWordingChoice : function(number)
-        {
-            wordingChoice = number;
-        },
-        getDialogChoice : function()
-        {
-            return dialogChoice;
-        },
-        setDialogChoice : function(number)
-        {
-            dialogChoice = number;
-        },
-        getDialogLanguageChoice : function()
-        {
-            return dialogLanguageChoice;
-        },
-        setDialogLanguageChoice : function(number)
-        {
-            dialogLanguageChoice = number;
-        }
-    };
-});
 
 app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLite, $state, SharingWordInformation) {
 
@@ -623,11 +637,46 @@ app.controller("DialogPresentation", function($scope, $sce, $ionicLoading, $http
         });
     };
 
-
     // Enable to trust the URL so Angular can load the corresponding template
     $scope.trustUrl = function(url) {
         return $sce.trustAsResourceUrl(url);
     };
+});
+
+app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite, SharingQCMInformation) {
+
+    var videoQCMList = [];
+
+    $scope.updateVideoQCM = function () {
+        // Select a random question in the list of questions
+        // search the corresponding videos, and update view
+    };
+
+    $scope.loadSentencesQuestion = function () {
+        difficultyLevel = SharingQCMInformation.getDifficultyLevel();
+
+        var query = "SELECT * from videoQCM where difficultyLevel = ?";
+        $cordovaSQLite.execute(db, query, [difficultyLevel]).then(function(res) {
+            if (res.rows.length > 0) {
+                console.log("loadSentencesQuestion : SELECTED -> " + res.rows.length);
+
+                // Store each sentences
+                for (var i = 0; i < res.rows.length; i++) {
+                videoQCMList.push(res.rows.item(i));
+                };
+
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
+    $scope.setDifficultyLevel = function (level) {
+        SharingQCMInformation.setDifficultyLevel(level);
+    }
+
 });
 
 app.config(function($stateProvider, $urlRouterProvider) {
@@ -680,10 +729,22 @@ app.config(function($stateProvider, $urlRouterProvider) {
         controller: 'DialogList'
     })
 
-        $stateProvider.state('dialog-presentation', {
+    $stateProvider.state('dialog-presentation', {
         url: '/word/:id/dialogs/:language/:number',
         templateUrl: 'templates/dialog-presentation.html',
         controller: 'DialogPresentation'
+    })
+
+    $stateProvider.state('qcm-difficulty-selection', {
+        url: '/qcm',
+        templateUrl: 'templates/qcm-difficulty-selection.html',
+        controller: 'QCMController'
+    })
+
+    $stateProvider.state('qcm-video', {
+        url: '/qcm/:difficulty/video',
+        templateUrl: 'templates/qcm-video.html',
+        controller: 'QCMController'
     })
 
     $urlRouterProvider.otherwise('/home')

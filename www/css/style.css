@@ -69,6 +69,15 @@ a {
     display: block;
 }
 
+.hand-picture {
+    position: relative;
+    background-image: url('../img/hand.png');
+    width: 100px;
+    height: 100px;
+    background-position: center center;
+    background-size: cover;
+}
+
 #first-hand-picture {
     position: relative;
     background-image: url('../img/hand.png');
