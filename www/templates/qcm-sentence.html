@@ -1,0 +1,85 @@
+<ion-view view-title="QCM Sentence">
+    <ion-content>
+        <div class="row">
+            <div class="center">
+                <button class="button button-positive" ui-sref="qcm-video({difficulty : difficultyLevel})">
+                    QCM Vidéos
+                </button>
+                <button class="button button-positive" ui-sref="qcm-sentence({difficulty : difficultyLevel})">
+                    QCM Phrases
+                </button>
+                <button class="button button-positive" ui-sref="qcm-difficulty-selection">
+                    Choix du niveau
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="center">
+                <div class="row">
+                    {{actualQuestion.englishSentence}}
+                </div>
+                <div class="row">
+                    {{actualQuestion.frenchSentence}}
+                </div>
+            </div>
+        </div>
+        <button id="QCMSentenceButtonAnswerA" class="button button-block button-positive button-qcm" ng-disabled="buttonsDisabled" ng-click="clickedSentenceQCM('A', actualQuestion.videoIDALSF, actualQuestion.videoIDAASL)">
+            <div class="row row-center">
+                <div class="col col-10">
+                    <h1>A</h1>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        Click here to show the videos
+                    </div>
+                </div>
+            </div>
+        </button>
+        <button id="QCMSentenceButtonAnswerB" class="button button-block button-positive button-qcm" ng-disabled="buttonsDisabled" ng-click="clickedSentenceQCM('B', actualQuestion.videoIDBLSF, actualQuestion.videoIDBASL)">
+            <div class="row row-center">
+                <div class="col col-10">
+                    <h1>B</h1>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        Click here to show the videos
+                    </div>
+                </div>
+            </div>
+        </button>
+        <button id="QCMSentenceButtonAnswerC" class="button button-block button-positive button-qcm" ng-disabled="buttonsDisabled" ng-click="clickedSentenceQCM('C', actualQuestion.videoIDCLSF, actualQuestion.videoIDCASL)">
+            <div class="row row-center">
+                <div class="col col-10">
+                    <h1>C</h1>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        Click here to show the videos
+                    </div>
+                </div>
+            </div>
+        </button>
+        <button id="QCMSentenceButtonAnswerD" class="button button-block button-positive button-qcm" ng-disabled="buttonsDisabled" ng-click="clickedSentenceQCM('D', actualQuestion.videoIDDLSF, actualQuestion.videoIDDASL)">
+            <div class="row row-center">
+                <div class="col col-10">
+                    <h1>D</h1>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        Click here to show the videos
+                    </div>
+                </div>
+            </div>
+        </button>
+        <button id="buttonResult-sentenceQCM" class="button center" style="visibility: hidden;" ng-click="updateSentenceQCM()" ng-init=""></button>
+        <button id="buttonSubmit-sentenceQCM" class="button center" style="visibility: hidden" ng-click="submitSentenceQCMAnswer()" ng-init="loadSentencesQuestions()">Submit!</button>
+        <div class="row">
+            <div class="col">
+                <iframe id="videoLSF" class="center" src="{{trustUrl(videoLSF.youtubeURL)}}" frameborder="0"></iframe>
+            </div>
+            <div class="col">
+                <iframe id="videoASL" class="center" src="{{trustUrl(videoASL.youtubeURL)}}" frameborder="0"></iframe>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
