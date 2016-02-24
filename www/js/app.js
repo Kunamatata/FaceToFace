@@ -16,8 +16,11 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         if (window.StatusBar) {
             StatusBar.styleDefault();
         }
-        //db = $cordovaSQLite.openDB("face.db"); For android device
-        db = window.openDatabase("face.db", "1.0", "Dev Database", 10000); //To test in web browser with ionic serve
+
+        if (window.cordova && window.SQLitePlugin)
+            db = $cordovaSQLite.openDB( 'face.db', 1 ); // Android devices
+        else
+            db = window.openDatabase("face.db", "1.0", "Dev Database", 200000); //To test in web browser with ionic serve
 
         /* A RETIRER */
         /* A RETIRER */
