@@ -18,7 +18,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         }
 
         if (window.cordova && window.SQLitePlugin)
-            db = $cordovaSQLite.openDB( 'face.db', 1 ); // Android devices
+            db = $cordovaSQLite.openDB('face.db', 1); // Android devices
         else
             db = window.openDatabase("face.db", "1.0", "Dev Database", 200000); //To test in web browser with ionic serve
 
@@ -908,6 +908,10 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
 
 });
 
+app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite) {
+
+});
+
 app.config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider.state('home', {
@@ -981,6 +985,68 @@ app.config(function($stateProvider, $urlRouterProvider) {
         templateUrl: 'templates/qcm-sentence.html',
         controller: 'QCMController'
     })
+
+    $stateProvider.state('data-management', {
+        url: '/manage',
+        templateUrl: 'templates/data-management.html',
+        controller: 'DataManagementController'
+    })
+
+    $stateProvider.state('add-word', {
+        url: '/manage/word/add',
+        templateUrl: 'templates/add-word.html',
+        controller: 'DataManagementController'
+    })
+
+    $stateProvider.state('edit-word', {
+        url: '/manage/word/edit',
+        templateUrl: 'templates/edit-word.html',
+        controller: 'DataManagementController'
+    })
+
+    $stateProvider.state('delete-word', {
+        url: '/manage/word/delete',
+        templateUrl: 'templates/delete-word.html',
+        controller: 'DataManagementController'
+    })
+
+    $stateProvider.state('add-sentence-qcm', {
+        url: '/manage/sentenceQCM/add',
+        templateUrl: 'templates/add-sentence-qcm.html',
+        controller: 'DataManagementController'
+    })
+
+    $stateProvider.state('edit-sentence-qcm', {
+        url: '/manage/sentenceQCM/edit',
+        templateUrl: 'templates/edit-sentence-qcm.html',
+        controller: 'DataManagementController'
+    })
+
+    $stateProvider.state('delete-sentence-qcm', {
+        url: '/manage/sentenceQCM/delete',
+        templateUrl: 'templates/delete-sentence-qcm.html',
+        controller: 'DataManagementController'
+    })
+
+    $stateProvider.state('add-video-qcm', {
+        url: '/manage/videoQCM/add',
+        templateUrl: 'templates/add-video-qcm.html',
+        controller: 'DataManagementController'
+    })
+
+    $stateProvider.state('edit-video-qcm', {
+        url: '/manage/videoQCM/edit',
+        templateUrl: 'templates/edit-video-qcm.html',
+        controller: 'DataManagementController'
+    })
+
+    $stateProvider.state('delete-video-qcm', {
+        url: '/manage/videoQCM/delete',
+        templateUrl: 'templates/delete-video-qcm.html',
+        controller: 'DataManagementController'
+    })
+
+
 
     $urlRouterProvider.otherwise('/home')
 
