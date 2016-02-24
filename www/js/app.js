@@ -65,7 +65,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS dialog(id INTEGER PRIMARY KEY, wordID INTEGER, language INTEGER, videoID INTEGER, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(videoID) REFERENCES video(id))");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS positionConfigurationSign(signID INTEGER PRIMARY KEY, configurationID INTEGER PRIMARY KEY, positionID INTEGER PRIMARY KEY, isDominatingHand INTEGER, FOREIGN KEY(signID) REFERENCES sign(id), FOREIGN KEY(configurationID) REFERENCES configuration(id), FOREIGN KEY(positionID) REFERENCES position(id))");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS positionConfigurationSign(signID INTEGER PRIMARY KEY, configurationIDDominating INTEGER PRIMARY KEY, positionIDDominating INTEGER PRIMARY KEY, configurationIDDominated INTEGER PRIMARY KEY, positionIDDominated INTEGER PRIMARY KEY,  FOREIGN KEY(signID) REFERENCES sign(id), FOREIGN KEY(configurationIDDominating) REFERENCES configuration(id), FOREIGN KEY(positionIDDominating) REFERENCES position(id), FOREIGN KEY(configurationIDDominated) REFERENCES configuration(id), FOREIGN KEY(positionIDDominated) REFERENCES position(id))");
     });
 });
 
