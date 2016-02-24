@@ -32,15 +32,17 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         $cordovaSQLite.execute(db, "DROP table video");
         $cordovaSQLite.execute(db, "DROP table wording");
         $cordovaSQLite.execute(db, "DROP table configuration");
+        $cordovaSQLite.execute(db, "DROP table subtitle");
         $cordovaSQLite.execute(db, "DROP table dialog");
         $cordovaSQLite.execute(db, "DROP table genealogy");
         $cordovaSQLite.execute(db, "DROP table videoQCM");
         $cordovaSQLite.execute(db, "DROP table sentenceQCM");
+        $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");
         /*___________________*/
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word(id INTEGER PRIMARY KEY, frenchWord TEXT, englishWord TEXT, idSignLSF INTEGER, idSignASL INTEGER,FOREIGN KEY(idSignLSF) REFERENCES sign(id), FOREIGN KEY(idSignASL) REFERENCES sign(id))");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word(id INTEGER PRIMARY KEY, frenchWord TEXT, englishWord TEXT, signIDLSF INTEGER, signIDASL INTEGER,FOREIGN KEY(signIDLSF) REFERENCES sign(id), FOREIGN KEY(signIDASL) REFERENCES sign(id))");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS sign(id INTEGER PRIMARY KEY, language INTEGER, idVideo INTEGER, FOREIGN KEY(idVideo) REFERENCES video(id))");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS sign(id INTEGER PRIMARY KEY, language INTEGER, videoID INTEGER, FOREIGN KEY(videoID) REFERENCES video(id))");
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS configuration(id INTEGER PRIMARY KEY, language INTEGER, imageURL TEXT)");
 
@@ -50,17 +52,17 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS video(id INTEGER PRIMARY KEY, youtubeURL TEXT, localURL TEXT)");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS subtitle(id INTEGER PRIMARY KEY, timer DATE)");
-
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS sentenceQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, frenchSentence TEXT, englishSentence TEXT, videoIDALSF INTEGER,videoIDAASL INTEGER, videoIDBLSF INTEGER, videoIDBASL INTEGER, videoIDCLSF INTEGER, videoIDCASL INTEGER, videoIDDLSF INTEGER, videoIDDASL INTEGER, goodAnswer TEXT, FOREIGN KEY(videoIDALSF) REFERENCES video(id), FOREIGN KEY(videoIDAASL) REFERENCES video(id), FOREIGN KEY(videoIDBLSF) REFERENCES video(id), FOREIGN KEY(videoIDBASL) REFERENCES video(id), FOREIGN KEY(videoIDCLSF) REFERENCES video(id), FOREIGN KEY(videoIDCASL) REFERENCES video(id), FOREIGN KEY(videoIDDLSF) REFERENCES video(id), FOREIGN KEY(videoIDDASL) REFERENCES video(id))");
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS videoQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, videoIDLSF INTEGER, videoIDASL INTEGER, englishSentenceA TEXT, frenchSentenceA TEXT, englishSentenceB TEXT, frenchSentenceB TEXT, englishSentenceC TEXT, frenchSentenceC TEXT, englishSentenceD TEXT, frenchSentenceD TEXT, goodAnswer TEXT, FOREIGN KEY(videoIDLSF) REFERENCES video(id), FOREIGN KEY(videoIDASL) REFERENCES video(id))");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS genealogy(id INTEGER PRIMARY KEY, wordID INTEGER, frenchDescription TEXT, englishDescrption TEXT, videoIDLSFDescription INTEGER, videoIDASLDescription INTEGER, FOREIGN KEY (wordID) REFERENCES word(id),FOREIGN KEY (videoIDLSFDescription) REFERENCES video(id), FOREIGN KEY (videoIDASLDescription) REFERENCES video(id))");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS genealogy(id INTEGER PRIMARY KEY, wordID INTEGER, frenchDescription TEXT, englishDescription TEXT, videoIDLSFDescription INTEGER, videoIDASLDescription INTEGER, FOREIGN KEY (wordID) REFERENCES word(id),FOREIGN KEY (videoIDLSFDescription) REFERENCES video(id), FOREIGN KEY (videoIDASLDescription) REFERENCES video(id))");
+
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS signExplanation(id INTEGER PRIMARY KEY, wordID INTEGER, frenchExplanation TEXT, englishExplanation TEXT, videoIDLSFExplanation INTEGER, videoIDASLExplanation INTEGER, FOREIGN KEY (wordID) REFERENCES word(id),FOREIGN KEY (videoIDLSFExplanation) REFERENCES video(id), FOREIGN KEY (videoIDASLExplanation) REFERENCES video(id))");
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS dialog(id INTEGER PRIMARY KEY, wordID INTEGER, language INTEGER, videoID INTEGER, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(videoID) REFERENCES video(id))");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS positionConfigurationSign(signID INTEGER PRIMARY KEY, configurationID INTEGER PRIMARY KEY, positionID INTEGER PRIMARY KEY, FOREIGN KEY(signID) REFERENCES sign(id), FOREIGN KEY(configurationID) REFERENCES configuration(id), order INTEGER, FOREIGN KEY(positionID) REFERENCES position(id))");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS positionConfigurationSign(signID INTEGER PRIMARY KEY, configurationID INTEGER PRIMARY KEY, positionID INTEGER PRIMARY KEY, isDominatingHand INTEGER, FOREIGN KEY(signID) REFERENCES sign(id), FOREIGN KEY(configurationID) REFERENCES configuration(id), FOREIGN KEY(positionID) REFERENCES position(id))");
     });
 });
 
@@ -83,7 +85,7 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
     };
 
     $scope.insertNewWordSigns = function(frenchWord, englishWord, idFrenchVideo, idEnglishVideo, callback) {
-        var query = "INSERT INTO sign (language, idVideo) VALUES(0, ?),(1, ?)";
+        var query = "INSERT INTO sign (language, videoID) VALUES(0, ?),(1, ?)";
         $cordovaSQLite.execute(db, query, [idFrenchVideo, idEnglishVideo]).then(function(res) {
             console.log("Signs successfully added -> " + res.insertId);
             return callback(frenchWord, englishWord, res.insertId - 1, res.insertId);
@@ -94,7 +96,7 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
     };
 
     $scope.insertWord = function(frenchWord, englishWord, idFrenchSign, idEnglishSign) {
-        var query = "INSERT INTO word (frenchWord, englishWord, idSignLSF, idSignASL) values(?, ?, ?, ?)";
+        var query = "INSERT INTO word (frenchWord, englishWord, signIDLSF, signIDASL) values(?, ?, ?, ?)";
         $cordovaSQLite.execute(db, query, [frenchWord, englishWord, idFrenchSign, idEnglishSign]).then(function(res) {
             console.log("Word successfully added -> " + res.insertId);
             return res.insertId;
@@ -238,7 +240,7 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
     };
 
     $scope.insertSign = function(language, idVideo) {
-        var query = "INSERT INTO sign (language, idVideo) values(?, ?)";
+        var query = "INSERT INTO sign (language, videoID) values(?, ?)";
         $cordovaSQLite.execute(db, query, [language, idVideo]).then(function(res) {
             console.log("Sign successfully added -> " + res.insertId);
             return res.insertId;
@@ -489,12 +491,12 @@ app.controller("WordPresentation", function($scope, $sce, $ionicLoading, $http, 
 
         // If we don't have the word information in memory, we execute a search query
         if ($scope.word.frenchVideo == undefined || $scope.word.englishVideo == undefined) {
-            var query = "SELECT idSignLSF, idSignASL FROM word WHERE id = ?";
+            var query = "SELECT signIDLSF, signIDASL FROM word WHERE id = ?";
             $cordovaSQLite.execute(db, query, [$scope.word.id]).then(function(res) {
                 if (res.rows.length > 0) {
                     console.log("prepareWordInformations : SELECTED -> " + res.rows.item(0));
 
-                    $scope.searchYoutubeURLBySignIDs(res.rows.item(0).idSignLSF, res.rows.item(0).idSignASL);
+                    $scope.searchYoutubeURLBySignIDs(res.rows.item(0).signIDLSF, res.rows.item(0).signIDASL);
 
                 } else {
                     console.log("No results found");
@@ -508,7 +510,7 @@ app.controller("WordPresentation", function($scope, $sce, $ionicLoading, $http, 
     // Search for the youtube URL of the sign videos
     $scope.searchYoutubeURLBySignIDs = function(idSignLSF, idSignASL) {
 
-        var query = "SELECT language, youtubeURL, localURL FROM sign, video WHERE (sign.id = ? OR sign.id = ?) AND sign.idVideo = video.id";
+        var query = "SELECT language, youtubeURL, localURL FROM sign, video WHERE (sign.id = ? OR sign.id = ?) AND sign.videoID = video.id";
         $cordovaSQLite.execute(db, query, [idSignLSF, idSignASL]).then(function(res) {
             if (res.rows.length == 2) {
                 console.log("searchYoutubeURLBySignIDs : SELECTED -> " + res.rows.length);
