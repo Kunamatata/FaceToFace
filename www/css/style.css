@@ -120,6 +120,16 @@ a {
     padding-right: 0;
 }
 
+.item-avatar i:first-child, .item-avatar .item-img {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 36px;
+    max-width: 40px;
+    max-height: 40px;
+    width: 100%;
+    border-radius: 4px; }
+
 @media (max-width: 768px) {
     [class^="col-"] {
         width: calc(25% - 5px);
