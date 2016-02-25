@@ -32,7 +32,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         /* A RETIRER */
         /* A RETIRER */
         /* A RETIRER */
-        $cordovaSQLite.execute(db, "DROP table word");
+/*        $cordovaSQLite.execute(db, "DROP table word");
         $cordovaSQLite.execute(db, "DROP table sign");
         $cordovaSQLite.execute(db, "DROP table video");
         $cordovaSQLite.execute(db, "DROP table wording");
@@ -42,7 +42,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         $cordovaSQLite.execute(db, "DROP table genealogy");
         $cordovaSQLite.execute(db, "DROP table videoQCM");
         $cordovaSQLite.execute(db, "DROP table sentenceQCM");
-        $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");
+        $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");*/
         /*___________________*/
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word(id INTEGER PRIMARY KEY, frenchWord TEXT, englishWord TEXT, signIDLSF INTEGER, signIDASL INTEGER,FOREIGN KEY(signIDLSF) REFERENCES sign(id), FOREIGN KEY(signIDASL) REFERENCES sign(id))");
@@ -318,7 +318,7 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
     };
 
 
-    $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
+/*    $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
     $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
 
     $scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
@@ -333,7 +333,7 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
 
     $scope.insertNewSentenceQCM(1, "Bob est perdu dans toutes ces lignes de code", "Bob is lost in all those lines of code", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "B");
 
-    $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");
+    $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");*/
 
     /*$scope.searchFrenchWord("Romain");
     setTimeout(function(){
@@ -456,12 +456,29 @@ app.controller("ASLSearch", function($scope, $ionicLoading, $http) {
 
 });
 
-
-
 app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLite, $state, SharingWordInformation) {
 
+    var language;
+
+    $scope.initSearchPage = function()
+    {
+        console.log("test");
+        if($state.current.name == "fr-search")
+        {
+            language = 0;
+            $scope.flagPicture = "../img/France-Flag-icon-little.png";
+            $scope.viewTitle = "Recherche Française";
+        }
+        else
+        {
+            language = 1;
+            $scope.flagPicture = "../img/United-States-Flag-icon-little.png";
+            $scope.viewTitle = "English Search";
+        }
+    }
+
     // Search potential words which start like the
-    $scope.searchPotentialWords = function(searchedWord, language) {
+    $scope.searchPotentialWords = function(searchedWord) {
         $scope.words = [];
 
         if (searchedWord != "") {
@@ -474,6 +491,11 @@ app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLi
 
                     for (var i = 0; i < numberWords; i++) {
                         $scope.words.push(res.rows.item(i));
+
+                        if(language == 0)
+                            $scope.words[i].shownWord = res.rows.item(i).frenchWord;
+                        else
+                            $scope.words[i].shownWord = res.rows.item(i).englishWord;
                     };
                 } else {
                     console.log("No results found");
@@ -975,7 +997,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider.state('fr-search', {
         url: '/fr-search',
-        templateUrl: 'templates/fr-search.html',
+        templateUrl: 'templates/word-search.html',
         controller: 'WordSearch'
     })
 
@@ -987,7 +1009,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
     $stateProvider.state('en-search', {
         url: '/en-search',
-        templateUrl: 'templates/en-search.html',
+        templateUrl: 'templates/word-search.html',
         controller: 'WordSearch'
     })
 
