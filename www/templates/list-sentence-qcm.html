@@ -1,0 +1,14 @@
+<ion-view view-title="Edit a sentence QCM">
+    <ion-content ng-init="getAllSentenceQCMs()" class="padding">
+        <div ng-repeat="qcm in qcmList">
+            <div class="item item-divider" ng-click="fillSentenceQCM(qcm.id)" ui-sref="edit-sentence-qcm({id:qcm.id})">
+                QCM id : {{qcm.id}}
+            </div>
+            <label class="item item-input">
+                French: {{qcm.frenchSentence}}
+                <br> English:{{qcm.englishSentence}}
+                <br>
+            </label>
+        </div>
+    </ion-content>
+</ion-view>

@@ -32,17 +32,17 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         /* A RETIRER */
         /* A RETIRER */
         /* A RETIRER */
-/*        $cordovaSQLite.execute(db, "DROP table word");
-        $cordovaSQLite.execute(db, "DROP table sign");
-        $cordovaSQLite.execute(db, "DROP table video");
-        $cordovaSQLite.execute(db, "DROP table wording");
-        $cordovaSQLite.execute(db, "DROP table configuration");
-        $cordovaSQLite.execute(db, "DROP table subtitle");
-        $cordovaSQLite.execute(db, "DROP table dialog");
-        $cordovaSQLite.execute(db, "DROP table genealogy");
-        $cordovaSQLite.execute(db, "DROP table videoQCM");
-        $cordovaSQLite.execute(db, "DROP table sentenceQCM");
-        $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");*/
+        /*        $cordovaSQLite.execute(db, "DROP table word");
+                $cordovaSQLite.execute(db, "DROP table sign");
+                $cordovaSQLite.execute(db, "DROP table video");
+                $cordovaSQLite.execute(db, "DROP table wording");
+                $cordovaSQLite.execute(db, "DROP table configuration");
+                $cordovaSQLite.execute(db, "DROP table subtitle");
+                $cordovaSQLite.execute(db, "DROP table dialog");
+                $cordovaSQLite.execute(db, "DROP table genealogy");
+                $cordovaSQLite.execute(db, "DROP table videoQCM");
+                $cordovaSQLite.execute(db, "DROP table sentenceQCM");
+                $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");*/
         /*___________________*/
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word(id INTEGER PRIMARY KEY, frenchWord TEXT, englishWord TEXT, signIDLSF INTEGER, signIDASL INTEGER,FOREIGN KEY(signIDLSF) REFERENCES sign(id), FOREIGN KEY(signIDASL) REFERENCES sign(id))");
@@ -318,22 +318,22 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
     };
 
 
-/*    $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
-    $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
+    /*    $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
+        $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
 
-    $scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
+        $scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
 
-    $scope.insertNewDialog(1, 1, "https://www.youtube.com/embed/yhy19VUoKAY");
+        $scope.insertNewDialog(1, 1, "https://www.youtube.com/embed/yhy19VUoKAY");
 
-    for (i = 0; i < 46; i++) {
-        $scope.insertConfiguration(0, "../config_" + (i + 1) + ".jpg");
-    }
+        for (i = 0; i < 46; i++) {
+            $scope.insertConfiguration(0, "../config_" + (i + 1) + ".jpg");
+        }
 
-    $scope.insertNewVideoQCM(1, "https://www.youtube.com/embed/9mp2E58UlR4", "https://www.youtube.com/embed/YVP6M2u2sf0", "Maybe", "Peut-être", "Not sure", "Pas sûr", "Oh yes", "Oh oui", "Cat", "Chat", "B");
+        $scope.insertNewVideoQCM(1, "https://www.youtube.com/embed/9mp2E58UlR4", "https://www.youtube.com/embed/YVP6M2u2sf0", "Maybe", "Peut-être", "Not sure", "Pas sûr", "Oh yes", "Oh oui", "Cat", "Chat", "B");
 
-    $scope.insertNewSentenceQCM(1, "Bob est perdu dans toutes ces lignes de code", "Bob is lost in all those lines of code", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "B");
+        $scope.insertNewSentenceQCM(1, "Bob est perdu dans toutes ces lignes de code", "Bob is lost in all those lines of code", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "B");
 
-    $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");*/
+        $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");*/
 
     /*$scope.searchFrenchWord("Romain");
     setTimeout(function(){
@@ -392,6 +392,18 @@ app.factory('SharingQCMInformation', function() {
             difficultyLevel = level;
         }
     };
+});
+
+app.factory("SharingSentenceQCMInformation", function() {
+    var qcm = {};
+    return {
+        getSentenceQCM: function() {
+            return qcm;
+        },
+        setSentenceQCM: function(object) {
+            qcm = object;
+        }
+    }
 });
 
 app.controller("LSFSearch", function($scope, $ionicLoading, $http, $ionicScrollDelegate) {
@@ -460,17 +472,13 @@ app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLi
 
     var language;
 
-    $scope.initSearchPage = function()
-    {
+    $scope.initSearchPage = function() {
         console.log("test");
-        if($state.current.name == "fr-search")
-        {
+        if ($state.current.name == "fr-search") {
             language = 0;
             $scope.flagPicture = "../img/France-Flag-icon-little.png";
             $scope.viewTitle = "Recherche Française";
-        }
-        else
-        {
+        } else {
             language = 1;
             $scope.flagPicture = "../img/United-States-Flag-icon-little.png";
             $scope.viewTitle = "English Search";
@@ -492,7 +500,7 @@ app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLi
                     for (var i = 0; i < numberWords; i++) {
                         $scope.words.push(res.rows.item(i));
 
-                        if(language == 0)
+                        if (language == 0)
                             $scope.words[i].shownWord = res.rows.item(i).frenchWord;
                         else
                             $scope.words[i].shownWord = res.rows.item(i).englishWord;
@@ -932,12 +940,12 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
 
 });
 
-app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite) {
+app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite, SharingSentenceQCMInformation) {
 
-//Insert new Sentence QCM and all the corresponding information
-    $scope.insertNewSentenceQCM = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
-        $scope.insertSentenceQCMVideos(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer, $scope.insertSentenceQCM);
-    };
+    $scope.youtubeURLArray = [];
+    $scope.qcmList = [];
+
+
 
     $scope.insertSentenceQCMVideos = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer, callback) {
         var query = "INSERT INTO video (youtubeURL) values (?),(?),(?),(?),(?),(?),(?),(?)";
@@ -972,13 +980,92 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         });
     };
 
-    $scope.addQCM = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer){
+    $scope.addQCM = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
         //Appel à la méthode insert qcm
-        console.log(document.getElementById('QCMSentence-LSFVideoA').validity.valid)
-        console.log(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer)
+        // console.log(document.getElementById('QCMSentence-LSFVideoA').validity.valid)
+        // console.log(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer)
+
+        //Gestion de formulaire invalide sinon l'utilisateur pourra insérér n'importe quoi
 
         $scope.insertNewSentenceQCM(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer);
     }
+
+    $scope.updateQCM = function(id, difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
+
+        //update video ID with current videod and edit sentenceQCM
+        console.log(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer)
+    }
+
+    /* Requêtes de recherches dans la table video */
+    $scope.searchVideo = function(videoID, key, id) {
+        var query = "SELECT * FROM video WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [videoID]).then(function(res) {
+            if (res.rows.length > 0) {
+                var obj = {};
+                obj[key] = res.rows[0].youtubeURL;
+                $scope.qcmList[id - 1][key] = res.rows[0].youtubeURL;
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
+
+    $scope.getAllSentenceQCMs = function() {
+        var query = "SELECT * FROM sentenceQCM";
+        $cordovaSQLite.execute(db, query).then(function(res) {
+            if (res.rows.length > 0) {
+                for (var i = 0; i < res.rows.length; ++i) {
+                    var obj = {};
+                    $scope.qcmList.push(res.rows[i]);
+                }
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    }
+
+    $scope.fillSentenceQCM = function(id) {
+        $scope.searchVideo($scope.qcmList[id - 1].videoIDALSF, "videoURLALSF", id);
+        $scope.searchVideo($scope.qcmList[id - 1].videoIDAASL, "videoURLAASL", id);
+        $scope.searchVideo($scope.qcmList[id - 1].videoIDBLSF, "videoURLBLSF", id);
+        $scope.searchVideo($scope.qcmList[id - 1].videoIDBASL, "videoURLBASL", id);
+        $scope.searchVideo($scope.qcmList[id - 1].videoIDCLSF, "videoURLCLSF", id);
+        $scope.searchVideo($scope.qcmList[id - 1].videoIDCASL, "videoURLCASL", id);
+        $scope.searchVideo($scope.qcmList[id - 1].videoIDDLSF, "videoURLDLSF", id);
+        $scope.searchVideo($scope.qcmList[id - 1].videoIDDASL, "videoURLDASL", id);
+
+
+        SharingSentenceQCMInformation.setSentenceQCM($scope.qcmList[id - 1]);
+    }
+
+    $scope.initEditQCM = function() {
+        $scope.qcm = SharingSentenceQCMInformation.getSentenceQCM();
+        setTimeout(function() {
+            $scope.frenchSentence = $scope.qcm.frenchSentence;
+            $scope.englishSentence = $scope.qcm.englishSentence;
+            $scope.difficultyLevelEdit = $scope.qcm.difficultyLevel;
+            $scope.videoURLALSFEdit = $scope.qcm.videoURLALSF;
+            $scope.videoURLAASLEdit = $scope.qcm.videoURLAASL;
+            $scope.videoURLBLSFEdit = $scope.qcm.videoURLBLSF;
+            $scope.videoURLBASLEdit = $scope.qcm.videoURLBASL;
+            $scope.videoURLCLSFEdit = $scope.qcm.videoURLCLSF;
+            $scope.videoURLCASLEdit = $scope.qcm.videoURLCASL;
+            $scope.videoURLDLSFEdit = $scope.qcm.videoURLDLSF;
+            $scope.videoURLDASLEdit = $scope.qcm.videoURLDASL;
+            $scope.goodAnswerEdit = $scope.qcm.goodAnswer;
+        }, 1000);
+
+    }
+
+    //Insert new Sentence QCM and all the corresponding information
+    $scope.insertNewSentenceQCM = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
+        $scope.insertSentenceQCMVideos(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer, $scope.insertSentenceQCM);
+    };
 });
 
 app.config(function($stateProvider, $urlRouterProvider) {
@@ -1085,9 +1172,16 @@ app.config(function($stateProvider, $urlRouterProvider) {
         controller: 'DataManagementController'
     })
 
+
     $stateProvider.state('edit-sentence-qcm', {
-        url: '/manage/sentenceQCM/edit',
+        url: '/manage/sentenceQCM/edit/:id',
         templateUrl: 'templates/edit-sentence-qcm.html',
+        controller: 'DataManagementController'
+    })
+
+    $stateProvider.state('list-sentence-qcm', {
+        url: '/manage/sentenceQCM/list/',
+        templateUrl: 'templates/list-sentence-qcm.html',
         controller: 'DataManagementController'
     })
 

@@ -1,5 +1,66 @@
 <ion-view view-title="Edit a sentence QCM">
-    <ion-content ng-init="getAllSentenceQCMs()">
-
+    <ion-content class="padding" ng-init="initEditQCM()">
+        <div class="list">
+            <div class="item item-divider">
+                Sentences
+            </div>
+            <label class="item item-input">
+                <input type="text" placeholder="{{qcm.frenchSentence}}" ng-model="frenchSentence">
+            </label>
+            <label class="item item-input">
+                <input type="text" placeholder="{{qcm.englishSentence}}" ng-model="englishSentence">
+            </label>
+            <div class="item item-divider">
+                Difficulty
+            </div>
+            <div class="item range">
+                <i class="fa fa-level-down"></i>
+                <input type="range" name="difficultyLevel" min="1" max="5" ng-model="difficultyLevelEdit">
+                <i class="fa fa-level-up"></i>
+            </div>
+            <div class="item item-divider">
+                Videos
+            </div>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">LSF Video A</span>
+                <input type="text" placeholder="{{qcm.videoURLALSF}}" ng-model="videoURLALSFEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">ASL Video A</span>
+                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="videoURLAASLEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">LSF Video B</span>
+                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="videoURLBLSFEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">ASL Video B</span>
+                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="videoURLBASLEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">LSF Video C</span>
+                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="videoURLCLSFEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">ASL Video C</span>
+                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="videoURLCASLEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">LSF Video D</span>
+                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="videoURLDLSFEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">ASL Video D</span>
+                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="videoURLDASLEdit">
+            </label>
+            <div class="item item-divider">
+                Correct Answer
+            </div>
+            <ion-radio ng-model="goodAnswerEdit" ng-value="'A'">Choose A</ion-radio>
+            <ion-radio ng-model="goodAnswerEdit" ng-value="'B'">Choose B</ion-radio>
+            <ion-radio ng-model="goodAnswerEdit" ng-value="'C'">Choose C</ion-radio>
+            <ion-radio ng-model="goodAnswerEdit" ng-value="'D'">Choose D</ion-radio>
+            <button class="button button-block button-positive" ng-click="updateQCM(qcm.id,difficultyLevelEdit, frenchSentence, englishSentence, videoURLALSFEdit, videoURLAASLEdit, videoURLBLSFEdit, videoURLBASLEdit, videoURLCLSFEdit, videoURLCASLEdit, videoURLDLSFEdit, videoURLDASLEdit, goodAnswerEdit)">Edit this!</button>
+        </div>
     </ion-content>
 </ion-view>
