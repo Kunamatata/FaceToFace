@@ -17,10 +17,12 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
             StatusBar.styleDefault();
         }
 
-        if (window.cordova && window.SQLitePlugin)
+        if (window.cordova && window.SQLitePlugin) {
             db = $cordovaSQLite.openDB('face.db', 1); // Android devices
-        else
+            db.executeSql("PRAGMA foreign_keys=ON;")
+        } else
             db = window.openDatabase("face.db", "1.0", "Dev Database", 200000); //To test in web browser with ionic serve
+
 
         /* A RETIRER */
         /* A RETIRER */
@@ -55,9 +57,9 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS video(id INTEGER PRIMARY KEY, youtubeURL TEXT, localURL TEXT)");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS sentenceQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, frenchSentence TEXT, englishSentence TEXT, videoIDALSF INTEGER,videoIDAASL INTEGER, videoIDBLSF INTEGER, videoIDBASL INTEGER, videoIDCLSF INTEGER, videoIDCASL INTEGER, videoIDDLSF INTEGER, videoIDDASL INTEGER, goodAnswer TEXT, FOREIGN KEY(videoIDALSF) REFERENCES video(id), FOREIGN KEY(videoIDAASL) REFERENCES video(id), FOREIGN KEY(videoIDBLSF) REFERENCES video(id), FOREIGN KEY(videoIDBASL) REFERENCES video(id), FOREIGN KEY(videoIDCLSF) REFERENCES video(id), FOREIGN KEY(videoIDCASL) REFERENCES video(id), FOREIGN KEY(videoIDDLSF) REFERENCES video(id), FOREIGN KEY(videoIDDASL) REFERENCES video(id))");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS sentenceQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, frenchSentence TEXT, englishSentence TEXT, videoIDALSF INTEGER,videoIDAASL INTEGER, videoIDBLSF INTEGER, videoIDBASL INTEGER, videoIDCLSF INTEGER, videoIDCASL INTEGER, videoIDDLSF INTEGER, videoIDDASL INTEGER, goodAnswer TEXT, FOREIGN KEY(videoIDALSF) REFERENCES video(id) ON DELETE CASCADE, FOREIGN KEY(videoIDAASL) REFERENCES video(id) ON DELETE CASCADE, FOREIGN KEY(videoIDBLSF) REFERENCES video(id) ON DELETE CASCADE, FOREIGN KEY(videoIDBASL) REFERENCES video(id) ON DELETE CASCADE, FOREIGN KEY(videoIDCLSF) REFERENCES video(id) ON DELETE CASCADE, FOREIGN KEY(videoIDCASL) REFERENCES video(id) ON DELETE CASCADE, FOREIGN KEY(videoIDDLSF) REFERENCES video(id) ON DELETE CASCADE, FOREIGN KEY(videoIDDASL) REFERENCES video(id) ON DELETE CASCADE)");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS videoQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, videoIDLSF INTEGER, videoIDASL INTEGER, englishSentenceA TEXT, frenchSentenceA TEXT, englishSentenceB TEXT, frenchSentenceB TEXT, englishSentenceC TEXT, frenchSentenceC TEXT, englishSentenceD TEXT, frenchSentenceD TEXT, goodAnswer TEXT, FOREIGN KEY(videoIDLSF) REFERENCES video(id), FOREIGN KEY(videoIDASL) REFERENCES video(id))");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS videoQCM(id INTEGER PRIMARY KEY, difficultyLevel INTEGER, videoIDLSF INTEGER, videoIDASL INTEGER, englishSentenceA TEXT, frenchSentenceA TEXT, englishSentenceB TEXT, frenchSentenceB TEXT, englishSentenceC TEXT, frenchSentenceC TEXT, englishSentenceD TEXT, frenchSentenceD TEXT, goodAnswer TEXT, FOREIGN KEY(videoIDLSF) REFERENCES video(id) ON DELETE CASCADE, FOREIGN KEY(videoIDASL) REFERENCES video(id) ON DELETE CASCADE)");
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS genealogy(id INTEGER PRIMARY KEY, wordID INTEGER, frenchDescription TEXT, englishDescription TEXT, videoIDLSFDescription INTEGER, videoIDASLDescription INTEGER, FOREIGN KEY (wordID) REFERENCES word(id),FOREIGN KEY (videoIDLSFDescription) REFERENCES video(id), FOREIGN KEY (videoIDASLDescription) REFERENCES video(id))");
 
@@ -910,6 +912,51 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
 
 app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite) {
 
+//Insert new Sentence QCM and all the corresponding information
+    $scope.insertNewSentenceQCM = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
+        $scope.insertSentenceQCMVideos(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer, $scope.insertSentenceQCM);
+    };
+
+    $scope.insertSentenceQCMVideos = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer, callback) {
+        var query = "INSERT INTO video (youtubeURL) values (?),(?),(?),(?),(?),(?),(?),(?)";
+        $cordovaSQLite.execute(db, query, [videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL]).then(function(res) {
+            console.log("VideoSentenceQCM successfully added -> " + (res.insertId - 7));
+            console.log("VideoSentenceQCM successfully added -> " + (res.insertId - 6));
+            console.log("VideoSentenceQCM successfully added -> " + (res.insertId - 5));
+            console.log("VideoSentenceQCM successfully added -> " + (res.insertId - 4));
+            console.log("VideoSentenceQCM successfully added -> " + (res.insertId - 3));
+            console.log("VideoSentenceQCM successfully added -> " + (res.insertId - 2));
+            console.log("VideoSentenceQCM successfully added -> " + (res.insertId - 1));
+            console.log("VideoSentenceQCM successfully added -> " + (res.insertId));
+            return callback(difficultyLevel, frenchSentence, englishSentence, res.insertId - 7, res.insertId - 6, res.insertId - 5, res.insertId - 4, res.insertId - 3, res.insertId - 2, res.insertId - 1, res.insertId, goodAnswer);
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+
+    $scope.insertSentenceQCM = function(difficultyLevel, frenchSentence, englishSentence, videoIDALSF, videoIDAASL, videoIDBLSF, videoIDBASL, videoIDCLSF, videoIDCASL, videoIDDLSF, videoIDDASL, goodAnswer) {
+        var query = "INSERT INTO sentenceQCM (difficultyLevel, frenchSentence, englishSentence, videoIDALSF, videoIDAASL, videoIDBLSF, videoIDBASL, videoIDCLSF, videoIDCASL, videoIDDLSF, videoIDDASL, goodAnswer) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $cordovaSQLite.execute(db, query, [difficultyLevel, frenchSentence, englishSentence, videoIDALSF, videoIDAASL, videoIDBLSF, videoIDBASL, videoIDCLSF, videoIDCASL, videoIDDLSF, videoIDDASL, goodAnswer]).then(function(res) {
+
+            console.log("Sentence successfully added -> " + res.insertId);
+
+            return res.insertId;
+
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.addQCM = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer){
+        //Appel à la méthode insert qcm
+        console.log(document.getElementById('QCMSentence-LSFVideoA').validity.valid)
+        console.log(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer)
+
+        $scope.insertNewSentenceQCM(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer);
+    }
 });
 
 app.config(function($stateProvider, $urlRouterProvider) {
