@@ -132,8 +132,21 @@ a {
     border-radius: 4px;
 }
 
-.item.item-divider{
+.item.item-divider {
     cursor: pointer;
+}
+
+.alert-popup .popup{
+    border-radius: px;
+}
+
+.alert-popup h3 {
+    color: red;
+}
+
+h2.menu{
+    position: absolute;
+    top: 26px;
 }
 
 @media (max-width: 768px) {
