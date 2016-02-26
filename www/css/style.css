@@ -180,6 +180,10 @@ h2.menu {
     background-color: #fff;
 }
 
+.item.center{
+    text-align: center;
+}
+
 @media (max-width: 768px) {
     [class^="col-"] {
         width: calc(25% - 5px);
