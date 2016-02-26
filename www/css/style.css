@@ -132,11 +132,17 @@ a {
     border-radius: 4px;
 }
 
-.item.item-divider {
-    cursor: pointer;
+.item{
+    border-color: #DADADA;
 }
 
-.alert-popup .popup{
+.item.item-divider {
+    cursor: pointer;
+    color: #212121;
+    background-color: #C5CAE9;
+}
+
+.alert-popup .popup {
     border-radius: px;
 }
 
@@ -144,9 +150,34 @@ a {
     color: red;
 }
 
-h2.menu{
+h2.menu {
     position: absolute;
     top: 26px;
+}
+
+
+/*------------------------------------*\
+    #Ionic Style Modification
+\*------------------------------------*/
+
+.padding.scroll-content.ionic-scroll.has-header {
+    background-color: #FAFAFA;
+}
+
+.button.button-icon.button-clear.ion-navicon {
+    color: #FFF;
+}
+
+.bar-stable.bar.bar-header{
+    background: #3F51B5;
+}
+
+.title.title-center.header-item{
+    color: #FFF;
+}
+
+.item-stacked-label {
+    background-color: #fff;
 }
 
 @media (max-width: 768px) {
