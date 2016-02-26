@@ -222,7 +222,7 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
-        //Insert new video QCM and all the corresponding information
+    //Insert new video QCM and all the corresponding information
     $scope.insertNewSignExplanation = function(wordID, frenchExplanation, englishExplanation, youtubeURLLSF, youtubeURLASL) {
         $scope.insertVideoSignExplanation(wordID, frenchExplanation, englishExplanation, youtubeURLLSF, youtubeURLASL, $scope.insertSignExplanation);
     };
@@ -231,7 +231,7 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         var query = "INSERT INTO video (youtubeURL) values (?),(?)";
         $cordovaSQLite.execute(db, query, [youtubeURLLSF, youtubeURLASL]).then(function(res) {
             console.log("Videos successfully added -> " + res.insertId);
-            return callback(wordID, frenchExplanation, englishExplanation, res.insertId -1, res.insertId);
+            return callback(wordID, frenchExplanation, englishExplanation, res.insertId - 1, res.insertId);
         }, function(err) {
             console.error(err);
             return -1;
@@ -347,25 +347,25 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
-     /*   $scope.insertNewSignExplanation(1, "Le signe-ancêtre commun, attesté pour la première fois en France en 1784 et importé aux USA au début du XXème siècle, comportait deux parties.", "There is a lot of interesting things to say about this sign.", "https://www.youtube.com/embed/87tCKyr5sa4", "https://www.youtube.com/embed/jP5-qP-LTE8");
+    /*   $scope.insertNewSignExplanation(1, "Le signe-ancêtre commun, attesté pour la première fois en France en 1784 et importé aux USA au début du XXème siècle, comportait deux parties.", "There is a lot of interesting things to say about this sign.", "https://www.youtube.com/embed/87tCKyr5sa4", "https://www.youtube.com/embed/jP5-qP-LTE8");
 
 
-        $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
-        $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
+       $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
+       $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
 
-        $scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
+       $scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
 
-        $scope.insertNewDialog(1, 1, "https://www.youtube.com/embed/yhy19VUoKAY");
+       $scope.insertNewDialog(1, 1, "https://www.youtube.com/embed/yhy19VUoKAY");
 
-        for (i = 0; i < 46; i++) {
-            $scope.insertConfiguration(0, "../config_" + (i + 1) + ".jpg");
-        }
+       for (i = 0; i < 46; i++) {
+           $scope.insertConfiguration(0, "../config_" + (i + 1) + ".jpg");
+       }
 
-        $scope.insertNewVideoQCM(1, "https://www.youtube.com/embed/9mp2E58UlR4", "https://www.youtube.com/embed/YVP6M2u2sf0", "Maybe", "Peut-être", "Not sure", "Pas sûr", "Oh yes", "Oh oui", "Cat", "Chat", "B");
+       $scope.insertNewVideoQCM(1, "https://www.youtube.com/embed/9mp2E58UlR4", "https://www.youtube.com/embed/YVP6M2u2sf0", "Maybe", "Peut-être", "Not sure", "Pas sûr", "Oh yes", "Oh oui", "Cat", "Chat", "B");
 
-        $scope.insertNewSentenceQCM(1, "Bob est perdu dans toutes ces lignes de code", "Bob is lost in all those lines of code", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "B");
+       $scope.insertNewSentenceQCM(1, "Bob est perdu dans toutes ces lignes de code", "Bob is lost in all those lines of code", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "B");
 
-        $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");*/
+       $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");*/
 
     /*$scope.searchFrenchWord("Romain");
     setTimeout(function(){
@@ -672,13 +672,10 @@ app.controller("WordingPresentation", function($scope, $sce, $ionicLoading, $htt
         $scope.wordingChoice = SharingWordInformation.getWordingChoice();
 
         // Set information for the other wording button
-        if($scope.wordingChoice == 0)
-        {
+        if ($scope.wordingChoice == 0) {
             $scope.otherWordingName = "Enoncé n°2";
             $scope.otherWordingNumber = 2;
-        }
-        else
-        {
+        } else {
             $scope.otherWordingName = "Enoncé n°1";
             $scope.otherWordingNumber = 1;
         }
@@ -749,7 +746,7 @@ app.controller("WordingPresentation", function($scope, $sce, $ionicLoading, $htt
     };
 
     $scope.setWordingChoice = function() {
-        if($scope.wordingChoice == 0)
+        if ($scope.wordingChoice == 0)
             SharingWordInformation.setWordingChoice(1);
         else
             SharingWordInformation.setWordingChoice(0);
@@ -1341,7 +1338,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
         controller: 'WordingPresentation'
     })
 
-        $stateProvider.state('sign-explanation', {
+    $stateProvider.state('sign-explanation', {
         url: '/word/:id/explanations',
         templateUrl: 'templates/sign-explanation.html',
         controller: 'SignExplanation'
@@ -1443,9 +1440,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
         templateUrl: 'templates/delete-video-qcm.html',
         controller: 'DataManagementController'
     })
-
-
-
 
     $urlRouterProvider.otherwise('/home')
 
