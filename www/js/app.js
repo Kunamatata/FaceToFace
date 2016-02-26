@@ -222,6 +222,36 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
+        //Insert new video QCM and all the corresponding information
+    $scope.insertNewSignExplanation = function(wordID, frenchExplanation, englishExplanation, youtubeURLLSF, youtubeURLASL) {
+        $scope.insertVideoSignExplanation(wordID, frenchExplanation, englishExplanation, youtubeURLLSF, youtubeURLASL, $scope.insertSignExplanation);
+    };
+
+    $scope.insertVideoSignExplanation = function(wordID, frenchExplanation, englishExplanation, youtubeURLLSF, youtubeURLASL, callback) {
+        var query = "INSERT INTO video (youtubeURL) values (?),(?)";
+        $cordovaSQLite.execute(db, query, [youtubeURLLSF, youtubeURLASL]).then(function(res) {
+            console.log("Videos successfully added -> " + res.insertId);
+            return callback(wordID, frenchExplanation, englishExplanation, res.insertId -1, res.insertId);
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.insertSignExplanation = function(wordID, frenchExplanation, englishExplanation, videoIDLSF, videoIDASL) {
+        var query = "INSERT INTO signExplanation (wordID, frenchExplanation, englishExplanation, videoIDLSFExplanation, videoIDASLExplanation) values (?, ?, ?, ?, ?)";
+        $cordovaSQLite.execute(db, query, [wordID, frenchExplanation, englishExplanation, videoIDLSF, videoIDASL]).then(function(res) {
+
+            console.log("SignExplanation successfully added -> " + res.insertId);
+
+            return res.insertId;
+
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
     $scope.insertDialog = function(wordID, language, videoID) {
         var query = "INSERT INTO dialog (wordID, language, videoID) VALUES(?, ?, ?)";
         $cordovaSQLite.execute(db, query, [wordID, language, videoID]).then(function(res) {
@@ -317,8 +347,10 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
+     /*   $scope.insertNewSignExplanation(1, "Le signe-ancêtre commun, attesté pour la première fois en France en 1784 et importé aux USA au début du XXème siècle, comportait deux parties.", "There is a lot of interesting things to say about this sign.", "https://www.youtube.com/embed/87tCKyr5sa4", "https://www.youtube.com/embed/jP5-qP-LTE8");
 
-    /*    $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
+
+        $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
         $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
 
         $scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
@@ -526,7 +558,7 @@ app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLi
     var language;
 
     $scope.initSearchPage = function() {
-        console.log("test");
+
         if ($state.current.name == "fr-search") {
             language = 0;
             $scope.flagPicture = "../img/France-Flag-icon-little.png";
@@ -624,6 +656,10 @@ app.controller("WordPresentation", function($scope, $sce, $ionicLoading, $http, 
         return $sce.trustAsResourceUrl(url);
     }
 
+    $scope.setWord = function() {
+        SharingWordInformation.setWord($scope.word);
+    };
+
     $scope.setWordingChoice = function(number) {
         SharingWordInformation.setWordingChoice(number);
     }
@@ -635,8 +671,21 @@ app.controller("WordingPresentation", function($scope, $sce, $ionicLoading, $htt
         $scope.word = SharingWordInformation.getWord();
         $scope.wordingChoice = SharingWordInformation.getWordingChoice();
 
+        // Set information for the other wording button
+        if($scope.wordingChoice == 0)
+        {
+            $scope.otherWordingName = "Enoncé n°2";
+            $scope.otherWordingNumber = 2;
+        }
+        else
+        {
+            $scope.otherWordingName = "Enoncé n°1";
+            $scope.otherWordingNumber = 1;
+        }
+
         // If we don't have the word's wordings information in memory, we execute a search query
-        if ($scope.wordings == undefined) {
+        if ($scope.word.wordingLSF == undefined && $scope.word.wordingASL == undefined) {
+
             var query = "SELECT * FROM wording WHERE wordID = ?";
             $cordovaSQLite.execute(db, query, [$scope.word.id]).then(function(res) {
                 if (res.rows.length > 0) {
@@ -699,11 +748,12 @@ app.controller("WordingPresentation", function($scope, $sce, $ionicLoading, $htt
         SharingWordInformation.setWord($scope.word);
     };
 
-    $scope.setWordingChoice = function(number) {
-        SharingWordInformation.setWordingChoice(number);
+    $scope.setWordingChoice = function() {
+        if($scope.wordingChoice == 0)
+            SharingWordInformation.setWordingChoice(1);
+        else
+            SharingWordInformation.setWordingChoice(0);
     }
-
-    $scope.prepareWordingInformation();
 });
 
 app.controller("DialogList", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite, SharingWordInformation) {
@@ -746,6 +796,10 @@ app.controller("DialogList", function($scope, $sce, $ionicLoading, $http, $cordo
         SharingWordInformation.setDialogLanguageChoice(language);
     };
 
+    $scope.setWordingChoice = function(number) {
+        SharingWordInformation.setWordingChoice(number);
+    }
+
 });
 
 app.controller("DialogPresentation", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite, SharingWordInformation) {
@@ -787,6 +841,82 @@ app.controller("DialogPresentation", function($scope, $sce, $ionicLoading, $http
     $scope.trustUrl = function(url) {
         return $sce.trustAsResourceUrl(url);
     };
+
+    $scope.setWord = function() {
+        SharingWordInformation.setWord($scope.word);
+    };
+
+    $scope.setWordingChoice = function(number) {
+        SharingWordInformation.setWordingChoice(number);
+    }
+});
+
+app.controller("SignExplanation", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite, SharingWordInformation) {
+
+    $scope.prepareSignExplanation = function() {
+        $scope.word = SharingWordInformation.getWord();
+
+        // If we don't have the sign's explanation
+        if ($scope.word.signExplanation == undefined) {
+
+            var query = "SELECT * FROM signExplanation WHERE wordID = ?";
+            $cordovaSQLite.execute(db, query, [$scope.word.id]).then(function(res) {
+                if (res.rows.length > 0) {
+                    console.log("prepareSignExplanation : SELECTED -> " + res.rows.length);
+
+                    $scope.word.signExplanation = res.rows.item(0);
+
+                    $scope.searchYoutubeURLByIDs($scope.word.signExplanation.videoIDLSFExplanation, $scope.word.signExplanation.videoIDASLExplanation);
+
+                } else {
+                    console.log("No results found");
+                }
+            }, function(err) {
+                console.error(err);
+            });
+        }
+    };
+
+    $scope.searchYoutubeURLByIDs = function(videoIDLSF, videoIDASL) {
+
+        var query = "SELECT * FROM video WHERE id = ? OR id = ?";
+        $cordovaSQLite.execute(db, query, [videoIDLSF, videoIDASL]).then(function(res) {
+            if (res.rows.length == 2) {
+
+                console.log("searchYoutubeURLBySignIDs : SELECTED -> " + res.rows.length);
+
+                for (var i = 0; i < 2; i++) {
+                    console.log(res.rows.item(i))
+                    switch (res.rows.item(i).id) {
+                        case videoIDLSF:
+                            $scope.word.signExplanation.LSFYoutubeURL = res.rows.item(i).youtubeURL;
+                            break;
+                        case videoIDASL:
+                            $scope.word.signExplanation.ASLYoutubeURL = res.rows.item(i).youtubeURL;
+                            break;
+                    }
+                }
+
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
+    // Enable to trust the URL so Angular can load the corresponding template
+    $scope.trustUrl = function(url) {
+        return $sce.trustAsResourceUrl(url);
+    };
+
+    $scope.setWord = function() {
+        SharingWordInformation.setWord($scope.word);
+    };
+
+    $scope.setWordingChoice = function(number) {
+        SharingWordInformation.setWordingChoice(number);
+    }
 });
 
 app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite, SharingQCMInformation) {
@@ -852,9 +982,11 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
         // Enable click on buttons
         $scope.buttonsDisabled = false;
 
+        // Reset videos
+        $scope.videoLSF = "";
+        $scope.videoASL = "";
+
         // Reset all the buttons states
-        document.getElementById("buttonSubmit-sentenceQCM").style.visibility = 'hidden';
-        document.getElementById("buttonSubmit-sentenceQCM").style.backgroundColor = "";
         document.getElementById("buttonResult-sentenceQCM").style.visibility = 'hidden';
         document.getElementById("buttonResult-sentenceQCM").style.backgroundColor = "";
         document.getElementById("QCMSentenceButtonAnswerA").style.backgroundColor = "";
@@ -870,7 +1002,7 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
         }
 
         $scope.actualQuestion = sentenceQCMList[numberChosen];
-        console.log($scope.actualQuestion)
+
 
     };
 
@@ -970,14 +1102,12 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
         userAnswer = document.getElementById("buttonSubmit-sentenceQCM").getAttribute('data-userAnswer');
         // If the user had the good answer, tells him he is correct
         if (userAnswer == $scope.actualQuestion.goodAnswer) {
-            document.getElementById("buttonSubmit-sentenceQCM").style.backgroundColor = "#2BBD2D";
             document.getElementById("buttonResult-sentenceQCM").style.backgroundColor = "#2BBD2D";
             document.getElementById("QCMSentenceButtonAnswer" + $scope.actualQuestion.goodAnswer).style.backgroundColor = "#2BBD2D";
             document.getElementById("buttonResult-sentenceQCM").innerHTML = "Correct !";
         }
         // If he's Incorrect, tells him and show him the good answer
         else {
-            document.getElementById("buttonSubmit-sentenceQCM").style.backgroundColor = "#C00000";
             document.getElementById("buttonResult-sentenceQCM").style.backgroundColor = "#C00000"
             document.getElementById("QCMSentenceButtonAnswer" + $scope.actualQuestion.goodAnswer).style.backgroundColor = "#2BBD2D";
             document.getElementById("QCMSentenceButtonAnswer" + userAnswer).style.backgroundColor = "#C00000";
@@ -1209,6 +1339,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
         url: '/word/:id/wording/:number',
         templateUrl: 'templates/wording-presentation.html',
         controller: 'WordingPresentation'
+    })
+
+        $stateProvider.state('sign-explanation', {
+        url: '/word/:id/explanations',
+        templateUrl: 'templates/sign-explanation.html',
+        controller: 'SignExplanation'
     })
 
     $stateProvider.state('dialog-list', {

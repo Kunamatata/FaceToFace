@@ -1,0 +1,49 @@
+<ion-view view-title="Aller plus loin">
+<ion-content class="padding">
+
+  <div class="row">
+    <div class="center">
+            <button class="button button-positive" ng-click="setWordChoice();" ui-sref="word-presentation({id:word.id})">
+              Mot
+          </button>
+            <button class="button button-positive" ng-click="setWordChoice(); setWordingChoice(0)" ui-sref="wording-presentation({id:word.id, number:1})">
+              Enoncé n°1
+            </button>
+            <button class="button button-positive" ng-click="setWordChoice(); setWordingChoice(1)" ui-sref="wording-presentation({id:word.id, number:2})">
+              Enoncé n°2
+            </button>
+          <button class="button button-positive" ng-click="setWordChoice();" ui-sref="dialog-list({id:word.id})">
+              Dialogues
+          </button>
+    </div>
+  </div>
+
+    <div class="row responsive-sm" ng-init="prepareSignExplanation()">
+      <div class="col col-50">
+          <div class="row">
+            <img class="center" src="../img/France-Flag-icon.png">
+          </div>
+          <div class="row">
+            <div class="center">{{word.signExplanation.frenchExplanation}}</div>
+          </div>
+          <div class="row">
+            <iframe class="center" src="{{trustUrl(word.signExplanation.LSFYoutubeURL)}}" frameborder="0"></iframe>
+          </div>
+      </div>
+
+      <div class="col col-50">
+        <div class="row">
+          <img class="center" src="../img/United-States-Flag-icon.png">
+        </div>
+        <div class="row">
+          <div class="center">{{word.signExplanation.englishExplanation}}</div>
+        </div>
+        <div class="row">
+          <iframe class="center" src="{{trustUrl(word.signExplanation.ASLYoutubeURL)}}" frameborder="0"></iframe>
+        </div>
+      </div>
+  </div>
+
+
+</ion-content>
+</ion-view>
