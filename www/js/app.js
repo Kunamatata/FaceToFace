@@ -42,6 +42,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
                 $cordovaSQLite.execute(db, "DROP table genealogy");
                 $cordovaSQLite.execute(db, "DROP table videoQCM");
                 $cordovaSQLite.execute(db, "DROP table sentenceQCM");
+
                 $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");*/
         /*___________________*/
 
@@ -307,6 +308,17 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
+    $scope.insertPositionConfigurationSign = function(signID, configurationIDDominating, positionIDDominating) {
+        var query = "INSERT INTO positionConfigurationSign (signID, configurationIDDominating, positionIDDominating) values(?, ?, ?)";
+        $cordovaSQLite.execute(db, query, [signID, configurationIDDominating, positionIDDominating]).then(function(res) {
+            console.log("Position Configuration Sign successfully added -> " + res.insertId + " " + signID);
+            return res.insertId;
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
     $scope.insertPositionConfigurationSign = function(signID, configurationIDDominating, positionIDDominating, configurationIDDominated, positionIDDominated) {
         var query = "INSERT INTO positionConfigurationSign (signID, configurationIDDominating, positionIDDominating, configurationIDDominated, positionIDDominated) values(?, ?, ?, ?, ?)";
         $cordovaSQLite.execute(db, query, [signID, configurationIDDominating, positionIDDominating, configurationIDDominated, positionIDDominated]).then(function(res) {
@@ -389,7 +401,7 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
 
        $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");*/
 
-    /* $scope.insertPosition(0,"mouth");
+    /*$scope.insertPosition(0,"mouth");
      $scope.insertPosition(1,"chin");
      $scope.insertPosition(2,"throat");
      $scope.insertPosition(3,"cheek");
@@ -404,23 +416,27 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
      $scope.insertPosition(12,"rightforearm");
      $scope.insertPosition(13,"rightelbow");
      $scope.insertPosition(14,"lefthand");
-     $scope.insertPosition(15,"righthand");*/
+     $scope.insertPosition(15,"righthand");
 
     //first configuration Mouth  first configuration Chin
-    //$scope.insertPositionConfigurationSign(1, 1, 0, 1, 1);
-
+    $scope.insertPositionConfigurationSign(1, 1, 0, 1, 1);
+    $scope.insertPositionConfigurationSign(3, 1, 0, 1, 1);
+    $scope.insertPositionConfigurationSign(2, 2, 0, 1, 1);
+    $scope.insertPositionConfigurationSign(3, 1, 0);
 
     /*$scope.searchFrenchWord("Romain");
     setTimeout(function(){
         console.log($scope.word.frenchWord);
         //$scope.deleteWord("Romain");
     }, 2000);*/
+
+
 });
 
 // Factory service to share word between controllers
 app.factory('SharingWordInformation', function() {
     var word = {};
-    var possibleSignIDList = [];
+    var possibleWordList = [];
     var wordingChoice = 0;
     var dialogChoice = 0;
     var dialogLanguageChoice = 0;
@@ -453,11 +469,11 @@ app.factory('SharingWordInformation', function() {
         setDialogLanguageChoice: function(number) {
             dialogLanguageChoice = number;
         },
-        getPossibleSignIDList: function() {
-            return possibleSignIDList;
+        getPossibleWordList: function() {
+            return possibleWordList;
         },
-        setPossibleSignIDList: function(array) {
-            possibleSignIDList = array.slice();
+        setPossibleWordList: function(array) {
+            possibleWordList = array.slice();
         }
     };
 });
@@ -507,7 +523,7 @@ app.factory("SharingConfigurationsLSF", function() {
 
 
 
-app.controller("LSFSearch", function($scope, $ionicLoading, $http, $ionicScrollDelegate, $ionicPopup, $location, SharingConfigurationsLSF) {
+app.controller("LSFSearch", function($scope, $ionicLoading, $http, $ionicScrollDelegate, $ionicPopup, $location, $state, SharingConfigurationsLSF) {
 
     $scope.images = [];
     $scope.selectedHand = "";
@@ -570,7 +586,7 @@ app.controller("LSFSearch", function($scope, $ionicLoading, $http, $ionicScrollD
     $scope.selectPositions = function() {
         if ($scope.selectedConfigurations[0] != null) {
             SharingConfigurationsLSF.setConfigurationsLSF($scope.selectedConfigurations);
-            $location.path("position-skeleton")
+            $state.go("position-skeleton");
         } else {
             //Display alert message
             $ionicPopup.alert({
@@ -584,16 +600,17 @@ app.controller("LSFSearch", function($scope, $ionicLoading, $http, $ionicScrollD
 });
 
 
-app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDelegate, $ionicPopup, $cordovaSQLite, $location, SharingWordInformation, SharingConfigurationsLSF) {
+app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDelegate, $ionicPopup, $cordovaSQLite, $location, $state, SharingWordInformation, SharingConfigurationsLSF) {
     var selectedConfigurations = SharingConfigurationsLSF.getConfigurationsLSF();
 
-    console.log(selectedConfigurations)
     $scope.activeHand = selectedConfigurations[0];
     $scope.passiveHand = selectedConfigurations[1];
 
-    var activeHandPosition = {}
-    var passiveHandPosition = {}
+    var activeHandPosition = {};
+    var passiveHandPosition = {};
     var currentSelectedHand = "";
+
+    var possibleWordList = [];
 
     $scope.activateSelection = function(handDivID) {
         if (handDivID == "first-hand-picture") {
@@ -624,15 +641,14 @@ app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDe
         var possibleSignIDList = [];
         //If passiveHand doesn't exist
         if (Object.keys(passiveHandPosition).length == 0) {
-            query = "SELECT signID from positionConfigurationSign where configurationIDDominating = ? and positionIDDominating = ? ";
+            query = "SELECT word.id, frenchWord, englishWord, signIDLSF, signIDASL from word, positionConfigurationSign WHERE word.signIDLSF = positionConfigurationSign.signID AND configurationIDDominating = ? AND positionIDDominating = ?  AND configurationIDDominated = \"undefined\" AND positionIDDominated = \"undefined\"";
             $cordovaSQLite.execute(db, query, [activeHandPosition['signID'], activeHandPosition['positionID']]).then(function(res) {
                 if (res.rows.length > 0) {
                     for (var i = 0; i < res.rows.length; i++) {
-                        possibleSignIDList.push(res.rows.item(i));
+                        possibleWordList.push(res.rows.item(i));
                     };
-                    SharingWordInformation.setPossibleSignIDList(possibleSignIDList);
-                    console.log("SharingWordInformation possibleSignIDList => ")
-                    console.log(SharingWordInformation.getPossibleSignIDList());
+
+                    $scope.checkResults();
                 } else {
                     console.log("No results found");
                 }
@@ -642,20 +658,38 @@ app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDe
         }
         // If activehandPosition & passivehandPosition exist
         else {
-            query = "SELECT signID from positionConfigurationSign where configurationIDDominating = ? and positionIDDominating = ?  and configurationIDDominated = ? and positionIDDominated = ?";
+            query = "SELECT word.id, frenchWord, englishWord, signIDLSF, signIDASL from word, positionConfigurationSign WHERE word.signIDLSF = positionConfigurationSign.signID AND configurationIDDominating = ? AND positionIDDominating = ?  AND configurationIDDominated = ? AND positionIDDominated = ?";
             $cordovaSQLite.execute(db, query, [activeHandPosition['signID'], activeHandPosition['positionID'], passiveHandPosition['signID'], passiveHandPosition['positionID']]).then(function(res) {
                 if (res.rows.length > 0) {
                     for (var i = 0; i < res.rows.length; i++) {
-                        possibleSignIDList.push(res.rows.item(i));
+                        possibleWordList.push(res.rows.item(i));
                     };
-                    SharingWordInformation.setPossibleSignIDList(possibleSignIDList);
-                    console.log("SharingWordInformation possibleSignIDList => ");
-                    console.log(SharingWordInformation.getPossibleSignIDList());
+
+                    $scope.checkResults();
                 } else {
                     console.log("No results found");
                 }
             }, function(err) {
                 console.error(err);
+            });
+        }
+    };
+
+    $scope.checkResults = function() {
+        if (possibleWordList.length > 1) {
+            SharingWordInformation.setPossibleWordList(possibleWordList);
+            $state.go("word-selection");
+        }
+        else if(possibleWordList.length == 1)
+        {
+            SharingWordInformation.setWord(possibleWordList[0]);
+            $state.go("word-presentation");
+        }
+        else {
+            //Display alert message
+            $ionicPopup.alert({
+                title: 'Aucun mot ne correspond à cette combinaison.',
+                cssClass: 'alert-popup'
             });
         }
     }
@@ -699,7 +733,7 @@ app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLi
         $scope.words = [];
 
         if (searchedWord != "") {
-            var query = "SELECT id, englishWord, frenchWord FROM word WHERE " + (language == 0 ? "frenchWord" : "englishWord") + " LIKE ?";
+            var query = "SELECT * FROM word WHERE " + (language == 0 ? "frenchWord" : "englishWord") + " LIKE ?";
             $cordovaSQLite.execute(db, query, [searchedWord + "%"]).then(function(res) {
                 if (res.rows.length > 0) {
                     console.log("SearchPotentialWords : SELECTED -> " + res.rows.length);
@@ -722,6 +756,18 @@ app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLi
             });
         }
     };
+
+    $scope.setWord = function(word) {
+        SharingWordInformation.setWord(word);
+    };
+});
+
+app.controller("WordSelection", function($scope, $ionicLoading, $http, $cordovaSQLite, $state, SharingWordInformation) {
+
+    $scope.initWordSelection = function()
+    {
+        $scope.words = SharingWordInformation.getPossibleWordList();
+    }
 
     $scope.setWord = function(word) {
         SharingWordInformation.setWord(word);
@@ -1448,6 +1494,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
         url: '/en-search',
         templateUrl: 'templates/word-search.html',
         controller: 'WordSearch'
+    })
+
+    $stateProvider.state('word-selection', {
+        url: '/word-selection',
+        templateUrl: 'templates/word-selection.html',
+        controller: 'WordSelection'
     })
 
     $stateProvider.state('word-presentation', {
