@@ -648,10 +648,11 @@ app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDe
                         possibleWordList.push(res.rows.item(i));
                     };
 
-                    $scope.checkResults();
+
                 } else {
                     console.log("No results found");
                 }
+                $scope.checkResults();
             }, function(err) {
                 console.error(err);
             });
@@ -665,10 +666,11 @@ app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDe
                         possibleWordList.push(res.rows.item(i));
                     };
 
-                    $scope.checkResults();
+
                 } else {
                     console.log("No results found");
                 }
+                $scope.checkResults();
             }, function(err) {
                 console.error(err);
             });
@@ -679,13 +681,10 @@ app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDe
         if (possibleWordList.length > 1) {
             SharingWordInformation.setPossibleWordList(possibleWordList);
             $state.go("word-selection");
-        }
-        else if(possibleWordList.length == 1)
-        {
+        } else if (possibleWordList.length == 1) {
             SharingWordInformation.setWord(possibleWordList[0]);
             $state.go("word-presentation");
-        }
-        else {
+        } else {
             //Display alert message
             $ionicPopup.alert({
                 title: 'Aucun mot ne correspond à cette combinaison.',
@@ -693,7 +692,6 @@ app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDe
             });
         }
     }
-
 });
 
 app.controller("ASLSearch", function($scope, $ionicLoading, $http) {
@@ -764,8 +762,7 @@ app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLi
 
 app.controller("WordSelection", function($scope, $ionicLoading, $http, $cordovaSQLite, $state, SharingWordInformation) {
 
-    $scope.initWordSelection = function()
-    {
+    $scope.initWordSelection = function() {
         $scope.words = SharingWordInformation.getPossibleWordList();
     }
 
