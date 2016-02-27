@@ -67,7 +67,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS dialog(id INTEGER PRIMARY KEY, wordID INTEGER, language INTEGER, videoID INTEGER, FOREIGN KEY(wordID) REFERENCES word(id), FOREIGN KEY(videoID) REFERENCES video(id))");
 
-        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS positionConfigurationSign(signID INTEGER PRIMARY KEY, configurationIDDominating INTEGER PRIMARY KEY, positionIDDominating INTEGER PRIMARY KEY, configurationIDDominated INTEGER PRIMARY KEY, positionIDDominated INTEGER PRIMARY KEY,  FOREIGN KEY(signID) REFERENCES sign(id), FOREIGN KEY(configurationIDDominating) REFERENCES configuration(id), FOREIGN KEY(positionIDDominating) REFERENCES position(id), FOREIGN KEY(configurationIDDominated) REFERENCES configuration(id), FOREIGN KEY(positionIDDominated) REFERENCES position(id))");
+        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS positionConfigurationSign(signID INTEGER, configurationIDDominating INTEGER, positionIDDominating INTEGER, configurationIDDominated INTEGER, positionIDDominated INTEGER,  FOREIGN KEY(signID) REFERENCES sign(id), FOREIGN KEY(configurationIDDominating) REFERENCES configuration(id), FOREIGN KEY(positionIDDominating) REFERENCES position(id), FOREIGN KEY(configurationIDDominated) REFERENCES configuration(id), FOREIGN KEY(positionIDDominated) REFERENCES position(id), PRIMARY KEY (signID, configurationIDDominating, positionIDDominating,configurationIDDominated))");
     });
 });
 
@@ -307,6 +307,17 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
+    $scope.insertPositionConfigurationSign = function(signID, configurationIDDominating, positionIDDominating, configurationIDDominated, positionIDDominated) {
+        var query = "INSERT INTO positionConfigurationSign (signID, configurationIDDominating, positionIDDominating, configurationIDDominated, positionIDDominated) values(?, ?, ?, ?, ?)";
+        $cordovaSQLite.execute(db, query, [signID, configurationIDDominating, positionIDDominating, configurationIDDominated, positionIDDominated]).then(function(res) {
+            console.log("Position Configuration Sign successfully added -> " + res.insertId + " " + signID);
+            return res.insertId;
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
     $scope.deleteWord = function(mot) {
         var query = "DELETE FROM word where frenchWord = ?";
         $cordovaSQLite.execute(db, query, [mot]).then(function(res) {
@@ -395,6 +406,9 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
      $scope.insertPosition(14,"lefthand");
      $scope.insertPosition(15,"righthand");*/
 
+    //first configuration Mouth  first configuration Chin
+    //$scope.insertPositionConfigurationSign(1, 1, 0, 1, 1);
+
 
     /*$scope.searchFrenchWord("Romain");
     setTimeout(function(){
@@ -406,6 +420,7 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
 // Factory service to share word between controllers
 app.factory('SharingWordInformation', function() {
     var word = {};
+    var possibleSignIDList = [];
     var wordingChoice = 0;
     var dialogChoice = 0;
     var dialogLanguageChoice = 0;
@@ -437,6 +452,12 @@ app.factory('SharingWordInformation', function() {
         },
         setDialogLanguageChoice: function(number) {
             dialogLanguageChoice = number;
+        },
+        getPossibleSignIDList: function() {
+            return possibleSignIDList;
+        },
+        setPossibleSignIDList: function(array) {
+            possibleSignIDList = array.slice();
         }
     };
 });
@@ -563,12 +584,11 @@ app.controller("LSFSearch", function($scope, $ionicLoading, $http, $ionicScrollD
 });
 
 
-app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDelegate, $ionicPopup, SharingConfigurationsLSF) {
+app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDelegate, $ionicPopup, $cordovaSQLite, $location, SharingWordInformation, SharingConfigurationsLSF) {
     var selectedConfigurations = SharingConfigurationsLSF.getConfigurationsLSF();
-    console.log("coucou")
+
     console.log(selectedConfigurations)
     $scope.activeHand = selectedConfigurations[0];
-    console.log($scope.activeHand.id)
     $scope.passiveHand = selectedConfigurations[1];
 
     var activeHandPosition = {}
@@ -578,23 +598,67 @@ app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDe
     $scope.activateSelection = function(handDivID) {
         if (handDivID == "first-hand-picture") {
             activeHandPosition['src'] = $scope.activeHand.src;
-            activeHandPosition['id'] = $scope.activeHand.id;
+            activeHandPosition['signID'] = $scope.activeHand.id;
         } else if (handDivID == "second-hand-picture" && $scope.passiveHand != null) {
             passiveHandPosition['src'] = $scope.passiveHand.src;
-            passiveHandPosition['id'] = $scope.passiveHand.id;
+            passiveHandPosition['signID'] = $scope.passiveHand.id;
         }
         currentSelectedHand = handDivID;
     };
 
-    $scope.setPosition = function(positionName) {
-        if (activeHandPosition['src'] != null && activeHandPosition['id'] != null && currentSelectedHand == "first-hand-picture") {
+    $scope.setPosition = function(positionName, positionID) {
+        if (activeHandPosition['src'] != null && activeHandPosition['signID'] != null && currentSelectedHand == "first-hand-picture") {
             activeHandPosition['position'] = positionName;
+            activeHandPosition['positionID'] = positionID;
             console.log(activeHandPosition);
         } else {
             passiveHandPosition['position'] = positionName
+            passiveHandPosition['positionID'] = positionID;
             console.log(passiveHandPosition);
         }
     };
+
+    $scope.submitConfigurationsPositions = function() {
+
+        var query = "";
+        var possibleSignIDList = [];
+        //If passiveHand doesn't exist
+        if (Object.keys(passiveHandPosition).length == 0) {
+            query = "SELECT signID from positionConfigurationSign where configurationIDDominating = ? and positionIDDominating = ? ";
+            $cordovaSQLite.execute(db, query, [activeHandPosition['signID'], activeHandPosition['positionID']]).then(function(res) {
+                if (res.rows.length > 0) {
+                    for (var i = 0; i < res.rows.length; i++) {
+                        possibleSignIDList.push(res.rows.item(i));
+                    };
+                    SharingWordInformation.setPossibleSignIDList(possibleSignIDList);
+                    console.log("SharingWordInformation possibleSignIDList => ")
+                    console.log(SharingWordInformation.getPossibleSignIDList());
+                } else {
+                    console.log("No results found");
+                }
+            }, function(err) {
+                console.error(err);
+            });
+        }
+        // If activehandPosition & passivehandPosition exist
+        else {
+            query = "SELECT signID from positionConfigurationSign where configurationIDDominating = ? and positionIDDominating = ?  and configurationIDDominated = ? and positionIDDominated = ?";
+            $cordovaSQLite.execute(db, query, [activeHandPosition['signID'], activeHandPosition['positionID'], passiveHandPosition['signID'], passiveHandPosition['positionID']]).then(function(res) {
+                if (res.rows.length > 0) {
+                    for (var i = 0; i < res.rows.length; i++) {
+                        possibleSignIDList.push(res.rows.item(i));
+                    };
+                    SharingWordInformation.setPossibleSignIDList(possibleSignIDList);
+                    console.log("SharingWordInformation possibleSignIDList => ");
+                    console.log(SharingWordInformation.getPossibleSignIDList());
+                } else {
+                    console.log("No results found");
+                }
+            }, function(err) {
+                console.error(err);
+            });
+        }
+    }
 
 });
 
