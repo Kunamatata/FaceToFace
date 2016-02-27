@@ -625,12 +625,20 @@ app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDe
 
     $scope.setPosition = function(positionName, positionID) {
         if (activeHandPosition['src'] != null && activeHandPosition['signID'] != null && currentSelectedHand == "first-hand-picture") {
+            if (activeHandPosition['position']) {
+                document.getElementsByClassName(activeHandPosition['position'])[0].style.backgroundColor = "red";
+            }
             activeHandPosition['position'] = positionName;
             activeHandPosition['positionID'] = positionID;
+            document.getElementsByClassName(positionName)[0].style.backgroundColor = "#00FF0C";
             console.log(activeHandPosition);
         } else {
+            if (passiveHandPosition['position']) {
+                document.getElementsByClassName(passiveHandPosition['position'])[0].style.backgroundColor = "red";
+            }
             passiveHandPosition['position'] = positionName
             passiveHandPosition['positionID'] = positionID;
+            document.getElementsByClassName(positionName)[0].style.backgroundColor = "#00FF0C";
             console.log(passiveHandPosition);
         }
     };

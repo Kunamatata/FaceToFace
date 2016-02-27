@@ -193,7 +193,7 @@ iframe{
 }
 
 .skeleton-square:hover {
-    background-color: #00FF0C;
+    background-color: #00FF0C !important;
 }
 
 .skeleton-circle{
@@ -205,7 +205,7 @@ iframe{
 }
 
 .skeleton-circle:hover {
-    background-color: #00FF0C;
+    background-color: #00FF0C !important;
 }
 
 
