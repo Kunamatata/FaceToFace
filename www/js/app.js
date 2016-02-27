@@ -296,6 +296,17 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
+    $scope.insertPosition = function(id, positionName) {
+        var query = "INSERT INTO position (id, positionName) values(?, ?)";
+        $cordovaSQLite.execute(db, query, [id, positionName]).then(function(res) {
+            console.log("Position successfully added -> " + res.insertId + " " + positionName);
+            return res.insertId;
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
     $scope.deleteWord = function(mot) {
         var query = "DELETE FROM word where frenchWord = ?";
         $cordovaSQLite.execute(db, query, [mot]).then(function(res) {
@@ -366,6 +377,24 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
        $scope.insertNewSentenceQCM(1, "Bob est perdu dans toutes ces lignes de code", "Bob is lost in all those lines of code", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "B");
 
        $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");*/
+
+    /* $scope.insertPosition(0,"mouth");
+     $scope.insertPosition(1,"chin");
+     $scope.insertPosition(2,"throat");
+     $scope.insertPosition(3,"cheek");
+     $scope.insertPosition(4,"temple");
+     $scope.insertPosition(5,"eyes");
+     $scope.insertPosition(6,"forehead");
+     $scope.insertPosition(7,"rightpectoral");
+     $scope.insertPosition(8,"leftpectoral");
+     $scope.insertPosition(9,"thorax");
+     $scope.insertPosition(10,"stomach");
+     $scope.insertPosition(11,"rightarm");
+     $scope.insertPosition(12,"rightforearm");
+     $scope.insertPosition(13,"rightelbow");
+     $scope.insertPosition(14,"lefthand");
+     $scope.insertPosition(15,"righthand");*/
+
 
     /*$scope.searchFrenchWord("Romain");
     setTimeout(function(){
@@ -535,6 +564,37 @@ app.controller("LSFSearch", function($scope, $ionicLoading, $http, $ionicScrollD
 
 
 app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDelegate, $ionicPopup, SharingConfigurationsLSF) {
+    var selectedConfigurations = SharingConfigurationsLSF.getConfigurationsLSF();
+    console.log("coucou")
+    console.log(selectedConfigurations)
+    $scope.activeHand = selectedConfigurations[0];
+    console.log($scope.activeHand.id)
+    $scope.passiveHand = selectedConfigurations[1];
+
+    var activeHandPosition = {}
+    var passiveHandPosition = {}
+    var currentSelectedHand = "";
+
+    $scope.activateSelection = function(handDivID) {
+        if (handDivID == "first-hand-picture") {
+            activeHandPosition['src'] = $scope.activeHand.src;
+            activeHandPosition['id'] = $scope.activeHand.id;
+        } else if (handDivID == "second-hand-picture" && $scope.passiveHand != null) {
+            passiveHandPosition['src'] = $scope.passiveHand.src;
+            passiveHandPosition['id'] = $scope.passiveHand.id;
+        }
+        currentSelectedHand = handDivID;
+    };
+
+    $scope.setPosition = function(positionName) {
+        if (activeHandPosition['src'] != null && activeHandPosition['id'] != null && currentSelectedHand == "first-hand-picture") {
+            activeHandPosition['position'] = positionName;
+            console.log(activeHandPosition);
+        } else {
+            passiveHandPosition['position'] = positionName
+            console.log(passiveHandPosition);
+        }
+    };
 
 });
 
