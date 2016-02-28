@@ -1,5 +1,5 @@
 <ion-view view-title="Edit a sentence QCM">
-    <ion-content class="padding" ng-init="initEditQCM()">
+    <ion-content class="padding" ng-init="initEditSentenceQCM()">
         <div class="list">
             <div class="item item-divider">
                 Sentences
@@ -60,7 +60,7 @@
             <ion-radio ng-model="goodAnswerEdit" ng-value="'B'">Choose B</ion-radio>
             <ion-radio ng-model="goodAnswerEdit" ng-value="'C'">Choose C</ion-radio>
             <ion-radio ng-model="goodAnswerEdit" ng-value="'D'">Choose D</ion-radio>
-            <button class="button button-block button-positive" ng-click="updateQCM(qcm.id,difficultyLevelEdit, frenchSentence, englishSentence, videoURLALSFEdit, videoURLAASLEdit, videoURLBLSFEdit, videoURLBASLEdit, videoURLCLSFEdit, videoURLCASLEdit, videoURLDLSFEdit, videoURLDASLEdit, goodAnswerEdit)">Edit this!</button>
+            <button class="button button-block button-positive" ng-click="updateSentenceQCM(qcm.id,difficultyLevelEdit, frenchSentence, englishSentence, videoURLALSFEdit, videoURLAASLEdit, videoURLBLSFEdit, videoURLBASLEdit, videoURLCLSFEdit, videoURLCASLEdit, videoURLDLSFEdit, videoURLDASLEdit, goodAnswerEdit)">Edit this!</button>
         </div>
     </ion-content>
 </ion-view>

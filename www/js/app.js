@@ -506,6 +506,18 @@ app.factory("SharingSentenceQCMInformation", function() {
     }
 });
 
+app.factory("SharingVideoQCMInformation", function() {
+    var qcm = {};
+    return {
+        getVideoQCM: function() {
+            return qcm;
+        },
+        setVideoQCM: function(object) {
+            qcm = object;
+        }
+    }
+});
+
 app.factory("SharingConfigurationsLSF", function() {
     var selectedConfigurationsLSF = [];
 
@@ -1297,13 +1309,17 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
 
 });
 
-app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $ionicPopup, $http, $cordovaSQLite, $location, SharingSentenceQCMInformation) {
+app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $ionicPopup, $http, $cordovaSQLite, $state, $location, $sce, SharingSentenceQCMInformation, SharingVideoQCMInformation) {
 
     $scope.youtubeURLArray = [];
     $scope.qcmList = [];
 
 
-    //# A Retirer!
+    // Trust the URL so Angular can load the corresponding template
+    $scope.trustUrl = function(url) {
+            return $sce.trustAsResourceUrl(url);
+        }
+        //# A Retirer!
     var query = "SELECT * FROM video WHERE id = ?";
     $cordovaSQLite.execute(db, query, [14]).then(function(res) {
         if (res.rows.length > 0) {
@@ -1350,7 +1366,39 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         });
     };
 
-    $scope.addQCM = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
+    //Insert new video QCM and all the corresponding information
+    $scope.insertNewVideoQCM = function(difficultyLevel, youtubeURLLSF, youtubeURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer) {
+        $scope.insertVideoQCMVideos(difficultyLevel, youtubeURLLSF, youtubeURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer, $scope.insertVideoQCM);
+    };
+
+        $scope.insertVideoQCMVideos = function(difficultyLevel, youtubeURLLSF, youtubeURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer, callback) {
+        var query = "INSERT INTO video (youtubeURL) values (?),(?)";
+        $cordovaSQLite.execute(db, query, [youtubeURLLSF, youtubeURLASL]).then(function(res) {
+            console.log("VideoQCM successfully added -> " + res.insertId);
+            return callback(difficultyLevel, res.insertId - 1, res.insertId, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer);
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.insertVideoQCM = function(difficultyLevel, videoIDLSF, videoIDASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer) {
+        var query = "INSERT INTO videoQCM (difficultyLevel, videoIDLSF, videoIDASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $cordovaSQLite.execute(db, query, [difficultyLevel, videoIDLSF, videoIDASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer]).then(function(res) {
+
+            console.log("Videos successfully added -> " + res.insertId);
+
+            return res.insertId;
+
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+
+
+    $scope.addSentenceQCM = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
         //Appel à la méthode insert qcm
         // console.log(document.getElementById('QCMSentence-LSFVideoA').validity.valid)
         // console.log(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer)
@@ -1358,9 +1406,19 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         //A FAIRE: Gérer les champs sinon l'utilisateur pourra insérér n'importe quoi
 
         $scope.insertNewSentenceQCM(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer);
+    };
+
+    $scope.addVideoQCM = function(difficultyLevel, videoURLLSF, videoURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer) {
+        //Appel à la méthode insert qcm
+        // console.log(document.getElementById('QCMSentence-LSFVideoA').validity.valid)
+        // console.log(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer)
+
+        //A FAIRE: Gérer les champs sinon l'utilisateur pourra insérér n'importe quoi
+
+        $scope.insertNewVideoQCM(difficultyLevel, videoURLLSF, videoURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer);
     }
 
-    $scope.updateQCM = function(id, difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
+    $scope.updateSentenceQCM = function(id, difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
         console.log(id, difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer);
         console.log($scope.qcm);
         console.log("QCM LIST:");
@@ -1401,9 +1459,26 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         var query = "UPDATE sentenceQCM set frenchSentence = ?, englishSentence = ?, difficultyLevel = ?, goodAnswer = ? where id = ?"
         $cordovaSQLite.execute(db, query, [frenchSentence, englishSentence, difficultyLevel, goodAnswer, id]);
 
-        $location.path("/manage/sentenceQCM/list/");
+        $state.go("list-sentence-qcm");
 
-    }
+    };
+
+    $scope.updateVideoQCM = function(id, difficultyLevel, videoURLLSF, videoURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer) {
+        if (videoURLLSF != $scope.qcm.videoURLLSF) {
+            var query = "UPDATE video SET youtubeURL = ? where ID = ?";
+            $cordovaSQLite.execute(db, query, [videoURLLSF, $scope.qcm.videoIDLSF]);
+        }
+        if (videoURLASL != $scope.qcm.videoURLASL) {
+            var query = "UPDATE video SET youtubeURL = ? where ID = ?";
+            $cordovaSQLite.execute(db, query, [videoURLASL, $scope.qcm.videoIDASL]);
+        }
+
+        var query = "UPDATE videoQCM set frenchSentenceA = ?, englishSentenceA = ?,frenchSentenceB = ?, englishSentenceB = ?,frenchSentenceC = ?, englishSentenceC = ?,frenchSentenceD = ?, englishSentenceD = ?, difficultyLevel = ?, goodAnswer = ? where id = ?"
+        $cordovaSQLite.execute(db, query, [frenchSentenceA, englishSentenceA, frenchSentenceB, englishSentenceB, frenchSentenceC, englishSentenceC, frenchSentenceD, englishSentenceD, difficultyLevel, goodAnswer, id]);
+
+        $state.go("list-video-qcm");
+
+    };
 
     /* Requêtes de recherches dans la table video */
     $scope.searchVideo = function(videoID, key, id) {
@@ -1412,7 +1487,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
             if (res.rows.length > 0) {
                 var obj = {};
                 obj[key] = res.rows[0].youtubeURL;
-                $scope.qcmList[id - 1][key] = res.rows[0].youtubeURL;
+                $scope.qcmList[id][key] = res.rows[0].youtubeURL;
             } else {
                 console.log("No results found");
             }
@@ -1441,6 +1516,32 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
     }
 
 
+    $scope.getAllVideoQCMs = function() {
+        var query = "SELECT * FROM videoQCM";
+        $cordovaSQLite.execute(db, query).then(function(res) {
+            if (res.rows.length > 0) {
+                for (var i = 0; i < res.rows.length; ++i) {
+                    var obj = {};
+                    $scope.qcmList.push(res.rows[i]);
+                    console.log($scope.qcmList);
+                    $scope.searchVideo($scope.qcmList[i]['videoIDLSF'], "videoURLLSF", i);
+                    $scope.searchVideo($scope.qcmList[i]['videoIDASL'], "videoURLASL", i);
+
+                }
+                $scope.youtubeURL
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    }
+
+    $scope.fillVideoQCM = function(id) {
+        SharingVideoQCMInformation.setVideoQCM($scope.qcmList[id - 1]);
+    }
+
+
     $scope.fillSentenceQCM = function(id) {
         $scope.searchVideo($scope.qcmList[id - 1].videoIDALSF, "videoURLALSF", id);
         $scope.searchVideo($scope.qcmList[id - 1].videoIDAASL, "videoURLAASL", id);
@@ -1455,7 +1556,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         SharingSentenceQCMInformation.setSentenceQCM($scope.qcmList[id - 1]);
     }
 
-    $scope.initEditQCM = function() {
+    $scope.initEditSentenceQCM = function() {
         $scope.qcm = SharingSentenceQCMInformation.getSentenceQCM();
         console.log($scope.qcm);
         setTimeout(function() {
@@ -1473,7 +1574,25 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
             $scope.goodAnswerEdit = $scope.qcm.goodAnswer;
         }, 1000);
 
-    }
+    };
+
+    $scope.initEditVideoQCM = function() {
+        $scope.qcm = SharingVideoQCMInformation.getVideoQCM();
+        console.log("QCM VIDEO:");
+        console.log($scope.qcm);
+        $scope.difficultyLevelEdit = $scope.qcm.difficultyLevel;
+        $scope.englishSentenceAEdit = $scope.qcm.englishSentenceA;
+        $scope.englishSentenceBEdit = $scope.qcm.englishSentenceB;
+        $scope.englishSentenceCEdit = $scope.qcm.englishSentenceC;
+        $scope.englishSentenceDEdit = $scope.qcm.englishSentenceD;
+        $scope.frenchSentenceAEdit = $scope.qcm.frenchSentenceA;
+        $scope.frenchSentenceBEdit = $scope.qcm.frenchSentenceB;
+        $scope.frenchSentenceCEdit = $scope.qcm.frenchSentenceC;
+        $scope.frenchSentenceDEdit = $scope.qcm.frenchSentenceD;
+        $scope.videoURLLSFEdit = $scope.qcm.videoURLASL;
+        $scope.videoURLASLEdit = $scope.qcm.videoURLLSF;
+        $scope.goodAnswerEdit = $scope.qcm.goodAnswer;
+    };
 
     //Insert new Sentence QCM and all the corresponding information
     $scope.insertNewSentenceQCM = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
@@ -1657,8 +1776,14 @@ app.config(function($stateProvider, $urlRouterProvider) {
     })
 
     $stateProvider.state('edit-video-qcm', {
-        url: '/manage/videoQCM/edit',
+        url: '/manage/videoQCM/edit/:id',
         templateUrl: 'templates/edit-video-qcm.html',
+        controller: 'DataManagementController'
+    })
+
+    $stateProvider.state('list-video-qcm', {
+        url: '/manage/videoQCM/list',
+        templateUrl: 'templates/list-video-qcm.html',
         controller: 'DataManagementController'
     })
 

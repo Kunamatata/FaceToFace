@@ -1,0 +1,17 @@
+<ion-view view-title="Edit a video QCM">
+    <ion-content ng-init="getAllVideoQCMs()" class="padding">
+        <div ng-repeat="qcm in qcmList">
+            <div class="item item-divider" ng-click="fillVideoQCM(qcm.id)" ui-sref="edit-video-qcm({id:qcm.id})">
+                QCM id : {{qcm.id}}
+            </div>
+            <label class="item item-input normal-wrap">
+                <div class="row">
+                    <iframe id="videoLSF" class="center" src="{{trustUrl(qcm.videoURLLSF)}}" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <div class="row">
+                    <iframe id="videoASL" class="center" src="{{trustUrl(qcm.videoURLASL)}}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </label>
+        </div>
+    </ion-content>
+</ion-view>
