@@ -1,0 +1,49 @@
+<ion-view view-title="Word">
+<ion-content class="padding">
+
+  <div class="row responsive-sm" ng-init="prepareWordInformation()">
+      <div class="col">
+          <div class="row">
+            <img class="center" src="../img/France-Flag-icon.png">
+          </div>
+          <div class="row">
+            <h2 class="center">{{word.frenchWord}}</h2>
+          </div>
+          <div class="row">
+            <iframe class="center" src="{{trustUrl(word.frenchVideo.youtubeURL)}}" frameborder="0"></iframe>
+          </div>
+      </div>
+      <div class="col">
+        <div class="row">
+          <img class="center" src="../img/United-States-Flag-icon.png">
+        </div>
+        <div class="row">
+          <h2 class="center">{{word.englishWord}}</h2>
+        </div>
+        <div class="row">
+          <iframe class="center" src="{{trustUrl(word.englishVideo.youtubeURL)}}" frameborder="0"></iframe>
+        </div>
+      </div>
+  </div>
+
+  <div class="row">
+    <div class="center">
+          <button class="button button-positive button-block" ng-click="setWordingChoice(0)" ui-sref="wording-presentation({id:word.id, number:1})">
+              Enoncé n°1
+          </button>
+          <button class="button button-positive button-block" ng-click="setWordingChoice(1)" ui-sref="wording-presentation({id:word.id, number:2})">
+              Enoncé n°2
+          </button>
+          <button class="button button-positive button-block" ng-click="" ui-sref="dialog-list({id:word.id})">
+              Dialogues
+          </button>
+          <button class="button button-positive button-block" ng-click="" ui-sref="sign-explanation({id:word.id})">
+              Pour aller plus loin
+          </button>
+    </div>
+  </div>
+
+
+
+</ion-content>
+</ion-view>

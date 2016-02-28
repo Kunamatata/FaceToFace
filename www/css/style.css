@@ -120,6 +120,10 @@ a {
     padding-right: 0;
 }
 
+.qcm{
+    margin-top: 15px;
+}
+
 .item-avatar i:first-child,
 .item-avatar .item-img {
     position: absolute;

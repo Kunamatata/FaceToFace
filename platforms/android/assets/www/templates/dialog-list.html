@@ -1,0 +1,46 @@
+<ion-view view-title="Dialogues">
+<ion-content class="padding">
+
+  <div class="row">
+    <div class="center">
+            <button class="button button-positive" ng-click="setWordChoice(); setWordingChoice(0)" ui-sref="wording-presentation({id:word.id, number:1})">
+                Enoncé n°1
+            </button>
+            <button class="button button-positive" ng-click="setWordChoice(); setWordingChoice(1)" ui-sref="wording-presentation({id:word.id, number:2})">
+                Enoncé n°2
+            </button>
+          <button class="button button-positive" ng-click="setWordChoice();" ui-sref="dialog-list({id:word.id})">
+              Dialogues
+          </button>
+           <button class="button button-positive" ng-click="" ui-sref="sign-explanation({id:word.id})">
+              Pour aller plus loin
+          </button>
+    </div>
+  </div>
+
+  <div class="row responsive-sm" ng-init="searchDialogs()">
+    <div class="col">
+      <div class="row">
+        <img class="center" src="../img/France-Flag-icon.png">
+      </div>
+      <div ng-repeat="dialog in word.frenchDialogList track by $index">
+        <div class="row">
+          <a ng-click="setDialogChoice($index,0)" ui-sref="dialog-presentation({id:word.id, language:'french', number:$index})" class="center">Dialogue {{$index +1}}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="row">
+        <img class="center" src="../img/United-States-Flag-icon.png">
+      </div>
+      <div ng-repeat="dialog in word.englishDialogList track by $index">
+        <div class="row">
+          <a ng-click="setDialogChoice($index,1)" ui-sref="dialog-presentation({id:word.id, language:'english', number:$index})" class="center">Dialogue {{$index +1}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ion-content>
+</ion-view>

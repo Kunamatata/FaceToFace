@@ -20,30 +20,32 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         if (window.cordova && window.SQLitePlugin) {
             db = $cordovaSQLite.openDB('face.db', 1); // Android devices
             db.executeSql("PRAGMA foreign_keys=ON;")
-        } else
+        } else {
             db = window.openDatabase("face.db", "1.0", "Dev Database", 200000); //To test in web browser with ionic serve
+        }
 
+        /* A RETIRER */
+        /* A RETIRER */
+        /* A RETIRER */
+        /* A RETIRER */
+        /* A RETIRER */
+        /* A RETIRER */
+        /* A RETIRER */
+        /* A RETIRER */
 
-        /* A RETIRER */
-        /* A RETIRER */
-        /* A RETIRER */
-        /* A RETIRER */
-        /* A RETIRER */
-        /* A RETIRER */
-        /* A RETIRER */
-        /* A RETIRER */
-        /*        $cordovaSQLite.execute(db, "DROP table word");
-                $cordovaSQLite.execute(db, "DROP table sign");
-                $cordovaSQLite.execute(db, "DROP table video");
-                $cordovaSQLite.execute(db, "DROP table wording");
-                $cordovaSQLite.execute(db, "DROP table configuration");
-                $cordovaSQLite.execute(db, "DROP table subtitle");
-                $cordovaSQLite.execute(db, "DROP table dialog");
-                $cordovaSQLite.execute(db, "DROP table genealogy");
-                $cordovaSQLite.execute(db, "DROP table videoQCM");
-                $cordovaSQLite.execute(db, "DROP table sentenceQCM");
+        // $cordovaSQLite.execute(db, "DROP table word");
+        // $cordovaSQLite.execute(db, "DROP table sign");
+        // $cordovaSQLite.execute(db, "DROP table video");
+        // $cordovaSQLite.execute(db, "DROP table wording");
+        // $cordovaSQLite.execute(db, "DROP table configuration");
+        // $cordovaSQLite.execute(db, "DROP table subtitle");
+        // $cordovaSQLite.execute(db, "DROP table dialog");
+        // $cordovaSQLite.execute(db, "DROP table genealogy");
+        // $cordovaSQLite.execute(db, "DROP table videoQCM");
+        // $cordovaSQLite.execute(db, "DROP table sentenceQCM");
+        // $cordovaSQLite.execute(db, "DROP table position");
+        // $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");
 
-                $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");*/
         /*___________________*/
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word(id INTEGER PRIMARY KEY, frenchWord TEXT, englishWord TEXT, signIDLSF INTEGER, signIDASL INTEGER,FOREIGN KEY(signIDLSF) REFERENCES sign(id), FOREIGN KEY(signIDASL) REFERENCES sign(id))");
@@ -381,48 +383,48 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
-    /*   $scope.insertNewSignExplanation(1, "Le signe-ancêtre commun, attesté pour la première fois en France en 1784 et importé aux USA au début du XXème siècle, comportait deux parties.", "There is a lot of interesting things to say about this sign.", "https://www.youtube.com/embed/87tCKyr5sa4", "https://www.youtube.com/embed/jP5-qP-LTE8");
+    // $scope.insertNewSignExplanation(1, "Le signe-ancêtre commun, attesté pour la première fois en France en 1784 et importé aux USA au début du XXème siècle, comportait deux parties.", "There is a lot of interesting things to say about this sign.", "https://www.youtube.com/embed/87tCKyr5sa4", "https://www.youtube.com/embed/jP5-qP-LTE8");
 
 
-       $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
-       $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
+    // $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
+    // $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
 
-       $scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
+    // $scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
 
-       $scope.insertNewDialog(1, 1, "https://www.youtube.com/embed/yhy19VUoKAY");
+    // $scope.insertNewDialog(1, 1, "https://www.youtube.com/embed/yhy19VUoKAY");
 
-       for (i = 0; i < 46; i++) {
-           $scope.insertConfiguration(0, "../config_" + (i + 1) + ".jpg");
-       }
+    // for (i = 0; i < 46; i++) {
+    //     $scope.insertConfiguration(0, "../config_" + (i + 1) + ".jpg");
+    // }
 
-       $scope.insertNewVideoQCM(1, "https://www.youtube.com/embed/9mp2E58UlR4", "https://www.youtube.com/embed/YVP6M2u2sf0", "Maybe", "Peut-être", "Not sure", "Pas sûr", "Oh yes", "Oh oui", "Cat", "Chat", "B");
+    // $scope.insertNewVideoQCM(1, "https://www.youtube.com/embed/9mp2E58UlR4", "https://www.youtube.com/embed/YVP6M2u2sf0", "Maybe", "Peut-être", "Not sure", "Pas sûr", "Oh yes", "Oh oui", "Cat", "Chat", "B");
 
-       $scope.insertNewSentenceQCM(1, "Bob est perdu dans toutes ces lignes de code", "Bob is lost in all those lines of code", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "B");
+    // $scope.insertNewSentenceQCM(1, "Bob est perdu dans toutes ces lignes de code", "Bob is lost in all those lines of code", "https://www.youtube.com/embed/QL8N4QcnpWE", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "B");
 
-       $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");*/
+    // $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");
 
-    /*$scope.insertPosition(0,"mouth");
-     $scope.insertPosition(1,"chin");
-     $scope.insertPosition(2,"throat");
-     $scope.insertPosition(3,"cheek");
-     $scope.insertPosition(4,"temple");
-     $scope.insertPosition(5,"eyes");
-     $scope.insertPosition(6,"forehead");
-     $scope.insertPosition(7,"rightpectoral");
-     $scope.insertPosition(8,"leftpectoral");
-     $scope.insertPosition(9,"thorax");
-     $scope.insertPosition(10,"stomach");
-     $scope.insertPosition(11,"rightarm");
-     $scope.insertPosition(12,"rightforearm");
-     $scope.insertPosition(13,"rightelbow");
-     $scope.insertPosition(14,"lefthand");
-     $scope.insertPosition(15,"righthand");
+    // $scope.insertPosition(0, "mouth");
+    // $scope.insertPosition(1, "chin");
+    // $scope.insertPosition(2, "throat");
+    // $scope.insertPosition(3, "cheek");
+    // $scope.insertPosition(4, "temple");
+    // $scope.insertPosition(5, "eyes");
+    // $scope.insertPosition(6, "forehead");
+    // $scope.insertPosition(7, "rightpectoral");
+    // $scope.insertPosition(8, "leftpectoral");
+    // $scope.insertPosition(9, "thorax");
+    // $scope.insertPosition(10, "stomach");
+    // $scope.insertPosition(11, "rightarm");
+    // $scope.insertPosition(12, "rightforearm");
+    // $scope.insertPosition(13, "rightelbow");
+    // $scope.insertPosition(14, "lefthand");
+    // $scope.insertPosition(15, "righthand");
 
-    //first configuration Mouth  first configuration Chin
-    $scope.insertPositionConfigurationSign(1, 1, 0, 1, 1);
-    $scope.insertPositionConfigurationSign(3, 1, 0, 1, 1);
-    $scope.insertPositionConfigurationSign(2, 2, 0, 1, 1);
-    $scope.insertPositionConfigurationSign(3, 1, 0);
+    // //first configuration Mouth  first configuration Chin
+    // $scope.insertPositionConfigurationSign(1, 1, 0, 1, 1);
+    // $scope.insertPositionConfigurationSign(3, 1, 0, 1, 1);
+    // $scope.insertPositionConfigurationSign(2, 2, 0, 1, 1);
+    // $scope.insertPositionConfigurationSign(3, 1, 0);
 
     /*$scope.searchFrenchWord("Romain");
     setTimeout(function(){
@@ -1295,11 +1297,24 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
 
 });
 
-app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $http, $cordovaSQLite, $location, SharingSentenceQCMInformation) {
+app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $ionicPopup, $http, $cordovaSQLite, $location, SharingSentenceQCMInformation) {
 
     $scope.youtubeURLArray = [];
     $scope.qcmList = [];
 
+
+    //# A Retirer!
+    var query = "SELECT * FROM video WHERE id = ?";
+    $cordovaSQLite.execute(db, query, [14]).then(function(res) {
+        if (res.rows.length > 0) {
+            console.log("Test du on delete cascade")
+            console.log(res.rows.item(0));
+        } else {
+            console.log("No results found");
+        }
+    }, function(err) {
+        console.error(err);
+    });
 
 
     $scope.insertSentenceQCMVideos = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer, callback) {
@@ -1407,6 +1422,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
     };
 
 
+
     $scope.getAllSentenceQCMs = function() {
         var query = "SELECT * FROM sentenceQCM";
         $cordovaSQLite.execute(db, query).then(function(res) {
@@ -1414,6 +1430,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
                 for (var i = 0; i < res.rows.length; ++i) {
                     var obj = {};
                     $scope.qcmList.push(res.rows[i]);
+                    console.log(res.rows[i]);
                 }
             } else {
                 console.log("No results found");
@@ -1422,6 +1439,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
             console.error(err);
         });
     }
+
 
     $scope.fillSentenceQCM = function(id) {
         $scope.searchVideo($scope.qcmList[id - 1].videoIDALSF, "videoURLALSF", id);
@@ -1461,6 +1479,34 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
     $scope.insertNewSentenceQCM = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
         $scope.insertSentenceQCMVideos(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer, $scope.insertSentenceQCM);
     };
+
+    var deleteSentenceQCMQuery = function(qcmID) {
+        var query = "DELETE FROM sentenceQCM WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [qcmID]).then(function(res) {
+            if (res.rows.length > 0) {
+                console.log(rows);
+            } else {
+                console.log("No delete corresponding to the ID found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    }
+
+    //Delete QCM with id
+    $scope.deleteSentenceQCM = function(qcmID) {
+        //Display alert message
+        $ionicPopup.confirm({
+            title: 'Voulez vous vraiment supprimer le QCM :' + qcmID,
+            cssClass: 'alert-popup',
+            cancelText: 'Annuler',
+            okText: 'Oui'
+        }).then(function(res) {
+            //If res == true then ok button was pressed, else false
+            if (res === true)
+                deleteSentenceQCMQuery(qcmID);
+        });
+    }
 });
 
 app.config(function($stateProvider, $urlRouterProvider) {

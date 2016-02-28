@@ -1,0 +1,48 @@
+<ion-view view-title="Positionnez les configurations">
+    <ion-content>
+        <div class="row">
+            <div class="col col-33">
+                <div class="row">
+                    <div id="first-hand-picture" class="center" style="background-image:url('{{activeHand.src}}')" ng-click="activateSelection('first-hand-picture')">
+                        <i class="fa fa-times" ng-click="deleteChosenConfiguration('first-hand-picture')"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="center">Main active</div>
+                </div>
+            </div>
+            <div class="col col-33 col-offset-33">
+                <div class="row">
+                    <div id="second-hand-picture" class="center" style="background-image:url('{{passiveHand.src}}')" ng-click="activateSelection('second-hand-picture')">
+                        <i class="fa fa-times" ng-click="deleteChosenConfiguration('second-hand-picture')"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="center">Main passive</div>
+                </div>
+            </div>
+        </div>
+        <div class="skeleton row center">
+            <div class="skeleton-square mouth" ng-click="setPosition('mouth',0)"></div>
+            <div class="skeleton-square chin" ng-click="setPosition('chin',1)"></div>
+            <div class="skeleton-square throat" ng-click="setPosition('throat',2)"></div>
+            <div class="skeleton-square cheek" ng-click="setPosition('cheek',3)"></div>
+            <div class="skeleton-square temple" ng-click="setPosition('temple',4)"></div>
+            <div class="skeleton-square eyes" ng-click="setPosition('eyes',5)"></div>
+            <div class="skeleton-square forehead" ng-click="setPosition('forehead',6)"></div>
+            <div class="skeleton-square right-pectoral" ng-click="setPosition('right-pectoral',7)"></div>
+            <div class="skeleton-square left-pectoral" ng-click="setPosition('left-pectoral',8)"></div>
+            <div class="skeleton-square thorax" ng-click="setPosition('thorax',9)"></div>
+            <div class="skeleton-square stomach" ng-click="setPosition('stomach',10)"></div>
+            <div class="skeleton-square right-arm" ng-click="setPosition('right-arm',11)"></div>
+            <div class="skeleton-square right-forearm" ng-click="setPosition('right-forearm',12)"></div>
+            <!-- <div class="skeleton-square left-arm" ng-click="leftarm"></div> -->
+            <div class="skeleton-circle right-elbow" ng-click="setPosition('right-elbow',13)"></div>
+            <div class="skeleton-circle left-hand" ng-click="setPosition('left-hand',14)"></div>
+            <div class="skeleton-circle right-hand" ng-click="setPosition('right-hand',15)"></div>
+        </div>
+        <button class="button button-positive center" style="width:150px" ng-click="submitConfigurationsPositions()">
+            Go!
+        </button>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,17 @@
+<ion-view ng-init="initSearchPage()" view-title="{{viewTitle}}" >
+    <ion-content class="padding">
+        <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="text" placeholder="Search" ng-keyup="searchPotentialWords(request)" ng-model="request">
+        </label>
+        <!--<button class="button button-block button-positive" ng-click="searchFrenchWord(request)">
+            Envoyer
+        </button>-->
+    <div ng-repeat="potentialWord in words">
+      <label class="item" ui-sref="word-presentation({id:potentialWord.id})" ng-click="setWord(potentialWord)">
+            <img src="{{flagPicture}}">
+            {{potentialWord.shownWord}}
+        </label>
+    </div>
+    </ion-content>
+</ion-view>

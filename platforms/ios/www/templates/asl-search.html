@@ -1,5 +1,9 @@
-<ion-view view-title="">
+<ion-view view-title="ASL Search">
     <ion-content>
-        <p>A propos de moi</p>
+        <div class="grid-container" ng-init="loadImages()">
+            <div class="col-8" ng-repeat="image in images">
+                <img ng-src="{{image.src}}" class="lsf-grid" />
+            </div>
+        </div>
     </ion-content>
 </ion-view>

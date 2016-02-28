@@ -1,9 +1,32 @@
-<ion-view view-title="">
+<ion-view view-title="Recherche LSF">
     <ion-content>
-        <div class="grid-container" ng-init="loadImages()">
-            <div class="col-4" ng-repeat="image in images">
-                <img ng-src="{{image.src}}" class="lsf-grid" />
+        <div class="row">
+            <div class="col col-33">
+                <div class="row">
+                    <div id="first-hand-picture" class="center" ng-click="activateSelection('first-hand-picture')">
+                        <i class="fa fa-times" ng-click="deleteChosenConfiguration('first-hand-picture')"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="center">Main active</div>
+                </div>
             </div>
+            <div class="col col-33 col-offset-33">
+                <div class="row">
+                    <div id="second-hand-picture" class="center" ng-click="activateSelection('second-hand-picture')">
+                        <i class="fa fa-times" ng-click="deleteChosenConfiguration('second-hand-picture')"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="center">Main passive</div>
+                </div>
+            </div>
+        </div>
+        <button class="button button-positive center" style="width:150px" ng-click="selectPositions()">
+            Séléctionner les positions
+        </button>
+        <div id="configuration-grid" class="grid-container" ng-init="loadImages()" style="visibility:hidden">
+            <div class="col-8" ng-repeat="image in images track by $index" style="background-image: url({{image.src}});" ng-click="configurationSelected(image, $index)"></div>
         </div>
     </ion-content>
 </ion-view>

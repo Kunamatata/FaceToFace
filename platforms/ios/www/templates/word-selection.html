@@ -1,0 +1,15 @@
+<ion-view ng-init="initWordSelection()" view-title="Sélection du mot" >
+    <ion-content class="padding">
+
+    <h2 class="center">Sélectionnez le mot correspondant dans la liste suivante.</h2>
+
+    <div ng-repeat="potentialWord in words">
+      <label class="item" ui-sref="word-presentation({id:potentialWord.id})" ng-click="setWord(potentialWord)">
+            <img src="../img/France-Flag-icon-little.png">
+            {{potentialWord.frenchWord}}
+            <img src="../img/United-States-Flag-icon-little.png">
+            {{potentialWord.englishWord}}
+        </label>
+    </div>
+    </ion-content>
+</ion-view>

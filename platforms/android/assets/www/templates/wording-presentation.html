@@ -1,0 +1,53 @@
+<ion-view view-title="Enoncé" ng-init="prepareWordingInformation()">
+<ion-content class="padding">
+
+
+
+  <div class="row">
+    <div class="center">
+          <button class="button button-positive" ng-click="setWordChoice();" ui-sref="word-presentation({id:word.id})">
+              Mot
+          </button>
+          <button class="button button-positive" ng-click="setWordChoice(); setWordingChoice()" ui-sref="wording-presentation({id:word.id, number:{{otherWordingNumber}}})">
+              {{otherWordingName}}
+          </button>
+          <button class="button button-positive" ng-click="setWordChoice();" ui-sref="dialog-list({id:word.id})">
+              Dialogues
+          </button>
+          <button class="button button-positive" ng-click="" ui-sref="sign-explanation({id:word.id})">
+              Pour aller plus loin
+          </button>
+    </div>
+  </div>
+
+
+  <div class="row responsive-sm">
+
+    <div class="col">
+      <div class="row">
+        <h2 class="center">LSF</h2>
+      </div>
+      <div class="row">
+        <img class="center" src="../img/France-Flag-icon.png">
+      </div>
+      <div class="row">
+        <iframe class="center" src="{{trustUrl(word.wordingLSF[wordingChoice].youtubeURL)}}" frameborder="0"></iframe>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="row">
+        <h2 class="center">ASL</h2>
+      </div>
+      <div class="row">
+        <img class="center" src="../img/United-States-Flag-icon.png">
+      </div>
+      <div class="row">
+        <iframe class="center" src="{{trustUrl(word.wordingASL[wordingChoice].youtubeURL)}}" frameborder="0"></iframe>
+      </div>
+    </div>
+
+  </div>
+
+</ion-content>
+</ion-view>
