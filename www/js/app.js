@@ -1553,7 +1553,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         $scope.searchVideo($scope.qcmList[index].videoIDDASL, "videoURLDASL", id);
 
 
-        SharingSentenceQCMInformation.setSentenceQCM($scope.qcmList[id - 1]);
+        SharingSentenceQCMInformation.setSentenceQCM($scope.qcmList[index]);
     }
 
     $scope.initEditSentenceQCM = function() {
