@@ -1,7 +1,7 @@
 <ion-view view-title="Edit a sentence QCM">
     <ion-content ng-init="getAllSentenceQCMs()" class="padding">
         <div ng-repeat="qcm in qcmList track by $index">
-            <div class="item item-divider" ng-click="fillSentenceQCM($index+1)" ui-sref="edit-sentence-qcm({id:qcm.id})">
+            <div class="item item-divider" ng-click="fillSentenceQCM($index)" ui-sref="edit-sentence-qcm({id:qcm.id})">
                 QCM id : {{qcm.id}}
             </div>
             <label class="item item-input normal-wrap">
