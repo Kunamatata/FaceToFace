@@ -120,7 +120,7 @@ a {
     padding-right: 0;
 }
 
-.qcm{
+.qcm {
     margin-top: 15px;
 }
 
@@ -136,7 +136,7 @@ a {
     border-radius: 4px;
 }
 
-.item{
+.item {
     border-color: #DADADA;
 }
 
@@ -159,11 +159,11 @@ h2.menu {
     top: 26px;
 }
 
-.normal-wrap{
+.normal-wrap {
     white-space: normal;
 }
 
-iframe{
+iframe {
     margin: 3px;
 }
 
@@ -183,7 +183,8 @@ iframe{
     background-size: contain;
 }
 
-.skeleton-square, .skeleton-circle {
+.skeleton-square,
+.skeleton-circle {
     height: 30px;
     width: 30px;
     background-color: red;
@@ -200,7 +201,7 @@ iframe{
     background-color: #00FF0C !important;
 }
 
-.skeleton-circle{
+.skeleton-circle {
     border-radius: 30px;
 }
 
@@ -211,7 +212,6 @@ iframe{
 .skeleton-circle:hover {
     background-color: #00FF0C !important;
 }
-
 
 .mouth {
     position: absolute;
@@ -333,7 +333,7 @@ iframe{
     left: 108px;
 }
 
-.left-hand{
+.left-hand {
     position: absolute;
     height: 15px;
     width: 15px;
@@ -341,7 +341,7 @@ iframe{
     left: 238px;
 }
 
-.right-hand{
+.right-hand {
     position: absolute;
     height: 15px;
     width: 15px;
@@ -349,13 +349,14 @@ iframe{
     left: 48px;
 }
 
-.right-elbow{
+.right-elbow {
     position: absolute;
     height: 15px;
     width: 15px;
     top: 124px;
     left: 28px;
 }
+
 
 /*------------------------------------*\
     #Ionic Style Modification
@@ -369,11 +370,11 @@ iframe{
     color: #FFF;
 }
 
-.bar-stable.bar.bar-header{
+.bar-stable.bar.bar-header {
     background: #3F51B5;
 }
 
-.title.title-center.header-item{
+.title.title-center.header-item {
     color: #FFF;
 }
 
@@ -381,8 +382,12 @@ iframe{
     background-color: #fff;
 }
 
-.item.center{
+.item.center {
     text-align: center;
+}
+
+.row.column {
+    flex-direction: column;
 }
 
 @media (max-width: 768px) {

@@ -1,17 +1,35 @@
 # Changes
 
-## 0.7.15-dev
+## 0.8.4-dev
 
-TBD
+- Split-up of some more spec test scripts
+
+## 0.8.2
+
+- Workaround fix for empty readTransaction issue (litehelpers/Cordova-sqlite-storage#409)
+- Split spec/www/spec/legacy.js into db-open-close-delete-test.js & tx-extended.js
+
+## 0.8.0
+
+- Simple sql batch transaction function
+- Echo test function
+- Remove extra runInBackground: step from iOS version
+- Android-sqlite-connector (NDK) support removed from this version branch
+- Windows version removed from this version branch
+- Java source of Android version now using io.sqlc package
+
+## 0.7.15-pre
+
+- All iOS operations are now using background processing (reported to resolve intermittent problems with cordova-ios@4.0.1)
 
 ## 0.7.14
 
-- REGEXP support removed from this version branch
+- REGEXP support completely removed from this version branch
 - Remove src/android/libs/.gitignore (inadvertently added in 0.7.13)
 
 ## 0.7.13
 
-- REGEXP support removed from this version branch
+- REGEXP support partially removed from this version branch
 - Rename Windows C++ Database close function to closedb to resolve conflict for Windows Store certification
 - Android version with sqlite `3.8.10.2` embedded (with error messages fixed)
 - Pre-populated database support removed from this version branch
@@ -122,4 +140,3 @@ TBD
   - fix integer data binding
 - Fix open/close callbacks Android & WP(8)
 - Resolve issue with INSERT OR IGNORE (Android)
-

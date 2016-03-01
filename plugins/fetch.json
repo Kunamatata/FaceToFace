@@ -50,7 +50,7 @@
     "cordova-sqlite-storage": {
         "source": {
             "type": "git",
-            "url": "https://github.com/litehelpers/Cordova-sqlite-storage.git",
+            "url": "https://github.com/litehelpers/Cordova-sqlite-storage",
             "subdir": "."
         },
         "is_top_level": true,

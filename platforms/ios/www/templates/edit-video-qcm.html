@@ -1,5 +1,68 @@
 <ion-view view-title="Edit a video QCM">
-    <ion-content>
-
+    <ion-content class="padding" ng-init="initEditVideoQCM()">
+        <div class="list">
+            <div class="item item-divider">
+                Videos
+            </div>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">LSF Video URL</span>
+                <input type="text" placeholder="{{qcm.videoURLLSFEdit}}" ng-model="videoURLLSFEdit">
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">ASL Video URL</span>
+                <input type="text" placeholder="{{qcm.videoURLASLEdit}}" ng-model="videoURLASLEdit">
+            </label>
+            <div class="item item-divider">
+                Difficulty
+            </div>
+            <div class="item range">
+                <i class="fa fa-level-down"></i>
+                <input type="range" name="difficultyLevel" min="1" max="5" ng-model="difficultyLevelEdit">
+                <i class="fa fa-level-up"></i>
+            </div>
+            <div class="item item-divider">
+                Sentences
+            </div>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">English Sentence A</span>
+                <input type="text" placeholder="{{qcm.englishSentenceAEdit}}" ng-model="englishSentenceAEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">French Sentence A</span>
+                <input type="text" placeholder="frenchSentenceAEdit" ng-model="frenchSentenceAEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">English Sentence B</span>
+                <input type="text" placeholder="englishSentenceBEdit" ng-model="englishSentenceBEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">French Sentence B</span>
+                <input type="text" placeholder="frenchSentenceBEdit" ng-model="frenchSentenceBEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">English Sentence C</span>
+                <input type="text" placeholder="englishSentenceCEdit" ng-model="englishSentenceCEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">French Sentence C</span>
+                <input type="text" placeholder="frenchSentenceCEdit" ng-model="frenchSentenceCEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">English Sentence D</span>
+                <input type="text" placeholder="englishSentenceDEdit" ng-model="englishSentenceDEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">French Sentence D</span>
+                <input type="text" placeholder="frenchSentenceDEdit" ng-model="frenchSentenceDEdit" required>
+            </label>
+            <div class="item item-divider">
+                Correct Answer
+            </div>
+            <ion-radio ng-model="goodAnswerEdit" ng-value="'A'">Choose A</ion-radio>
+            <ion-radio ng-model="goodAnswerEdit" ng-value="'B'">Choose B</ion-radio>
+            <ion-radio ng-model="goodAnswerEdit" ng-value="'C'">Choose C</ion-radio>
+            <ion-radio ng-model="goodAnswerEdit" ng-value="'D'">Choose D</ion-radio>
+            <button class="button button-block button-positive" ng-click="updateVideoQCM(qcm.id,difficultyLevelEdit, videoURLLSFEdit, videoURLASLEdit, englishSentenceAEdit, frenchSentenceAEdit, englishSentenceBEdit, frenchSentenceBEdit, englishSentenceCEdit, frenchSentenceCEdit, englishSentenceDEdit, frenchSentenceDEdit, goodAnswerEdit)">Edit this!</button>
+        </div>
     </ion-content>
 </ion-view>

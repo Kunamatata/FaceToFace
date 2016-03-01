@@ -1,5 +1,69 @@
 <ion-view view-title="Add a video QCM">
-    <ion-content>
-
+    <ion-content class="padding">
+        <div class="list">
+            <div class="item item-divider">
+                Videos
+            </div>
+             <label class="item item-input item-stacked-label">
+                <span class="input-label">LSF Video URL</span>
+                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="videoURLLSF">
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">ASL Video URL</span>
+                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="videoURLASL">
+            </label>
+            <div class="item item-divider">
+                Difficulty
+            </div>
+            <div class="item range">
+                <i class="fa fa-level-down"></i>
+                <input type="range" name="difficultyLevel" min="1" max="5" ng-model="difficultyLevel">
+                <i class="fa fa-level-up"></i>
+            </div>
+            <div class="item item-divider">
+                Sentences
+            </div>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">English Sentence A</span>
+                <input type="text" placeholder="English Sentence A" ng-model="englishSentenceA" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">French Sentence A</span>
+                <input type="text" placeholder="French Sentence A" ng-model="frenchSentenceA" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">English Sentence B</span>
+                <input type="text" placeholder="English Sentence B" ng-model="englishSentenceB" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">French Sentence B</span>
+                <input type="text" placeholder="French Sentence B" ng-model="frenchSentenceB" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">English Sentence C</span>
+                <input type="text" placeholder="englishSentenceC" ng-model="englishSentenceC" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">French Sentence C</span>
+                <input type="text" placeholder="frenchSentenceC" ng-model="frenchSentenceC" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">English Sentence D</span>
+                <input type="text" placeholder="englishSentenceD" ng-model="englishSentenceD" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">French Sentence D</span>
+                <input type="text" placeholder="frenchSentenceD" ng-model="frenchSentenceD" required>
+            </label>
+            <div class="item item-divider">
+                Correct Answer
+            </div>
+            <ion-radio ng-model="goodAnswer" ng-value="'A'">Choose A</ion-radio>
+            <ion-radio ng-model="goodAnswer" ng-value="'B'">Choose B</ion-radio>
+            <ion-radio ng-model="goodAnswer" ng-value="'C'">Choose C</ion-radio>
+            <ion-radio ng-model="goodAnswer" ng-value="'D'">Choose D</ion-radio>
+            <button class="button button-block button-positive" ng-click="addVideoQCM(difficultyLevel, videoURLLSF, videoURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer)"> this!</button>
+        </div>
     </ion-content>
 </ion-view>
+
