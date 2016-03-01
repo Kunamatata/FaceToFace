@@ -357,6 +357,10 @@ iframe {
     left: 28px;
 }
 
+.center p{
+    min-height: 100px;
+    max-width: 300px;
+}
 
 /*------------------------------------*\
     #Ionic Style Modification

@@ -74,11 +74,13 @@
             </div>
         </button>
         <button id="buttonResult" class="button center" style="visibility: hidden;" ng-click="updateVideoQCM()" ng-init="loadVideoQuestions()"></button>
-        <div class="row">
+        <div class="row responsive-sm">
+          <div class="col">
             <iframe id="videoLSF" class="center" src="{{trustUrl(videoLSF.youtubeURL)}}" frameborder="0" allowfullscreen></iframe>
-        </div>
-        <div class="row">
+          </div>
+          <div class="col">
             <iframe id="videoASL" class="center" src="{{trustUrl(videoASL.youtubeURL)}}" frameborder="0" allowfullscreen></iframe>
+          </div>
         </div>
     </ion-content>
 </ion-view>
