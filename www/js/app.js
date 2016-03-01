@@ -796,7 +796,7 @@ app.controller("WordPresentation", function($scope, $sce, $ionicLoading, $http, 
 
     $scope.prepareWordInformation = function() {
         $scope.word = SharingWordInformation.getWord();
-        
+
         // If we don't have the word information in memory, we execute a search query
         if ($scope.word.frenchVideo == undefined || $scope.word.englishVideo == undefined) {
             var query = "SELECT signIDLSF, signIDASL FROM word WHERE id = ?";
@@ -1308,6 +1308,14 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
 
 app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $ionicPopup, $http, $cordovaSQLite, $state, $location, $sce, SharingSentenceQCMInformation, SharingVideoQCMInformation) {
 
+
+    /**********************
+    Variables to add a word
+    **********************/
+    $scope.images = [];
+    $scope.selectedHand = "";
+    $scope.selectedConfigurations = [null, null];
+
     $scope.youtubeURLArray = [];
     $scope.qcmList = [];
 
@@ -1625,6 +1633,69 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
                 deleteSentenceQCMQuery(qcmID);
         });
     }
+
+    /************************************
+    Add a Word
+    ************************************/
+
+    // Loading french sign configurations in scope.images
+    $scope.loadImages = function() {
+        if ($scope.images.length == 0) {
+            for (var i = 1; i < 47; i++) {
+                $scope.images.push({
+                    src: "../img/sign_config/config_" + i.toString() + ".jpg",
+                    id: i
+                });
+            };
+        }
+    };
+
+    $scope.activateSelection = function(handDivisionID) {
+        $scope.selectedHand = handDivisionID;
+
+        document.getElementById("configuration-grid").style.visibility = 'visible';
+    };
+
+    $scope.configurationSelected = function(image) {
+        if ($scope.selectedHand != "") {
+            //Check if selectedHand is the first or second to insert correctly in the array
+            if ($scope.selectedHand == "first-hand-picture")
+                $scope.selectedConfigurations[0] = image;
+            else if ($scope.selectedHand == "second-hand-picture")
+                $scope.selectedConfigurations[1] = image;
+
+            console.log($scope.selectedConfigurations)
+
+            document.getElementById($scope.selectedHand).style = "background-image: url(" + image.src + ");";
+
+            $scope.selectedHand = "";
+
+        }
+    };
+
+    $scope.deleteChosenConfiguration = function(handDivisionID) {
+        if (handDivisionID == "first-hand-picture")
+            $scope.selectedConfigurations[0] = null;
+        else if (handDivisionID == "second-hand-picture")
+            $scope.selectedConfigurations[1] = null;
+
+        console.log($scope.selectedConfigurations)
+
+        document.getElementById(handDivisionID).style = "background-image: url('../img/hand.png');";
+    };
+
+    $scope.selectPositions = function() {
+        if ($scope.selectedConfigurations[0] != null) {
+            SharingConfigurationsLSF.setConfigurationsLSF($scope.selectedConfigurations);
+            $state.go("position-skeleton");
+        } else {
+            //Display alert message
+            $ionicPopup.alert({
+                title: 'Vous devez obligatoirement choisir une configuration pour la main active.',
+                cssClass: 'alert-popup'
+            });
+        }
+    };
 });
 
 app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
