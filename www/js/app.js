@@ -1314,8 +1314,8 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
     **********************/
     $scope.images = [];
     $scope.selectedHand = "";
-    $scope.selectedConfigurations = [null, null];
-
+    $scope.selectedConfigurationsLSF = [null, null];
+    $scope.selectedConfigurationsASL = [null, null]
     $scope.youtubeURLArray = [];
     $scope.qcmList = [];
 
@@ -1652,19 +1652,31 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
 
     $scope.activateSelection = function(handDivisionID) {
         $scope.selectedHand = handDivisionID;
-
-        document.getElementById("configuration-grid").style.visibility = 'visible';
+        console.log($scope.selectedHand);
+        if (handDivisionID == "first-hand-picture-lsf" && $scope.selectedConfigurationsLSF[0] != null)
+            $scope.activateSkeletonSelection(handDivisionID);
+        else if (handDivisionID == "second-hand-picture-lsf" && $scope.selectedConfigurationsLSF[1] != null)
+            $scope.activateSkeletonSelection(handDivisionID);
+        else if (handDivisionID == "first-hand-picture-asl" && $scope.selectedConfigurationsASL[0] != null)
+            $scope.activateSkeletonSelection(handDivisionID);
+        else if (handDivisionID == "second-hand-picture-asl" && $scope.selectedConfigurationsASL[1] != null)
+            $scope.activateSkeletonSelection(handDivisionID);
     };
 
     $scope.configurationSelected = function(image) {
         if ($scope.selectedHand != "") {
             //Check if selectedHand is the first or second to insert correctly in the array
-            if ($scope.selectedHand == "first-hand-picture")
-                $scope.selectedConfigurations[0] = image;
-            else if ($scope.selectedHand == "second-hand-picture")
-                $scope.selectedConfigurations[1] = image;
+            if ($scope.selectedHand == "first-hand-picture-lsf")
+                $scope.selectedConfigurationsLSF[0] = image;
+            else if ($scope.selectedHand == "second-hand-picture-lsf")
+                $scope.selectedConfigurationsLSF[1] = image;
+            else if ($scope.selectedHand == "first-hand-picture-asl")
+                $scope.selectedConfigurationsASL[0] = image;
+            else if ($scope.selectedHand == "second-hand-picture-asl")
+                $scope.selectedConfigurationsASL[1] = image;
 
-            console.log($scope.selectedConfigurations)
+            console.log($scope.selectedConfigurationsLSF);
+            console.log($scope.selectedConfigurationsASL);
 
             document.getElementById($scope.selectedHand).style = "background-image: url(" + image.src + ");";
 
@@ -1674,14 +1686,87 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
     };
 
     $scope.deleteChosenConfiguration = function(handDivisionID) {
-        if (handDivisionID == "first-hand-picture")
-            $scope.selectedConfigurations[0] = null;
-        else if (handDivisionID == "second-hand-picture")
-            $scope.selectedConfigurations[1] = null;
+        if (handDivisionID == "first-hand-picture-lsf")
+            $scope.selectedConfigurationsLSF[0] = null;
+        else if (handDivisionID == "second-hand-picture-lsf")
+            $scope.selectedConfigurationsLSF[1] = null;
+        else if (handDivisionID == "first-hand-picture-asl")
+            $scope.selectedConfigurationsASL[0] = null;
+        else if (handDivisionID == "second-hand-picture-asl")
+            $scope.selectedConfigurationsASL[1] = null;
 
-        console.log($scope.selectedConfigurations)
+        console.log($scope.selectedConfigurationsLSF);
+        console.log($scope.selectedConfigurationsASL);
 
         document.getElementById(handDivisionID).style = "background-image: url('../img/hand.png');";
+    };
+
+    var activeHandPositionLSF = {};
+    var passiveHandPositionLSF = {};
+    var activeHandPositionASL = {};
+    var passiveHandPositionASL = {};
+    var currentSelectedHand = "";
+
+    var possibleWordList = [];
+
+    $scope.activateSkeletonSelection = function(handDivID) {
+        if (handDivID == "first-hand-picture-lsf") {
+            activeHandPositionLSF['src'] = $scope.selectedConfigurationsLSF[0].src;
+            activeHandPositionLSF['signID'] = $scope.selectedConfigurationsLSF[0].id;
+        } else if (handDivID == "second-hand-picture-lsf" && $scope.selectedConfigurationsLSF[1] != null) {
+            passiveHandPositionLSF['src'] = $scope.selectedConfigurationsLSF[1].src;
+            passiveHandPositionLSF['signID'] = $scope.selectedConfigurationsLSF[1].id;
+        } else if (handDivID == "first-hand-picture-asl") {
+            activeHandPositionASL['src'] = $scope.selectedConfigurationsASL[0].src;
+            activeHandPositionASL['signID'] = $scope.selectedConfigurationsASL[0].id;
+        } else if (handDivID == "second-hand-picture-asl") {
+            passiveHandPositionASL['src'] = $scope.selectedConfigurationsASL[1].src;
+            passiveHandPositionASL['signID'] = $scope.selectedConfigurationsASL[1].id;
+        }
+        currentSelectedHand = handDivID;
+    };
+
+    //Language can either be LSF or ASL
+    $scope.setPosition = function(positionName, positionID, language) {
+        if (language == "LSF")
+            if (activeHandPositionLSF['src'] != null && activeHandPositionLSF['signID'] != null && currentSelectedHand == "first-hand-picture-lsf") {
+                if (activeHandPositionLSF['position']) {
+                    document.getElementsByClassName(activeHandPositionLSF['position'])[0].style.backgroundColor = "red";
+                }
+                activeHandPositionLSF['position'] = positionName;
+                activeHandPositionLSF['positionID'] = positionID;
+                document.getElementById(positionName + "-lsf").style.backgroundColor = "#00FF0C";
+                console.log(activeHandPositionLSF);
+            } else {
+                if (passiveHandPositionLSF['position']) {
+                    document.getElementById(passiveHandPositionLSF['position'] + "-lsf").style.backgroundColor = "red";
+                }
+                passiveHandPositionLSF['position'] = positionName
+                passiveHandPositionLSF['positionID'] = positionID;
+                document.getElementById(positionName + "-lsf").style.backgroundColor = "#00FF0C";
+                console.log(passiveHandPositionLSF);
+            }
+        else if (language == "ASL") {
+            console.log(activeHandPositionASL)
+            if (activeHandPositionASL['src'] != null && activeHandPositionASL['signID'] != null && currentSelectedHand == "first-hand-picture-asl") {
+
+                if (activeHandPositionASL['position']) {
+                    document.getElementById(activeHandPositionASL['position'] + "-asl").style.backgroundColor = "red";
+                }
+                activeHandPositionASL['position'] = positionName;
+                activeHandPositionASL['positionID'] = positionID;
+                document.getElementById(positionName + "-asl").style.backgroundColor = "#00FF0C";
+                console.log(activeHandPositionASL);
+            } else {
+                if (passiveHandPositionASL['position']) {
+                    document.getElementById(passiveHandPositionASL['position'] + "-asl").style.backgroundColor = "red";
+                }
+                passiveHandPositionASL['position'] = positionName
+                passiveHandPositionASL['positionID'] = positionID;
+                document.getElementById(positionName + "-asl").style.backgroundColor = "#00FF0C";
+                console.log(passiveHandPositionASL);
+            }
+        }
     };
 
     $scope.selectPositions = function() {

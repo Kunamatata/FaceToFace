@@ -78,7 +78,9 @@ a {
     background-size: cover;
 }
 
-#first-hand-picture {
+#first-hand-picture,
+#first-hand-picture-lsf,
+#first-hand-picture-asl {
     position: relative;
     background-image: url('../img/hand.png');
     width: 100px;
@@ -87,7 +89,9 @@ a {
     background-size: cover;
 }
 
-#second-hand-picture {
+#second-hand-picture,
+#second-hand-picture-lsf,
+#second-hand-picture-asl {
     position: relative;
     background-image: url('../img/hand.png');
     width: 100px;
