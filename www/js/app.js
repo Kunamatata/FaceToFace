@@ -1411,6 +1411,9 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         //A FAIRE: Gérer les champs sinon l'utilisateur pourra insérér n'importe quoi
 
         $scope.insertNewSentenceQCM(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer);
+
+        $scope.getAllSentenceQCMs();
+        $state.go("list-sentence-qcm");
     };
 
     $scope.addVideoQCM = function(difficultyLevel, videoURLLSF, videoURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer) {
@@ -1421,6 +1424,8 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         //A FAIRE: Gérer les champs sinon l'utilisateur pourra insérér n'importe quoi
 
         $scope.insertNewVideoQCM(difficultyLevel, videoURLLSF, videoURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer);
+        $scope.getAllVideoQCMs();
+        $state.go("list-video-qcm");
     }
 
     $scope.updateSentenceQCM = function(id, difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
@@ -1620,7 +1625,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         });
     }
 
-    var deleteSentenceQCMQuery = function(qcmID) {
+    var deleteSentenceQCMQuery = function(qcmID, index) {
         var query = "SELECT * FROM sentenceQCM WHERE id = ?";
         $cordovaSQLite.execute(db, query, [qcmID]).then(function(res) {
             if (res.rows.length > 0) {
@@ -1634,6 +1639,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
                 deleteVideoFromQCMQuery(res.rows[0].videoIDDLSF);
                 query = "DELETE FROM sentenceQCM WHERE id = ?";
                 $cordovaSQLite.execute(db, query, [qcmID])
+                $scope.qcmList.splice(index, 1);
             } else {
                 console.log("No delete corresponding to the ID found");
             }
@@ -1644,7 +1650,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
 
 
     //Delete QCM with id
-    $scope.deleteSentenceQCM = function(qcmID) {
+    $scope.deleteSentenceQCM = function(qcmID, index) {
         //Display alert message
         $ionicPopup.confirm({
             title: 'Voulez vous vraiment supprimer le QCM :' + qcmID,
@@ -1654,11 +1660,11 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         }).then(function(res) {
             //If res == true then ok button was pressed, else false
             if (res === true)
-                deleteSentenceQCMQuery(qcmID);
+                deleteSentenceQCMQuery(qcmID, index);
         });
     };
 
-    var deleteVideoQCMQuery = function(qcmID) {
+    var deleteVideoQCMQuery = function(qcmID, index) {
         var query = "SELECT * FROM videoQCM WHERE id = ?";
         $cordovaSQLite.execute(db, query, [qcmID]).then(function(res) {
             if (res.rows.length > 0) {
@@ -1667,6 +1673,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
                 deleteVideoFromQCMQuery(res.rows[0].videoIDLSF);
                 query = "DELETE FROM videoQCM WHERE id = ?";
                 $cordovaSQLite.execute(db, query, [qcmID])
+                $scope.qcmList.splice(index, 1);
             } else {
                 console.log("No delete corresponding to the ID found");
             }
@@ -1675,7 +1682,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         });
     };
 
-    $scope.deleteVideoQCM = function(qcmID) {
+    $scope.deleteVideoQCM = function(qcmID, index) {
         //Display alert message
         $ionicPopup.confirm({
             title: 'Voulez vous vraiment supprimer le QCM :' + qcmID,
@@ -1685,7 +1692,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         }).then(function(res) {
             //If res == true then ok button was pressed, else false
             if (res === true)
-                deleteVideoQCMQuery(qcmID);
+                deleteVideoQCMQuery(qcmID, index);
         });
     };
 
