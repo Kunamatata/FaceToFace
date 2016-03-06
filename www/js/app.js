@@ -628,16 +628,16 @@ app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDe
     $scope.activateSelection = function(handDivID) {
         if (handDivID == "first-hand-picture") {
             activeHandPosition['src'] = $scope.activeHand.src;
-            activeHandPosition['signID'] = $scope.activeHand.id;
+            activeHandPosition['configurationID'] = $scope.activeHand.id;
         } else if (handDivID == "second-hand-picture" && $scope.passiveHand != null) {
             passiveHandPosition['src'] = $scope.passiveHand.src;
-            passiveHandPosition['signID'] = $scope.passiveHand.id;
+            passiveHandPosition['configurationID'] = $scope.passiveHand.id;
         }
         currentSelectedHand = handDivID;
     };
 
     $scope.setPosition = function(positionName, positionID) {
-        if (activeHandPosition['src'] != null && activeHandPosition['signID'] != null && currentSelectedHand == "first-hand-picture") {
+        if (activeHandPosition['src'] != null && activeHandPosition['configurationID'] != null && currentSelectedHand == "first-hand-picture") {
             if (activeHandPosition['position']) {
                 document.getElementsByClassName(activeHandPosition['position'])[0].style.backgroundColor = "red";
             }
@@ -1774,16 +1774,16 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
     $scope.activateSkeletonSelection = function(handDivID) {
         if (handDivID == "first-hand-picture-lsf") {
             activeHandPositionLSF['src'] = $scope.selectedConfigurationsLSF[0].src;
-            activeHandPositionLSF['signID'] = $scope.selectedConfigurationsLSF[0].id;
+            activeHandPositionLSF['configurationID'] = $scope.selectedConfigurationsLSF[0].id;
         } else if (handDivID == "second-hand-picture-lsf" && $scope.selectedConfigurationsLSF[1] != null) {
             passiveHandPositionLSF['src'] = $scope.selectedConfigurationsLSF[1].src;
-            passiveHandPositionLSF['signID'] = $scope.selectedConfigurationsLSF[1].id;
+            passiveHandPositionLSF['configurationID'] = $scope.selectedConfigurationsLSF[1].id;
         } else if (handDivID == "first-hand-picture-asl") {
             activeHandPositionASL['src'] = $scope.selectedConfigurationsASL[0].src;
-            activeHandPositionASL['signID'] = $scope.selectedConfigurationsASL[0].id;
+            activeHandPositionASL['configurationID'] = $scope.selectedConfigurationsASL[0].id;
         } else if (handDivID == "second-hand-picture-asl") {
             passiveHandPositionASL['src'] = $scope.selectedConfigurationsASL[1].src;
-            passiveHandPositionASL['signID'] = $scope.selectedConfigurationsASL[1].id;
+            passiveHandPositionASL['configurationID'] = $scope.selectedConfigurationsASL[1].id;
         }
         currentSelectedHand = handDivID;
     };
@@ -1791,7 +1791,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
     //Language can either be LSF or ASL
     $scope.setPosition = function(positionName, positionID, language) {
         if (language == "LSF")
-            if (activeHandPositionLSF['src'] != null && activeHandPositionLSF['signID'] != null && currentSelectedHand == "first-hand-picture-lsf") {
+            if (activeHandPositionLSF['src'] != null && activeHandPositionLSF['configurationID'] != null && currentSelectedHand == "first-hand-picture-lsf") {
                 if (activeHandPositionLSF['position']) {
                     document.getElementsByClassName(activeHandPositionLSF['position'])[0].style.backgroundColor = "red";
                 }
@@ -1810,7 +1810,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
             }
         else if (language == "ASL") {
             console.log(activeHandPositionASL)
-            if (activeHandPositionASL['src'] != null && activeHandPositionASL['signID'] != null && currentSelectedHand == "first-hand-picture-asl") {
+            if (activeHandPositionASL['src'] != null && activeHandPositionASL['configurationID'] != null && currentSelectedHand == "first-hand-picture-asl") {
 
                 if (activeHandPositionASL['position']) {
                     document.getElementById(activeHandPositionASL['position'] + "-asl").style.backgroundColor = "red";
@@ -1829,6 +1829,60 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
                 console.log(passiveHandPositionASL);
             }
         }
+    };
+
+
+
+    // Insert a new word and all the corresponding information (first insert videos, then signs, then the word)
+    $scope.insertNewWord = function(frenchWord, englishWord, frenchYoutubeURL, englishYoutubeURL) {
+        var answer = insertNewWordVideos(frenchWord, englishWord, frenchYoutubeURL, englishYoutubeURL, insertNewWordSigns);
+    };
+
+    var insertNewWordVideos = function(frenchWord, englishWord, frenchYoutubeURL, englishYoutubeUrl, callback) {
+        var query = "INSERT INTO video (youtubeURL) values (?),(?)";
+        $cordovaSQLite.execute(db, query, [frenchYoutubeURL, englishYoutubeUrl]).then(function(res) {
+            console.log("Videos successfully added -> " + res.insertId);
+            return callback(frenchWord, englishWord, res.insertId - 1, res.insertId, insertWord);
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    var insertPositionConfigurationSign = function(signID, configurationIDDominating, positionIDDominating, configurationIDDominated, positionIDDominated) {
+        var query = "INSERT INTO positionConfigurationSign (signID, configurationIDDominating, positionIDDominating, configurationIDDominated, positionIDDominated) values(?, ?, ?, ?, ?)";
+        $cordovaSQLite.execute(db, query, [signID, configurationIDDominating, positionIDDominating, configurationIDDominated, positionIDDominated]).then(function(res) {
+            console.log("Position Configuration Sign successfully added -> " + res.insertId + " " + signID);
+            return res.insertId;
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    var insertNewWordSigns = function(frenchWord, englishWord, idFrenchVideo, idEnglishVideo, callback) {
+        var query = "INSERT INTO sign (language, videoID) VALUES(0, ?),(1, ?)";
+        $cordovaSQLite.execute(db, query, [idFrenchVideo, idEnglishVideo]).then(function(res) {
+            console.log("Signs successfully added -> " + res.insertId);
+            insertPositionConfigurationSign(res.insertId, activeHandPositionLSF['configurationID'], activeHandPositionLSF['positionID'], passiveHandPositionLSF['configurationID'], passiveHandPositionLSF['positionID']);
+            insertPositionConfigurationSign(res.insertId, activeHandPositionASL['configurationID'], activeHandPositionASL['positionID'], passiveHandPositionASL['configurationID'], passiveHandPositionASL['positionID']);
+
+            return callback(frenchWord, englishWord, res.insertId - 1, res.insertId);
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    var insertWord = function(frenchWord, englishWord, idFrenchSign, idEnglishSign) {
+        var query = "INSERT INTO word (frenchWord, englishWord, signIDLSF, signIDASL) values(?, ?, ?, ?)";
+        $cordovaSQLite.execute(db, query, [frenchWord, englishWord, idFrenchSign, idEnglishSign]).then(function(res) {
+            console.log("Word successfully added -> " + res.insertId);
+            return res.insertId;
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
     };
 
     $scope.selectPositions = function() {

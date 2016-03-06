@@ -6,22 +6,22 @@
             </div>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">French Word</span>
-                <input type="text" placeholder="Your word here" ng-model="videoURLLSF">
+                <input type="text" placeholder="Your word here" ng-model="frenchWord">
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">English Word</span>
-                <input type="text" placeholder="Your word here" ng-model="videoURLASL">
+                <input type="text" placeholder="Your word here" ng-model="EnglishWord">
             </label>
             <div class="item item-divider">
                 Videos
             </div>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">LSF Video</span>
-                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="englishSentenceA" required>
+                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="videoURLLSF" required>
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">ASL Video</span>
-                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="frenchSentenceA" required>
+                <input type="text" placeholder="https://www.youtube.com/embed/xxxxxx" ng-model="videoURLASL" required>
             </label>
             <div class="item item-divider">
                 LSF Sign
@@ -117,7 +117,7 @@
             <div id="configuration-grid" class="grid-container" ng-init="loadImages()">
                 <div class="col-8" ng-repeat="image in images track by $index" style="background-image: url({{image.src}});" ng-click="configurationSelected(image, $index)"></div>
             </div>
-            <button class="button button-block button-positive" ng-click="addVideoQCM(difficultyLevel, videoURLLSF, videoURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer)">Submit</button>
+            <button class="button button-block button-positive" ng-click="insertNewWord(frenchWord,englishWord, videoURLLSF, videoURLASL)">Submit</button>
         </div>
     </ion-content>
 </ion-view>
