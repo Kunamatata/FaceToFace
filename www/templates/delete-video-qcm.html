@@ -1,5 +1,17 @@
 <ion-view view-title="Delete a video QCM">
-    <ion-content>
-
+    <ion-content ng-init="getAllVideoQCMs()" class="padding">
+        <div ng-repeat="qcm in qcmList track by $index">
+            <div class="item item-divider" ng-click="deleteVideoQCM(qcm.id)">
+                QCM id : {{qcm.id}}
+            </div>
+            <label class="item item-input">
+                <div class="row column">
+                    <span class="input-label">LSF Video</span>
+                    <iframe id="videoLSF" class="center" src="{{trustUrl(qcm.videoURLLSF)}}" frameborder="0" allowfullscreen></iframe>
+                    <span class="input-label">ASL Video</span>
+                    <iframe id="videoASL" class="center" src="{{trustUrl(qcm.videoURLASL)}}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </label>
+        </div>
     </ion-content>
 </ion-view>

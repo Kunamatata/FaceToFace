@@ -1606,11 +1606,12 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         $scope.insertSentenceQCMVideos(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer, $scope.insertSentenceQCM);
     };
 
-    var deleteSentenceQCMQuery = function(qcmID) {
-        var query = "DELETE FROM sentenceQCM WHERE id = ?";
-        $cordovaSQLite.execute(db, query, [qcmID]).then(function(res) {
+
+    var deleteVideoFromQCMQuery = function(videoID) {
+        var query = "DELETE from video where id = ?";
+        $cordovaSQLite.execute(db, query, [videoID]).then(function(res) {
             if (res.rows.length > 0) {
-                console.log(rows);
+                console.log(res.rows);
             } else {
                 console.log("No delete corresponding to the ID found");
             }
@@ -1618,6 +1619,29 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
             console.error(err);
         });
     }
+
+    var deleteSentenceQCMQuery = function(qcmID) {
+        var query = "SELECT * FROM sentenceQCM WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [qcmID]).then(function(res) {
+            if (res.rows.length > 0) {
+                deleteVideoFromQCMQuery(res.rows[0].videoIDAASL);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDALSF);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDBASL);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDBLSF);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDCASL);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDCLSF);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDDASL);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDDLSF);
+                query = "DELETE FROM sentenceQCM WHERE id = ?";
+                $cordovaSQLite.execute(db, query, [qcmID])
+            } else {
+                console.log("No delete corresponding to the ID found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
 
     //Delete QCM with id
     $scope.deleteSentenceQCM = function(qcmID) {
@@ -1632,7 +1656,38 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
             if (res === true)
                 deleteSentenceQCMQuery(qcmID);
         });
-    }
+    };
+
+    var deleteVideoQCMQuery = function(qcmID) {
+        var query = "SELECT * FROM videoQCM WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [qcmID]).then(function(res) {
+            if (res.rows.length > 0) {
+                console.log(res.rows);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDASL);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDLSF);
+                query = "DELETE FROM videoQCM WHERE id = ?";
+                $cordovaSQLite.execute(db, query, [qcmID])
+            } else {
+                console.log("No delete corresponding to the ID found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
+    $scope.deleteVideoQCM = function(qcmID) {
+        //Display alert message
+        $ionicPopup.confirm({
+            title: 'Voulez vous vraiment supprimer le QCM :' + qcmID,
+            cssClass: 'alert-popup',
+            cancelText: 'Annuler',
+            okText: 'Oui'
+        }).then(function(res) {
+            //If res == true then ok button was pressed, else false
+            if (res === true)
+                deleteVideoQCMQuery(qcmID);
+        });
+    };
 
     /************************************
     Add a Word
