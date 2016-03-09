@@ -727,7 +727,6 @@ app.controller("ASLSearch", function($scope, $ionicLoading, $http) {
             });
         };
     }
-
 });
 
 app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLite, $state, SharingWordInformation) {
@@ -1367,8 +1366,8 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
 
     $scope.deleteWord = function(id, index)
     {
-        $scope.deleteSign(words[index].idSignLSF);
-        $scope.deleteSign(words[index].idSignASL);
+        $scope.deleteSign($scope.words[index].idSignLSF);
+        $scope.deleteSign($scope.words[index].idSignASL);
 
         query = "DELETE FROM word WHERE id = ?";
         $cordovaSQLite.execute(db, query, [id]);
@@ -1383,7 +1382,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         $cordovaSQLite.execute(db, query, [id]);
 
         query = "DELETE FROM PositionConfigurationSign WHERE id = ? OR id = ?";
-        $cordovaSQLite.execute(db, query, [words[index].idSignLSF, words[index].idSignASL]);
+        $cordovaSQLite.execute(db, query, [$scope.words[index].idSignLSF, $scope.words[index].idSignASL]);
 
         $scope.words.splice(index, 1);
     }
