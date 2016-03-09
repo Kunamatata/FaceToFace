@@ -1860,7 +1860,6 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
                 console.log(passiveHandPositionLSF);
             }
         else if (language == "ASL") {
-            console.log(activeHandPositionASL)
             if (activeHandPositionASL['src'] != null && activeHandPositionASL['configurationID'] != null && currentSelectedHand == "first-hand-picture-asl") {
 
                 if (activeHandPositionASL['position']) {

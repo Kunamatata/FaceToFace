@@ -64,8 +64,13 @@
                 <div class="skeleton-square right-forearm" id="right-forearm-lsf" ng-click="setPosition('right-forearm',12,'LSF')"></div>
                 <!-- <div class="skeleton-square left-arm" ng-click="leftarm"></div> -->
                 <div class="skeleton-circle right-elbow" id="right-elbow-lsf" ng-click="setPosition('right-elbow',13,'LSF')"></div>
-                <div class="skeleton-circle left-hand" id="left-hand-lsf" ng-click="setPosition('left-hand',14,'LSF')"></div>
+                <div class="skeleton-circle hand-palm" id="hand-palm-lsf" ng-click="setPosition('hand-palm',14,'LSF')"></div>
                 <div class="skeleton-circle right-hand" id="right-hand-lsf" ng-click="setPosition('right-hand',15,'LSF')"></div>
+                <div class="skeleton-circle ear" id="ear-lsf" ng-click="setPosition('ear', 16,'LSF')"></div>
+                <div class="skeleton-circle armpit" id="armpit-lsf" ng-click="setPosition('armpit', 17,'LSF')"></div>
+                <div class="skeleton-circle wrist" id="wrist-lsf" ng-click="setPosition('wrist', 18,'LSF')"></div>
+                <div class="skeleton-circle top-head" id="top-head-lsf" ng-click="setPosition('top-head', 19,'LSF')"></div>
+                <div class="skeleton-circle chin-neck" id="chin-neck-lsf" ng-click="setPosition('chin-neck', 20,'LSF')"></div>
             </div>
             <div id="configuration-grid" class="grid-container" ng-init="loadImages()">
                 <div class="col-8" ng-repeat="image in images track by $index" style="background-image: url({{image.src}});" ng-click="configurationSelected(image, $index)"></div>
@@ -111,8 +116,13 @@
                 <div class="skeleton-square right-forearm" id="right-forearm-asl" ng-click="setPosition('right-forearm',12,'ASL')"></div>
                 <!-- <div class="skeleton-square left-arm" ng-click="leftarm"></div> -->
                 <div class="skeleton-circle right-elbow" id="right-elbow-asl" ng-click="setPosition('right-elbow',13,'ASL')"></div>
-                <div class="skeleton-circle left-hand" id="left-hand-asl" ng-click="setPosition('left-hand',14,'ASL')"></div>
+                <div class="skeleton-circle hand-palm" id="hand-palm-asl" ng-click="setPosition('hand-palm',14,'ASL')"></div>
                 <div class="skeleton-circle right-hand" id="right-hand-asl" ng-click="setPosition('right-hand',15,'ASL')"></div>
+                <div class="skeleton-circle ear" id="ear-asl" ng-click="setPosition('ear', 16,'ASL')"></div>
+                <div class="skeleton-circle armpit" id="armpit-asl" ng-click="setPosition('armpit', 17,'ASL')"></div>
+                <div class="skeleton-circle wrist" id="wrist-asl" ng-click="setPosition('wrist', 18,'ASL')"></div>
+                <div class="skeleton-circle top-head" id="top-head-asl" ng-click="setPosition('top-head', 19,'ASL')"></div>
+                <div class="skeleton-circle chin-neck" id="chin-neck-asl" ng-click="setPosition('chin-neck', 20,'ASL')"></div>
             </div>
             <div id="configuration-grid" class="grid-container" ng-init="loadImages()">
                 <div class="col-8" ng-repeat="image in images track by $index" style="background-image: url({{image.src}});" ng-click="configurationSelected(image, $index)"></div>
