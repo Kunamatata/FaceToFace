@@ -603,7 +603,7 @@ app.controller("LSFSearch", function($scope, $ionicLoading, $http, $ionicScrollD
         } else {
             //Display alert message
             $ionicPopup.alert({
-                title: 'Vous devez obligatoirement choisir une configuration pour la main active.',
+                title: 'You must choose a configuration at least for the active hand.',
                 cssClass: 'alert-popup'
             });
         }
@@ -708,7 +708,7 @@ app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDe
         } else {
             //Display alert message
             $ionicPopup.alert({
-                title: 'Aucun mot ne correspond à cette combinaison.',
+                title: 'Aucun mot ou signe ne correspond à la combinaison de configurations et de positions données !',
                 cssClass: 'alert-popup'
             });
         }
@@ -1886,6 +1886,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
 
     // Insert a new word and all the corresponding information (first insert videos, then signs, then the word)
     $scope.insertNewWord = function(frenchWord, englishWord, frenchYoutubeURL, englishYoutubeURL) {
+        console.log(englishWord);
         var answer = insertNewWordVideos(frenchWord, englishWord, frenchYoutubeURL, englishYoutubeURL, insertNewWordSigns);
     };
 
