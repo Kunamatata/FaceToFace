@@ -17,10 +17,12 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
             StatusBar.styleDefault();
         }
 
-        
+        if (window.cordova && window.SQLitePlugin) {
             db = $cordovaSQLite.openDB('face.db', 1); // Android devices
             db.executeSql("PRAGMA foreign_keys=ON;")
-        
+        } else {
+            db = window.openDatabase("face.db", "1.0", "Dev Database", 200000); //To test in web browser with ionic serve
+        }
         /* A RETIRER */
         /* A RETIRER */
         /* A RETIRER */
@@ -1185,8 +1187,6 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
         }
 
         $scope.actualQuestion = sentenceQCMList[numberChosen];
-
-
     };
 
     // Load all the Videos QCM questions with the corresponding difficulty level
@@ -1368,7 +1368,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         $scope.insertVideoQCMVideos(difficultyLevel, youtubeURLLSF, youtubeURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer, $scope.insertVideoQCM);
     };
 
-        $scope.insertVideoQCMVideos = function(difficultyLevel, youtubeURLLSF, youtubeURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer, callback) {
+    $scope.insertVideoQCMVideos = function(difficultyLevel, youtubeURLLSF, youtubeURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer, callback) {
         var query = "INSERT INTO video (youtubeURL) values (?),(?)";
         $cordovaSQLite.execute(db, query, [youtubeURLLSF, youtubeURLASL]).then(function(res) {
             console.log("VideoQCM successfully added -> " + res.insertId);
@@ -1454,9 +1454,11 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
             $cordovaSQLite.execute(db, query, [videoURLDASL, $scope.qcm.videoIDDASL]);
         }
         var query = "UPDATE sentenceQCM set frenchSentence = ?, englishSentence = ?, difficultyLevel = ?, goodAnswer = ? where id = ?"
-        $cordovaSQLite.execute(db, query, [frenchSentence, englishSentence, difficultyLevel, goodAnswer, id]);
+        $cordovaSQLite.execute(db, query, [frenchSentence, englishSentence, difficultyLevel, goodAnswer, id]).then(function() {
+            $state.go("list-sentence-qcm");
+        });
 
-        $state.go("list-sentence-qcm");
+
 
     };
 
@@ -1625,8 +1627,9 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
     }
 });
 
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
+    $ionicConfigProvider.views.maxCache(0);
     $stateProvider.state('home', {
         url: '/home',
         templateUrl: 'templates/home.html',
