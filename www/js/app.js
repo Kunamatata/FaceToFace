@@ -1603,7 +1603,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
             $scope.signLSF = $scope.word.signLSF;
             $scope.signASL = $scope.word.signASL;
         }, 1000);
-    }
+    };
 
     $scope.updateWord = function(frenchWordEdit,englishWordEdit, videoURLLSFEdit, videoURLASLEdit, wordingLSF1Edit, wordingASL1Edit, wordingLSF2Edit, wordingASL2Edit, signExplanationFrenchEdit, signExplanationEnglishEdit, signExplanationLSFEdit, signExplanationASLEdit)
     {
@@ -1619,38 +1619,106 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         }
         if(videoURLLSFEdit != $scope.word.signLSF.youtubeURL)
         {
-            var query = "UPDATE video SET youtubeURL = ? where id = ?";
-            $cordovaSQLite.execute(db, query, [videoURLLSFEdit, $scope.word.signLSF.videoID]);
+            if($scope.word.signLSF.youtubeURL == "undefined")
+            {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?)";
+                $cordovaSQLite.execute(db, query, [videoURLLSFEdit]);
+            }
+            else
+            {
+                var query = "UPDATE video SET youtubeURL = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [videoURLLSFEdit, $scope.word.signLSF.videoID]);
+            }
         }
         if(videoURLASLEdit != $scope.word.signASL.youtubeURL)
         {
-            var query = "UPDATE video SET youtubeURL = ? where id = ?";
-            $cordovaSQLite.execute(db, query, [videoURLASLEdit, $scope.word.signASL.videoID]);
+            if($scope.word.signASL.youtubeURL == "undefined")
+            {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?)";
+                $cordovaSQLite.execute(db, query, [videoURLASLEdit]);
+            }
+            else
+            {
+                var query = "UPDATE video SET youtubeURL = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [videoURLASLEdit, $scope.word.signASL.videoID]);
+            }
         }
         if(wordingLSF1Edit != $scope.word.wordings[0].youtubeURLLSF)
         {
-            var query = "UPDATE video SET youtubeURL = ? where id = ?";
-            $cordovaSQLite.execute(db, query, [wordingLSF1Edit, $scope.word.wordings[0].videoIDLSF]);
+            if($scope.word.wordings[0].youtubeURLLSF == "undefined")
+            {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?)";
+                $cordovaSQLite.execute(db, query, [wordingLSF1Edit]).then(function(res) {
+                    var secondQuery = "INSERT INTO wording(wordID, videoIDLSF) VALUES (?, ?)";
+                    $cordovaSQLite.execute(db, secondQuery, [$scope.word.id, res.insertId])
+                });
+            }
+            else
+            {
+                var query = "UPDATE video SET youtubeURL = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [wordingLSF1Edit, $scope.word.wordings[0].videoIDLSF]);
+            }
         }
         if(wordingLSF2Edit != $scope.word.wordings[1].youtubeURLLSF)
         {
-            var query = "UPDATE video SET youtubeURL = ? where id = ?";
-            $cordovaSQLite.execute(db, query, [wordingLSF2Edit, $scope.word.wordings[1].videoIDLSF]);
+            if($scope.word.wordings[1].youtubeURLLSF == "undefined")
+            {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?)";
+                $cordovaSQLite.execute(db, query, [wordingLSF2Edit]).then(function(res) {
+                    var secondQuery = "INSERT INTO wording(wordID, videoIDLSF) VALUES (?, ?)";
+                    $cordovaSQLite.execute(db, secondQuery, [$scope.word.id, res.insertId])
+                });
+            }
+            else
+            {
+                var query = "UPDATE video SET youtubeURL = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [wordingLSF2Edit, $scope.word.wordings[1].videoIDLSF]);
+            }
         }
         if(wordingASL1Edit != $scope.word.wordings[0].youtubeURLASL)
         {
-            var query = "UPDATE video SET youtubeURL = ? where id = ?";
-            $cordovaSQLite.execute(db, query, [wordingASL1Edit, $scope.word.wordings[0].videoIDASL]);
+            if($scope.word.wordings[0].youtubeURLASL == "undefined")
+            {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?)";
+                $cordovaSQLite.execute(db, query, [wordingASL1Edit]).then(function(res) {
+                    var query = "UPDATE wording SET videoIDASL = ? WHERE wordID = ?";
+                    $cordovaSQLite.execute(db, query, [res.insertId, $scope.word.id])
+                });
+            }
+            else
+            {
+                var query = "UPDATE video SET youtubeURL = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [wordingASL1Edit, $scope.word.wordings[0].videoIDASL]);
+            }
         }
         if(wordingASL2Edit != $scope.word.wordings[1].youtubeURLASL)
         {
-            var query = "UPDATE video SET youtubeURL = ? where id = ?";
-            $cordovaSQLite.execute(db, query, [wordingASL2Edit, $scope.word.wordings[1].videoIDASL]);
+            if($scope.word.wordings[1].youtubeURLASL == "undefined")
+            {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?)";
+                $cordovaSQLite.execute(db, query, [wordingASL2Edit]).then(function(res) {
+                    var query = "UPDATE wording SET videoIDASL = ? WHERE wordID = ?";
+                    $cordovaSQLite.execute(db, query, [res.insertId, $scope.word.id])
+                });
+            }
+            else
+            {
+                var query = "UPDATE video SET youtubeURL = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [wordingASL2Edit, $scope.word.wordings[1].videoIDASL]);
+            }
         }
         if(signExplanationFrenchEdit != $scope.word.signExplanation.frenchExplanation)
         {
-            var query = "UPDATE signExplanation SET frenchExplanation = ? where id = ?";
-            $cordovaSQLite.execute(db, query, [signExplanationFrenchEdit, $scope.word.signExplanation.id]);
+            if($scope.word.signExplanation == "undefined")
+            {
+                var query = "INSERT INTO signExplanation(frenchExplanation, englishExplanation, videoIDLSFExplanation, videoIDASLExplanation) VALUES (?)";
+                $cordovaSQLite.execute(db, query, [signExplanationFrenchEdit]);
+            }
+            else
+            {
+                var query = "UPDATE signExplanation SET frenchExplanation = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [signExplanationFrenchEdit, $scope.word.signExplanation.id]);
+            }
         }
         if(signExplanationEnglishEdit != $scope.word.signExplanation.englishExplanation)
         {
