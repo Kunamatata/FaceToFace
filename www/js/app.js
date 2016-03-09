@@ -42,7 +42,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         // $cordovaSQLite.execute(db, "DROP table genealogy");
         // $cordovaSQLite.execute(db, "DROP table videoQCM");
         // $cordovaSQLite.execute(db, "DROP table sentenceQCM");
-        // $cordovaSQLite.execute(db, "DROP table position");
+        //$cordovaSQLite.execute(db, "DROP table position");
         // $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");
 
         /*___________________*/
@@ -416,8 +416,13 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
     // $scope.insertPosition(11, "rightarm");
     // $scope.insertPosition(12, "rightforearm");
     // $scope.insertPosition(13, "rightelbow");
-    // $scope.insertPosition(14, "lefthand");
+    // $scope.insertPosition(14, "handpalm");
     // $scope.insertPosition(15, "righthand");
+    // $scope.insertPosition(16, "ear");
+    // $scope.insertPosition(17, "armpit");
+    // $scope.insertPosition(18, "wrist");
+    // $scope.insertPosition(19, "tophead");
+    // $scope.insertPosition(20, "chinneck");
 
     // //first configuration Mouth  first configuration Chin
     // $scope.insertPositionConfigurationSign(1, 1, 0, 1, 1);
@@ -1322,19 +1327,17 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
 
     // Trust the URL so Angular can load the corresponding template
     $scope.trustUrl = function(url) {
-            return $sce.trustAsResourceUrl(url);
-        };
+        return $sce.trustAsResourceUrl(url);
+    };
 
-    $scope.getAllWords = function()
-    {
+    $scope.getAllWords = function() {
         var query = "SELECT * from word";
         $cordovaSQLite.execute(db, query, []).then(function(res) {
             if (res.rows.length > 0) {
 
-            for(var i = 0; i < res.rows.length; i++)
-            {
-                $scope.words.push(res.rows[i]);
-            }
+                for (var i = 0; i < res.rows.length; i++) {
+                    $scope.words.push(res.rows[i]);
+                }
 
             } else {
                 console.log("No results found");
@@ -1345,8 +1348,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         });
     };
 
-    $scope.deleteSign = function(id)
-    {
+    $scope.deleteSign = function(id) {
         var query = "SELECT videoID from sign WHERE id = ?";
         $cordovaSQLite.execute(db, query, [id]).then(function(res) {
             if (res.rows.length > 0) {
@@ -1364,8 +1366,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
     };
 
 
-    $scope.deleteWord = function(id, index)
-    {
+    $scope.deleteWord = function(id, index) {
         $scope.deleteSign($scope.words[index].idSignLSF);
         $scope.deleteSign($scope.words[index].idSignASL);
 
