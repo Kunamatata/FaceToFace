@@ -1,6 +1,18 @@
 <ion-view view-title="Delete a word">
-    <ion-content>
-        <ion-nav-back-button>
-        </ion-nav-back-button>
+    <ion-content ng-init="getAllWords()" class="padding">
+        <div ng-repeat="word in wordList track by $index">
+            <div class="item item-divider" ng-click="deleteWord(word.id,$index)">
+                Word ID : {{word.id}}
+                 <i class="fa fa-times qcm-delete"></i>
+            </div>
+            <label class="item item-input">
+                <div class="row column">
+                  <img src="../img/France-Flag-icon-little.png">
+                  {{word.frenchWord}}
+                  <img src="../img/United-States-Flag-icon-little.png">
+                  {{word.englishWord}}
+                </div>
+            </label>
+        </div>
     </ion-content>
 </ion-view>

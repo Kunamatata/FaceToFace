@@ -1318,24 +1318,75 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
     $scope.selectedConfigurationsASL = [null, null]
     $scope.youtubeURLArray = [];
     $scope.qcmList = [];
+    $scope.words = [];
 
 
     // Trust the URL so Angular can load the corresponding template
     $scope.trustUrl = function(url) {
             return $sce.trustAsResourceUrl(url);
-        }
-        //# A Retirer!
-    var query = "SELECT * FROM video WHERE id = ?";
-    $cordovaSQLite.execute(db, query, [14]).then(function(res) {
-        if (res.rows.length > 0) {
-            console.log("Test du on delete cascade")
-            console.log(res.rows.item(0));
-        } else {
-            console.log("No results found");
-        }
-    }, function(err) {
-        console.error(err);
-    });
+        };
+
+    $scope.getAllWords = function()
+    {
+        var query = "SELECT * from word";
+        $cordovaSQLite.execute(db, query, []).then(function(res) {
+            if (res.rows.length > 0) {
+
+            for(var i = 0; i < res.rows.length; i++)
+            {
+                $scope.words.push(res.rows[i]);
+            }
+
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.deleteSign = function(id)
+    {
+        var query = "SELECT videoID from sign WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [id]).then(function(res) {
+            if (res.rows.length > 0) {
+                query = "DELETE FROM video WHERE id = ?";
+                $cordovaSQLite.execute(db, query, [res.rows[0].id]);
+            }
+
+            query = "DELETE FROM sign WHERE id = ?";
+            $cordovaSQLite.execute(db, query, [id]);
+
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+
+    $scope.deleteWord = function(id, index)
+    {
+        $scope.deleteSign(words[index].idSignLSF);
+        $scope.deleteSign(words[index].idSignASL);
+
+        query = "DELETE FROM word WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [id]);
+
+        query = "DELETE FROM dialog WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [id]);
+
+        query = "DELETE FROM wording WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [id]);
+
+        query = "DELETE FROM SignExplanation WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [id]);
+
+        query = "DELETE FROM PositionConfigurationSign WHERE id = ? OR id = ?";
+        $cordovaSQLite.execute(db, query, [words[index].idSignLSF, words[index].idSignASL]);
+
+        $scope.words.splice(index, 1);
+    }
 
 
     $scope.insertSentenceQCMVideos = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer, callback) {
@@ -2006,7 +2057,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
     $stateProvider.state('edit-word', {
         url: '/manage/word/edit',
-        templateUrl: 'templates/edit-word.html',
+        templateUrl: 'templates/list-word.html',
         controller: 'DataManagementController'
     })
 
