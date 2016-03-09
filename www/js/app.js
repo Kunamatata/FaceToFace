@@ -1310,7 +1310,7 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
 
 });
 
-app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $ionicPopup, $http, $cordovaSQLite, $state, $location, $sce, SharingSentenceQCMInformation, SharingVideoQCMInformation) {
+app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $ionicPopup, $http, $cordovaSQLite, $state, $location, $sce, SharingSentenceQCMInformation, SharingVideoQCMInformation, SharingWordInformation) {
 
 
     /**********************
@@ -1386,7 +1386,289 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         $cordovaSQLite.execute(db, query, [$scope.words[index].idSignLSF, $scope.words[index].idSignASL]);
 
         $scope.words.splice(index, 1);
+    };
+
+    $scope.searchSignVideos = function(idLSF, idASL, index)
+    {
+        var query = "SELECT youtubeURL FROM video WHERE id = ? OR id = ?";
+        $cordovaSQLite.execute(db, query, [idLSF, idASL]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                for(var i = 0; i < res.rows.length; i++)
+                {
+                    switch(res.rows[i].signID)
+                    {
+                        case idLSF :
+                            $scope.words[index].signLSF.configuration = res.rows[i];
+                            break;
+                        case idASL :
+                            $scope.words[index].signASL.configuration = res.rows[i];
+                            break;
+                    }
+                }
+            }
+        }
+    };
+
+    $scope.searchPositionConfigurationSign = function(idLSF, idASL, index)
+    {
+        var query = "SELECT * FROM positionConfigurationSign WHERE signID = ? or signID = ?";
+        $cordovaSQLite.execute(db, query, [idLSF, idASL]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                for(var i = 0; i < res.rows.length; i++)
+                {
+                    switch(res.rows[i].id)
+                    {
+                        case idLSF :
+                            $scope.words[index].signLSF.youtubeURL = res.rows[i].youtubeURL;
+                            break;
+                        case idASL :
+                            $scope.words[index].signASL.youtubeURL = res.rows[i].youtubeURL;
+                            break;
+                    }
+                }
+            }
+        }
+    };
+
+    $scope.searchSigns = function(index)
+    {
+        var query = "SELECT * FROM sign WHERE id = ? or id = ?";
+        $cordovaSQLite.execute(db, query, [$scope.words[index].idSignLSF, $scope.words[index].idSignASL]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                for(var i = 0; i < res.rows.length; i++)
+                {
+                    switch(res.rows[i].id)
+                    {
+                        case $scope.words[index].idSignLSF :
+                            $scope.words[index].signLSF = res.rows[i];
+                            break;
+                        case $scope.words[index].idSignASL:
+                            $scope.words[index].signASL = res.rows[i]
+                            break;
+                    }
+
+                    $scope.searchSignVideos($scope.words[index].signLSF.videoID, $scope.words[index].signASL.videoID, index);
+                    $scope.searchPositionConfigurationSign($scope.words[index].idSignLSF, $scope.words[index].idSignASL, index);
+                }
+
+            }
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.searchWordingVideo = function(idLSF, idASL, wordIndex, wordingIndex)
+    {
+        var query = "SELECT youtubeURL FROM video WHERE id = ? OR id = ?";
+        $cordovaSQLite.execute(db, query, [idLSF, idASL]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                for(var i = 0; i < res.rows.length; i++)
+                {
+                    switch(res.rows[i].id)
+                    {
+                        case idLSF :
+                            $scope.words[wordIndex].wordings[wordingIndex].youtubeURLLSF = res.rows[i].youtubeURL;
+                            break;
+                        case idASL :
+                            $scope.words[wordIndex].wordings[wordingIndex].youtubeURLASL = res.rows[i].youtubeURL;
+                            break;
+                    }
+                }
+            }
+        }
+    };
+
+    $scope.searchWordings = function(index)
+    {
+        var query = "SELECT * FROM wording WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [$scope.words[index].idSignLSF]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                $scope.words[i].wordings = [];
+
+                for(var i = 0; i < res.rows.length; i++)
+                {
+                    $scope.words[i].wordings[i] = res.rows[i];
+
+                    $scope.searchWordingVideo(res.rows[i].videoIDLSF, res.rows[i].videoIDASL, index, i);
+                }
+            }
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.searchDialogVideo = function(idLSF, idASL, wordIndex, dialogIndex)
+    {
+        var query = "SELECT youtubeURL FROM video WHERE id = ? OR id = ?";
+        $cordovaSQLite.execute(db, query, [idLSF, idSL]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                for(var i = 0; i < res.rows.length; i++)
+                {
+                    switch(res.rows[i].id)
+                    {
+                        case idLSF :
+                            $scope.words[wordIndex].dialogs[dialogIndex].youtubeURLLSF = res.rows[i].youtubeURL;
+                            break;
+                        case idASL :
+                            $scope.words[wordIndex].dialogs[dialogIndex].youtubeURLASL = res.rows[i].youtubeURL;
+                            break;
+                    }
+                }
+            }
+        }
+    };
+
+    $scope.searchDialogs = function(index)
+    {
+        var query = "SELECT * FROM dialog WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [$scope.words[index].wordID]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                $scope.words[i].dialogs = [];
+
+                for(var i = 0; i < res.rows.length; i++)
+                {
+                    $scope.words[index].dialogs[i] = res.rows[i];
+
+                    $scope.searchDialogVideo(res.rows[i].videoIDLSF, res.rows[i].videoIDASL, index, i);
+                }
+            }
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.searchSignExplanationVideos = function(idLSF, idASL, index)
+    {
+        var query = "SELECT youtubeURL FROM video WHERE id = ? or id = ?";
+        $cordovaSQLite.execute(db, query, [idLSF, idASL]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                for(var i = 0; i < res.rows.length; i++)
+                {
+                    switch(res.rows[i].id)
+                    {
+                        case idLSF :
+                            $scope.words[index].signExplanation.youtubeURLLSF = res.rows[i].youtubeURL;
+                            break;
+                        case idASL :
+                            $scope.words[index].signExplanation.youtubeURLASL = res.rows[i].youtubeURL;
+                            break;
+                    }
+                }
+            }
+        }
+    };
+
+    $scope.searchSignExplanations = function(index)
+    {
+        var query = "SELECT * FROM signExplanation WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [$scope.words[index].wordID]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                    $scope.words[index].signExplanation = res.rows[0];
+
+                    $scope.searchSignExplanationsVideos(res.rows[0].videoIDLSFExplanation, res.rows[0].videoIDASLExplanation, index);
+                }
+            }
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.fillWord = function(index)
+    {
+        $scope.searchSigns(index);
+        $scope.searchWordings(index);
+        $scope.searchDialogs(index);
+        $scope.searchSignExplanation(index);
+
+        SharingWordInformation.setWord($scope.words[index]);
+    };
+
+    $scope.initWordEdition = function()
+    {
+        $scope.word = SharingWordInformation.getWord();
+
+        setTimeout(function() {
+            $scope.signLSF = $scope.word.signLSF;
+            $scope.signASL = $scope.word.signASL;
+        }, 1000);
     }
+
+    $scope.updateWord = function(frenchWordEdit,englishWordEdit, videoURLLSFEdit, videoURLASLEdit, wordingLSF1Edit, wordingASL1Edit, wordingLSF2Edit, wordingASL2Edit, signExplanationFrenchEdit, signExplanationEnglishEdit, signExplanationLSFEdit, signExplanationASLEdit)
+    {
+        if(frenchWordEdit != $scope.word.frenchWord)
+        {
+            var query = "UPDATE word SET frenchWord = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [frenchWordEdit, $scope.word.id]);
+        }
+        if(englishWordEdit != $scope.word.englishWord)
+        {
+            var query = "UPDATE word SET englishWord = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [englishWordEdit, $scope.word.id]);
+        }
+        if(videoURLLSFEdit != $scope.word.signLSF.youtubeURL)
+        {
+            var query = "UPDATE video SET youtubeURL = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [videoURLLSFEdit, $scope.word.signLSF.videoID]);
+        }
+        if(videoURLASLEdit != $scope.word.signASL.youtubeURL)
+        {
+            var query = "UPDATE video SET youtubeURL = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [videoURLASLEdit, $scope.word.signASL.videoID]);
+        }
+        if(wordingLSF1Edit != $scope.word.wordings[0].youtubeURLLSF)
+        {
+            var query = "UPDATE video SET youtubeURL = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [wordingLSF1Edit, $scope.word.wordings[0].videoIDLSF]);
+        }
+        if(wordingLSF2Edit != $scope.word.wordings[1].youtubeURLLSF)
+        {
+            var query = "UPDATE video SET youtubeURL = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [wordingLSF2Edit, $scope.word.wordings[1].videoIDLSF]);
+        }
+        if(wordingASL1Edit != $scope.word.wordings[0].youtubeURLASL)
+        {
+            var query = "UPDATE video SET youtubeURL = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [wordingASL1Edit, $scope.word.wordings[0].videoIDASL]);
+        }
+        if(wordingASL2Edit != $scope.word.wordings[1].youtubeURLASL)
+        {
+            var query = "UPDATE video SET youtubeURL = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [wordingASL2Edit, $scope.word.wordings[1].videoIDASL]);
+        }
+        if(signExplanationFrenchEdit != $scope.word.signExplanation.frenchExplanation)
+        {
+            var query = "UPDATE signExplanation SET frenchExplanation = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [signExplanationFrenchEdit, $scope.word.signExplanation.id]);
+        }
+        if(signExplanationEnglishEdit != $scope.word.signExplanation.englishExplanation)
+        {
+            var query = "UPDATE signExplanation SET englishExplanation = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [signExplanationEnglishEdit, $scope.word.signExplanation.id]);
+        }
+        if(signExplanationLSFEdit != $scope.word.signExplanation.youtubeURLLSF)
+        {
+            var query = "UPDATE video SET youtubeURL = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [signExplanationLSFEdit, $scope.word.signExplanation.videoIDLSFExplanation]);
+        }
+        if(signExplanationASLEdit != $scope.word.signExplanation.youtubeURLASL)
+        {
+            var query = "UPDATE video SET youtubeURL = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [signExplanationASLEdit, $scope.word.signExplanation.videoIDASLExplanation]);
+        }
+    };
 
 
     $scope.insertSentenceQCMVideos = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer, callback) {
