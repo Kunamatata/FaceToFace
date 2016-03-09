@@ -860,10 +860,10 @@ app.controller("WordingPresentation", function($scope, $sce, $ionicLoading, $htt
 
         // Set information for the other wording button
         if ($scope.wordingChoice == 0) {
-            $scope.otherWordingName = "Enoncé n°2";
+            $scope.otherWordingName = "Second Wording";
             $scope.otherWordingNumber = 2;
         } else {
-            $scope.otherWordingName = "Enoncé n°1";
+            $scope.otherWordingName = "First Wording";
             $scope.otherWordingNumber = 1;
         }
 
