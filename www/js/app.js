@@ -1407,7 +1407,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
                     }
                 }
             }
-        }
+        })
     };
 
     $scope.searchPositionConfigurationSign = function(idLSF, idASL, index)
@@ -1429,7 +1429,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
                     }
                 }
             }
-        }
+        })
     };
 
     $scope.searchSigns = function(index)
@@ -1480,7 +1480,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
                     }
                 }
             }
-        }
+        })
     };
 
     $scope.searchWordings = function(index)
@@ -1523,7 +1523,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
                     }
                 }
             }
-        }
+        })
     };
 
     $scope.searchDialogs = function(index)
@@ -1566,7 +1566,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
                     }
                 }
             }
-        }
+        })
     };
 
     $scope.searchSignExplanations = function(index)
@@ -1579,7 +1579,6 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
 
                     $scope.searchSignExplanationsVideos(res.rows[0].videoIDLSFExplanation, res.rows[0].videoIDASLExplanation, index);
                 }
-            }
         }, function(err) {
             console.error(err);
             return -1;
