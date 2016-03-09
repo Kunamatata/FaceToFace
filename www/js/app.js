@@ -388,53 +388,53 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
     // $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
     // $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
 
-    // $scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
+        // $scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
 
-    // $scope.insertNewDialog(1, 1, "https://www.youtube.com/embed/yhy19VUoKAY");
+        // $scope.insertNewDialog(1, 1, "https://www.youtube.com/embed/yhy19VUoKAY");
 
-    // for (i = 0; i < 46; i++) {
-    //     $scope.insertConfiguration(0, "../config_" + (i + 1) + ".jpg");
-    // }
+        // for (i = 0; i < 46; i++) {
+        //     $scope.insertConfiguration(0, "../config_" + (i + 1) + ".jpg");
+        // }
 
-    // $scope.insertNewVideoQCM(1, "https://www.youtube.com/embed/9mp2E58UlR4", "https://www.youtube.com/embed/YVP6M2u2sf0", "Maybe", "Peut-être", "Not sure", "Pas sûr", "Oh yes", "Oh oui", "Cat", "Chat", "B");
+        // $scope.insertNewVideoQCM(1, "https://www.youtube.com/embed/9mp2E58UlR4", "https://www.youtube.com/embed/YVP6M2u2sf0", "Maybe", "Peut-être", "Not sure", "Pas sûr", "Oh yes", "Oh oui", "Cat", "Chat", "B");
 
-    // $scope.insertNewSentenceQCM(1, "Bob est perdu dans toutes ces lignes de code", "Bob is lost in all those lines of code", "https://www.youtube.com/embed/QL8N4QcnpWE", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "B");
+        // $scope.insertNewSentenceQCM(1, "Bob est perdu dans toutes ces lignes de code", "Bob is lost in all those lines of code", "https://www.youtube.com/embed/QL8N4QcnpWE", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "B");
 
-    // $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");
+        // $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");
 
-    // $scope.insertPosition(0, "mouth");
-    // $scope.insertPosition(1, "chin");
-    // $scope.insertPosition(2, "throat");
-    // $scope.insertPosition(3, "cheek");
-    // $scope.insertPosition(4, "temple");
-    // $scope.insertPosition(5, "eyes");
-    // $scope.insertPosition(6, "forehead");
-    // $scope.insertPosition(7, "rightpectoral");
-    // $scope.insertPosition(8, "leftpectoral");
-    // $scope.insertPosition(9, "thorax");
-    // $scope.insertPosition(10, "stomach");
-    // $scope.insertPosition(11, "rightarm");
-    // $scope.insertPosition(12, "rightforearm");
-    // $scope.insertPosition(13, "rightelbow");
-    // $scope.insertPosition(14, "handpalm");
-    // $scope.insertPosition(15, "righthand");
-    // $scope.insertPosition(16, "ear");
-    // $scope.insertPosition(17, "armpit");
-    // $scope.insertPosition(18, "wrist");
-    // $scope.insertPosition(19, "tophead");
-    // $scope.insertPosition(20, "chinneck");
+        // $scope.insertPosition(0, "mouth");
+        // $scope.insertPosition(1, "chin");
+        // $scope.insertPosition(2, "throat");
+        // $scope.insertPosition(3, "cheek");
+        // $scope.insertPosition(4, "temple");
+        // $scope.insertPosition(5, "eyes");
+        // $scope.insertPosition(6, "forehead");
+        // $scope.insertPosition(7, "rightpectoral");
+        // $scope.insertPosition(8, "leftpectoral");
+        // $scope.insertPosition(9, "thorax");
+        // $scope.insertPosition(10, "stomach");
+        // $scope.insertPosition(11, "rightarm");
+        // $scope.insertPosition(12, "rightforearm");
+        // $scope.insertPosition(13, "rightelbow");
+        // $scope.insertPosition(14, "handpalm");
+        // $scope.insertPosition(15, "righthand");
+        // $scope.insertPosition(16, "ear");
+        // $scope.insertPosition(17, "armpit");
+        // $scope.insertPosition(18, "wrist");
+        // $scope.insertPosition(19, "tophead");
+        // $scope.insertPosition(20, "chinneck");
 
-    // //first configuration Mouth  first configuration Chin
-    // $scope.insertPositionConfigurationSign(1, 1, 0, 1, 1);
-    // $scope.insertPositionConfigurationSign(3, 1, 0, 1, 1);
-    // $scope.insertPositionConfigurationSign(2, 2, 0, 1, 1);
-    // $scope.insertPositionConfigurationSign(3, 1, 0);
+        // //first configuration Mouth  first configuration Chin
+        // $scope.insertPositionConfigurationSign(1, 1, 0, 1, 1);
+        // $scope.insertPositionConfigurationSign(3, 1, 0, 1, 1);
+        // $scope.insertPositionConfigurationSign(2, 2, 0, 1, 1);
+        // $scope.insertPositionConfigurationSign(3, 1, 0);
 
-    /*$scope.searchFrenchWord("Romain");
-    setTimeout(function(){
-        console.log($scope.word.frenchWord);
-        //$scope.deleteWord("Romain");
-    }, 2000);*/
+        /*$scope.searchFrenchWord("Romain");
+        setTimeout(function(){
+            console.log($scope.word.frenchWord);
+            //$scope.deleteWord("Romain");
+        }, 2000);*/
 
 
 });
