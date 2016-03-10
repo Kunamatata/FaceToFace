@@ -1,0 +1,17 @@
+<ion-view view-title="Edit a word">
+    <ion-content ng-init="getAllWords()" class="padding">
+        <div ng-repeat="word in words track by $index">
+            <div class="item item-divider" ng-click="fillWord($index)" ui-sref="edit-word({id:word.id})">
+                Word ID : {{word.id}}
+                 <i class="fa fa-times qcm-delete"></i>
+            </div>
+            <label class="item item-input">
+                  <img src="../img/France-Flag-icon-little.png">
+                  {{word.frenchWord}}
+
+                  <img src="../img/United-States-Flag-icon-little.png">
+                  {{word.englishWord}}
+            </label>
+        </div>
+    </ion-content>
+</ion-view>

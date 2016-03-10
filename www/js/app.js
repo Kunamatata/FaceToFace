@@ -32,7 +32,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         /* A RETIRER */
         /* A RETIRER */
 
-/*        $cordovaSQLite.execute(db, "DROP table word");
+        $cordovaSQLite.execute(db, "DROP table word");
         $cordovaSQLite.execute(db, "DROP table sign");
         $cordovaSQLite.execute(db, "DROP table video");
         $cordovaSQLite.execute(db, "DROP table wording");
@@ -43,7 +43,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         $cordovaSQLite.execute(db, "DROP table videoQCM");
         $cordovaSQLite.execute(db, "DROP table sentenceQCM");
         $cordovaSQLite.execute(db, "DROP table position");
-        $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");*/
+        $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");
 
         /*___________________*/
 
@@ -382,7 +382,7 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
-/*    $scope.insertNewSignExplanation(1, "Le signe-ancêtre commun, attesté pour la première fois en France en 1784 et importé aux USA au début du XXème siècle, comportait deux parties.", "There is a lot of interesting things to say about this sign.", "https://www.youtube.com/embed/87tCKyr5sa4", "https://www.youtube.com/embed/jP5-qP-LTE8");
+    $scope.insertNewSignExplanation(1, "Le signe-ancêtre commun, attesté pour la première fois en France en 1784 et importé aux USA au début du XXème siècle, comportait deux parties.", "There is a lot of interesting things to say about this sign.", "https://www.youtube.com/embed/87tCKyr5sa4", "https://www.youtube.com/embed/jP5-qP-LTE8");
 
 
     $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
@@ -446,7 +446,7 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
     $scope.insertPositionConfigurationSign(1, 1, 0, 1, 1);
     $scope.insertPositionConfigurationSign(3, 1, 0, 1, 1);
     $scope.insertPositionConfigurationSign(2, 2, 0, 1, 1);
-    $scope.insertPositionConfigurationSign(3, 1, 0);*/
+    $scope.insertPositionConfigurationSign(3, 1, 0);
 
 });
 

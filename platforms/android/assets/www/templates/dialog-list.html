@@ -1,19 +1,19 @@
-<ion-view view-title="Dialogues">
+<ion-view view-title="Dialogs">
 <ion-content class="padding">
 
   <div class="row">
     <div class="center">
             <button class="button button-positive" ng-click="setWordChoice(); setWordingChoice(0)" ui-sref="wording-presentation({id:word.id, number:1})">
-                Enoncé n°1
+                First Wording
             </button>
             <button class="button button-positive" ng-click="setWordChoice(); setWordingChoice(1)" ui-sref="wording-presentation({id:word.id, number:2})">
-                Enoncé n°2
+                Second Wording
             </button>
           <button class="button button-positive" ng-click="setWordChoice();" ui-sref="dialog-list({id:word.id})">
-              Dialogues
+              Dialogs
           </button>
            <button class="button button-positive" ng-click="" ui-sref="sign-explanation({id:word.id})">
-              Pour aller plus loin
+              More Information
           </button>
     </div>
   </div>
@@ -25,7 +25,7 @@
       </div>
       <div ng-repeat="dialog in word.frenchDialogList track by $index">
         <div class="row">
-          <a ng-click="setDialogChoice($index,0)" ui-sref="dialog-presentation({id:word.id, language:'french', number:$index})" class="center">Dialogue {{$index +1}}</a>
+          <a ng-click="setDialogChoice($index,0)" ui-sref="dialog-presentation({id:word.id, language:'french', number:$index})" class="center">Dialog {{$index +1}}</a>
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@
       </div>
       <div ng-repeat="dialog in word.englishDialogList track by $index">
         <div class="row">
-          <a ng-click="setDialogChoice($index,1)" ui-sref="dialog-presentation({id:word.id, language:'english', number:$index})" class="center">Dialogue {{$index +1}}</a>
+          <a ng-click="setDialogChoice($index,1)" ui-sref="dialog-presentation({id:word.id, language:'english', number:$index})" class="center">Dialog {{$index +1}}</a>
         </div>
       </div>
     </div>
