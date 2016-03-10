@@ -1,4 +1,4 @@
-<ion-view view-title="Add a word">
+<ion-view view-title="Edit a word">
     <ion-content>
         <div class="list">
             <div class="item item-divider" ng-init="initWordEdition()">
@@ -17,11 +17,11 @@
             </div>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">LSF Video</span>
-                <input type="text" placeholder="{{signLSF.youtubeURL}}" ng-model="videoURLLSFEdit" required>
+                <input type="text" placeholder="{{word.signLSF.youtubeURL}}" ng-model="videoURLLSFEdit" required>
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">ASL Video</span>
-                <input type="text" placeholder="{{signASL.youtubeURL}}" ng-model="videoURLASLEdit" required>
+                <input type="text" placeholder="{{word.signASL.youtubeURL}}" ng-model="videoURLASLEdit" required>
             </label>
             <div class="item item-divider">
                 Wordings
@@ -61,100 +61,6 @@
                 <span class="input-label">ASL Explanation</span>
                 <input type="text" placeholder="{{word.signExplanation.youtubeURLASL}}" ng-model="signExplanationASLEdit">
             </label>
-            <div class="item item-divider">
-                LSF Sign
-            </div>
-            <div class="row">
-                <div class="col col-33">
-                    <div class="row">
-                        <div id="first-hand-picture-lsf" class="center" ng-click="activateSelection('first-hand-picture-lsf')">
-                            <i class="fa fa-times" ng-click="deleteChosenConfiguration('first-hand-picture-lsf')"></i>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="center">Main active</div>
-                    </div>
-                </div>
-                <div class="col col-33 col-offset-33">
-                    <div class="row">
-                        <div id="second-hand-picture-lsf" class="center" ng-click="activateSelection('second-hand-picture-lsf')">
-                            <i class="fa fa-times" ng-click="deleteChosenConfiguration('second-hand-picture-lsf')"></i>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="center">Main passive</div>
-                    </div>
-                </div>
-            </div>
-            <div class="skeleton row center">
-                <div class="skeleton-square mouth" id="mouth-lsf" ng-click="setPosition('mouth',0,'LSF')"></div>
-                <div class="skeleton-square chin" id="chin-lsf" ng-click="setPosition('chin',1,'LSF')"></div>
-                <div class="skeleton-square throat" id="throat-lsf" ng-click="setPosition('throat',2,'LSF')"></div>
-                <div class="skeleton-square cheek" id="cheek-lsf" ng-click="setPosition('cheek',3,'LSF')"></div>
-                <div class="skeleton-square temple" id="temple-lsf" ng-click="setPosition('temple',4,'LSF')"></div>
-                <div class="skeleton-square eyes" id="eyes-lsf" ng-click="setPosition('eyes',5,'LSF')"></div>
-                <div class="skeleton-square forehead" id="forehead-lsf" ng-click="setPosition('forehead',6,'LSF')"></div>
-                <div class="skeleton-square right-pectoral" id="right-pectoral-lsf" ng-click="setPosition('right-pectoral',7,'LSF')"></div>
-                <div class="skeleton-square left-pectoral" id="left-pectoral-lsf" ng-click="setPosition('left-pectoral',8,'LSF')"></div>
-                <div class="skeleton-square thorax" id="thorax-lsf" ng-click="setPosition('thorax',9,'LSF')"></div>
-                <div class="skeleton-square stomach" id="stomach-lsf" ng-click="setPosition('stomach',10,'LSF')"></div>
-                <div class="skeleton-square right-arm" id="right-arm-lsf" ng-click="setPosition('right-arm',11,'LSF')"></div>
-                <div class="skeleton-square right-forearm" id="right-forearm-lsf" ng-click="setPosition('right-forearm',12,'LSF')"></div>
-                <!-- <div class="skeleton-square left-arm" ng-click="leftarm"></div> -->
-                <div class="skeleton-circle right-elbow" id="right-elbow-lsf" ng-click="setPosition('right-elbow',13,'LSF')"></div>
-                <div class="skeleton-circle left-hand" id="left-hand-lsf" ng-click="setPosition('left-hand',14,'LSF')"></div>
-                <div class="skeleton-circle right-hand" id="right-hand-lsf" ng-click="setPosition('right-hand',15,'LSF')"></div>
-            </div>
-            <div id="configuration-grid" class="grid-container" ng-init="loadImages()">
-                <div class="col-8" ng-repeat="image in images track by $index" style="background-image: url({{image.src}});" ng-click="configurationSelected(image, $index)"></div>
-            </div>
-            <div class="item item-divider">
-                ASL Sign
-            </div>
-            <div class="row">
-                <div class="col col-33">
-                    <div class="row">
-                        <div id="first-hand-picture-asl" class="center" ng-click="activateSelection('first-hand-picture-asl')">
-                            <i class="fa fa-times" ng-click="deleteChosenConfiguration('first-hand-picture-asl')"></i>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="center">Active Hand</div>
-                    </div>
-                </div>
-                <div class="col col-33 col-offset-33">
-                    <div class="row">
-                        <div id="second-hand-picture-asl" class="center" ng-click="activateSelection('second-hand-picture-asl')">
-                            <i class="fa fa-times" ng-click="deleteChosenConfiguration('second-hand-picture-asl')"></i>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="center">Passive Hand</div>
-                    </div>
-                </div>
-            </div>
-            <div class="skeleton row center">
-                <div class="skeleton-square mouth" id="mouth-asl" ng-click="setPosition('mouth',0,'ASL')"></div>
-                <div class="skeleton-square chin" id="chin-asl" ng-click="setPosition('chin',1,'ASL')"></div>
-                <div class="skeleton-square throat" id="throat-asl" ng-click="setPosition('throat',2,'ASL')"></div>
-                <div class="skeleton-square cheek" id="cheek-asl" ng-click="setPosition('cheek',3,'ASL')"></div>
-                <div class="skeleton-square temple" id="temple-asl" ng-click="setPosition('temple',4,'ASL')"></div>
-                <div class="skeleton-square eyes" id="eyes-asl" ng-click="setPosition('eyes',5,'ASL')"></div>
-                <div class="skeleton-square forehead" id="forehead-asl" ng-click="setPosition('forehead',6,'ASL')"></div>
-                <div class="skeleton-square right-pectoral" id="right-pectoral-asl" ng-click="setPosition('right-pectoral',7,'ASL')"></div>
-                <div class="skeleton-square left-pectoral" id="left-pectoral-asl" ng-click="setPosition('left-pectoral',8,'ASL')"></div>
-                <div class="skeleton-square thorax" id="thorax-asl" ng-click="setPosition('thorax',9,'ASL')"></div>
-                <div class="skeleton-square stomach" id="stomach-asl" ng-click="setPosition('stomach',10,'ASL')"></div>
-                <div class="skeleton-square right-arm" id="right-arm-asl" ng-click="setPosition('right-arm',11,'ASL')"></div>
-                <div class="skeleton-square right-forearm" id="right-forearm-asl" ng-click="setPosition('right-forearm',12,'ASL')"></div>
-                <!-- <div class="skeleton-square left-arm" ng-click="leftarm"></div> -->
-                <div class="skeleton-circle right-elbow" id="right-elbow-asl" ng-click="setPosition('right-elbow',13,'ASL')"></div>
-                <div class="skeleton-circle left-hand" id="left-hand-asl" ng-click="setPosition('left-hand',14,'ASL')"></div>
-                <div class="skeleton-circle right-hand" id="right-hand-asl" ng-click="setPosition('right-hand',15,'ASL')"></div>
-            </div>
-            <div id="configuration-grid" class="grid-container" ng-init="loadImages()">
-                <div class="col-8" ng-repeat="image in images track by $index" style="background-image: url({{image.src}});" ng-click="configurationSelected(image, $index)"></div>
-            </div>
             <button class="button button-block button-positive" ng-click="updateWord(frenchWordEdit,englishWordEdit, videoURLLSFEdit, videoURLASLEdit, wordingLSF1Edit, wordingASL1Edit, wordingLSF2Edit, wordingASL2Edit, signExplanationFrenchEdit, signExplanationEnglishEdit, signExplanationLSFEdit, signExplanationASLEdit)">Submit</button>
         </div>
     </ion-content>
