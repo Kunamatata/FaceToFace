@@ -1,6 +1,67 @@
 <ion-view view-title="Edit a word">
     <ion-content>
-        <ion-nav-back-button>
-        </ion-nav-back-button>
+        <div class="list">
+            <div class="item item-divider" ng-init="initWordEdition()">
+                Words
+            </div>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">French Word</span>
+                <input type="text" placeholder="{{word.frenchWord}}" ng-model="frenchWordEdit">
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">English Word</span>
+                <input type="text" placeholder="{{word.englishWord}}" ng-model="englishWordEdit">
+            </label>
+            <div class="item item-divider">
+                Sign Videos
+            </div>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">LSF Video</span>
+                <input type="text" placeholder="{{word.signLSF.youtubeURL}}" ng-model="videoURLLSFEdit" required>
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">ASL Video</span>
+                <input type="text" placeholder="{{word.signASL.youtubeURL}}" ng-model="videoURLASLEdit" required>
+            </label>
+            <div class="item item-divider">
+                Wordings
+            </div>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">LSF Wording 1</span>
+                <input type="text" placeholder="{{word.wordings[0].youtubeURLLSF}}" ng-model="wordingLSF1Edit">
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">ASL Wording 1</span>
+                <input type="text" placeholder="{{word.wordings[0].youtubeURLASL}}" ng-model="wordingASL1Edit">
+            </label>
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">LSF Wording 2</span>
+                <input type="text" placeholder="{{word.wordings[1].youtubeURLLSF}}" ng-model="wordingLSF2Edit">
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">ASL Wording 2</span>
+                <input type="text" placeholder="{{word.wordings[1].youtubeURLASL}}" ng-model="wordingASL2Edit">
+            </label>
+            <div class="item item-divider">
+                Sign Explanation
+            </div>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">French Explanation</span>
+                <input type="text" placeholder="{{word.signExplanation.frenchExplanation}}" ng-model="signExplanationFrenchEdit">
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">English Explanation</span>
+                <input type="text" placeholder="{{word.signExplanation.englishExplanation}}" ng-model="signExplanationEnglishEdit">
+            </label>
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">LSF Explanation</span>
+                <input type="text" placeholder="{{word.signExplanation.youtubeURLLSF}}" ng-model="signExplanationLSFEdit">
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">ASL Explanation</span>
+                <input type="text" placeholder="{{word.signExplanation.youtubeURLASL}}" ng-model="signExplanationASLEdit">
+            </label>
+            <button class="button button-block button-positive" ng-click="updateWord(frenchWordEdit,englishWordEdit, videoURLLSFEdit, videoURLASLEdit, wordingLSF1Edit, wordingASL1Edit, wordingLSF2Edit, wordingASL2Edit, signExplanationFrenchEdit, signExplanationEnglishEdit, signExplanationLSFEdit, signExplanationASLEdit)">Submit</button>
+        </div>
     </ion-content>
 </ion-view>

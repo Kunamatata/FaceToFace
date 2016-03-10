@@ -48,6 +48,8 @@
 		7A9CEF4995B34021B02B62B3 /* UIWebViewExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = E56EE297BF2C45F5B27A48E6 /* UIWebViewExtension.m */; };
 		A043F1AE30E9431BB7D00394 /* SQLitePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F958239F02D42CF882921C5 /* SQLitePlugin.m */; };
 		1B3C852C103042EC8C725D09 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FFE69CD806B44B9AB3B628D /* libsqlite3.dylib */; };
+		65EC85E990094F41804F8D5B /* sqlDB.h in Resources */ = {isa = PBXBuildFile; fileRef = 6AD3D5BC3BCE410493FAC126 /* sqlDB.h */; };
+		63D7B6BE3B3A4C6AB59E1AAA /* sqlDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 75D080083AD94E4794201CDB /* sqlDB.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,6 +132,8 @@
 		8F958239F02D42CF882921C5 /* SQLitePlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "SQLitePlugin.m"; path = "cordova-sqlite-storage/SQLitePlugin.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		6B27FC8F7E3D453E8F091D68 /* SQLitePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SQLitePlugin.h"; path = "cordova-sqlite-storage/SQLitePlugin.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		9FFE69CD806B44B9AB3B628D /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsqlite3.dylib"; path = "usr/lib/libsqlite3.dylib"; sourceTree = SDKROOT; fileEncoding = 4; };
+		6AD3D5BC3BCE410493FAC126 /* sqlDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "sqlDB.h"; path = "me.rahul.plugins.sqlDB/sqlDB.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		75D080083AD94E4794201CDB /* sqlDB.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "sqlDB.m"; path = "me.rahul.plugins.sqlDB/sqlDB.m"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,6 +250,8 @@
 				40F535C696E6445ABD4E09C8 /* UIWebViewExtension.h */,
 				8F958239F02D42CF882921C5 /* SQLitePlugin.m */,
 				6B27FC8F7E3D453E8F091D68 /* SQLitePlugin.h */,
+				6AD3D5BC3BCE410493FAC126 /* sqlDB.h */,
+				75D080083AD94E4794201CDB /* sqlDB.m */,
 			);
 			name = Plugins;
 			path = "facetoface/Plugins";
@@ -438,6 +444,8 @@
 				2E19DF977E3144369B73D135 /* IonicKeyboard.m in Sources */,
 				7A9CEF4995B34021B02B62B3 /* UIWebViewExtension.m in Sources */,
 				A043F1AE30E9431BB7D00394 /* SQLitePlugin.m in Sources */,
+				65EC85E990094F41804F8D5B /* sqlDB.h in Resources */,
+				63D7B6BE3B3A4C6AB59E1AAA /* sqlDB.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

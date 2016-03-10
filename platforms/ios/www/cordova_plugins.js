@@ -56,6 +56,14 @@ module.exports = [
         "clobbers": [
             "SQLitePlugin"
         ]
+    },
+    {
+        "file": "plugins/me.rahul.plugins.sqlDB/www/sqlDB.js",
+        "id": "me.rahul.plugins.sqlDB.sqlDB",
+        "pluginId": "me.rahul.plugins.sqlDB",
+        "clobbers": [
+            "window.plugins.sqlDB"
+        ]
     }
 ];
 module.exports.metadata = 

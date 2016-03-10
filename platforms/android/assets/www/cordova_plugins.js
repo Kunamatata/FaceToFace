@@ -47,6 +47,14 @@ module.exports = [
         "runs": true
     },
     {
+        "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+        "id": "cordova-sqlite-storage.SQLitePlugin",
+        "pluginId": "cordova-sqlite-storage",
+        "clobbers": [
+            "SQLitePlugin"
+        ]
+    },
+    {
         "file": "plugins/ionic-plugin-keyboard/www/android/keyboard.js",
         "id": "ionic-plugin-keyboard.keyboard",
         "pluginId": "ionic-plugin-keyboard",
@@ -56,11 +64,11 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
-        "id": "cordova-sqlite-storage.SQLitePlugin",
-        "pluginId": "cordova-sqlite-storage",
+        "file": "plugins/me.rahul.plugins.sqlDB/www/sqlDB.js",
+        "id": "me.rahul.plugins.sqlDB.sqlDB",
+        "pluginId": "me.rahul.plugins.sqlDB",
         "clobbers": [
-            "SQLitePlugin"
+            "window.plugins.sqlDB"
         ]
     }
 ];

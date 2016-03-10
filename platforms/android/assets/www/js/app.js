@@ -18,8 +18,14 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         }
 
         if (window.cordova && window.SQLitePlugin) {
-            db = $cordovaSQLite.openDB('face.db', 1); // Android devices
-            db.executeSql("PRAGMA foreign_keys=ON;")
+            //db = window.sqlitePlugin.openDatabase( {name: "face.db", createFromLocation: 1} );
+        window.plugins.sqlDB.copy("face.db", function() {
+            db = $cordovaSQLite.openDB("face.db");
+        }, function(error) {
+            console.error("There was an error copying the database: " + error);
+            db = $cordovaSQLite.openDB("face.db");
+        });
+            //db.executeSql("PRAGMA foreign_keys=ON;")
         } else {
             db = window.openDatabase("face.db", "1.0", "Dev Database", 200000); //To test in web browser with ionic serve
         }
@@ -32,7 +38,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         /* A RETIRER */
         /* A RETIRER */
 
-        $cordovaSQLite.execute(db, "DROP table word");
+/*        $cordovaSQLite.execute(db, "DROP table word");
         $cordovaSQLite.execute(db, "DROP table sign");
         $cordovaSQLite.execute(db, "DROP table video");
         $cordovaSQLite.execute(db, "DROP table wording");
@@ -44,7 +50,7 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         $cordovaSQLite.execute(db, "DROP table sentenceQCM");
         $cordovaSQLite.execute(db, "DROP table position");
         $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");
-
+*/
         /*___________________*/
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word(id INTEGER PRIMARY KEY, frenchWord TEXT, englishWord TEXT, signIDLSF INTEGER, signIDASL INTEGER,FOREIGN KEY(signIDLSF) REFERENCES sign(id), FOREIGN KEY(signIDASL) REFERENCES sign(id))");
@@ -382,8 +388,8 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
-    $scope.insertNewSignExplanation(1, "Le signe-ancêtre commun, attesté pour la première fois en France en 1784 et importé aux USA au début du XXème siècle, comportait deux parties.", "There is a lot of interesting things to say about this sign.", "https://www.youtube.com/embed/87tCKyr5sa4", "https://www.youtube.com/embed/jP5-qP-LTE8");
 
+/*$scope.insertNewSignExplanation(1, "Le signe-ancêtre commun, attesté pour la première fois en France en 1784 et importé aux USA au début du XXème siècle, comportait deux parties.", "There is a lot of interesting things to say about this sign.", "https://www.youtube.com/embed/87tCKyr5sa4", "https://www.youtube.com/embed/jP5-qP-LTE8");
 
     $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
     $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
@@ -447,7 +453,7 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
     $scope.insertPositionConfigurationSign(3, 1, 0, 1, 1);
     $scope.insertPositionConfigurationSign(2, 2, 0, 1, 1);
     $scope.insertPositionConfigurationSign(3, 1, 0);
-
+*/
 });
 
 // Factory service to share word between controllers
@@ -753,11 +759,11 @@ app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLi
 
         if ($state.current.name == "fr-search") {
             language = 0;
-            $scope.flagPicture = "../img/France-Flag-icon-little.png";
+            $scope.flagPicture = "img/France-Flag-icon-little.png";
             $scope.viewTitle = "Recherche Française";
         } else {
             language = 1;
-            $scope.flagPicture = "../img/United-States-Flag-icon-little.png";
+            $scope.flagPicture = "img/United-States-Flag-icon-little.png";
             $scope.viewTitle = "English Search";
         }
     }

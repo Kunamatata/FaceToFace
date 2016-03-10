@@ -1,15 +1,15 @@
-<ion-view view-title="QCM Videos">
+<ion-view view-title="Video Exercices">
     <ion-content>
         <div class="row">
             <div class="center">
                 <button class="button button-positive" ui-sref="qcm-video({difficulty : difficultyLevel})">
-                    QCM Vidéos
+                   Video Exercices
                 </button>
                 <button class="button button-positive" ui-sref="qcm-sentence({difficulty : difficultyLevel})">
-                    QCM Phrases
+                    Sentence Exercices
                 </button>
                 <button class="button button-positive" ui-sref="qcm-difficulty-selection">
-                    Choix du niveau
+                    Level Choice
                 </button>
             </div>
         </div>
@@ -74,11 +74,13 @@
             </div>
         </button>
         <button id="buttonResult" class="button center" style="visibility: hidden;" ng-click="updateVideoQCM()" ng-init="loadVideoQuestions()"></button>
-        <div class="row">
+        <div class="row responsive-sm">
+          <div class="col">
             <iframe id="videoLSF" class="center" src="{{trustUrl(videoLSF.youtubeURL)}}" frameborder="0" allowfullscreen></iframe>
-        </div>
-        <div class="row">
+          </div>
+          <div class="col">
             <iframe id="videoASL" class="center" src="{{trustUrl(videoASL.youtubeURL)}}" frameborder="0" allowfullscreen></iframe>
+          </div>
         </div>
     </ion-content>
 </ion-view>

@@ -27,6 +27,9 @@
         },
         "cordova-sqlite-storage": {
             "PACKAGE_NAME": "com.ionicframework.facetoface654008"
+        },
+        "me.rahul.plugins.sqlDB": {
+            "PACKAGE_NAME": "com.ionicframework.facetoface654008"
         }
     },
     "dependent_plugins": {}

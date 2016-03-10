@@ -1,4 +1,4 @@
-<ion-view view-title="Sentence Exercices">
+<ion-view view-title="Video Exercices">
     <ion-content>
         <div class="row">
             <div class="center">
@@ -73,11 +73,13 @@
         </button>
         <button id="buttonResult-sentenceQCM" class="button center" style="visibility: hidden;" ng-click="updateSentenceQCM()" ng-init=""></button>
         <button id="buttonSubmit-sentenceQCM" class="button center" style="visibility: hidden" ng-click="submitSentenceQCMAnswer()" ng-init="loadSentencesQuestions()">Submit!</button>
-        <div class="row">
-            <iframe id="videoLSF" class="center" src="{{trustUrl(videoLSF.youtubeURL)}}" frameborder="0"></iframe>
-        </div>
-        <div class="row">
-            <iframe id="videoASL" class="center" src="{{trustUrl(videoASL.youtubeURL)}}" frameborder="0"></iframe>
+        <div class="row responsive-sm">
+          <div class="col">
+            <iframe id="videoLSF" class="center" src="{{trustUrl(videoLSF.youtubeURL)}}" frameborder="0" allowfullscreen></iframe>
+          </div>
+          <div class="col">
+            <iframe id="videoASL" class="center" src="{{trustUrl(videoASL.youtubeURL)}}" frameborder="0" allowfullscreen></iframe>
+          </div>
         </div>
     </ion-content>
 </ion-view>

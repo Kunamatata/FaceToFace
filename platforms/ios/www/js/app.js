@@ -17,10 +17,13 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
             StatusBar.styleDefault();
         }
 
-        
-            db = $cordovaSQLite.openDB('face.db', 1); // Android devices
-            db.executeSql("PRAGMA foreign_keys=ON;")
-        
+        if (window.cordova && window.SQLitePlugin) {
+            db = window.sqlitePlugin.openDatabase( {name: "face.db", createFromLocation: 1} );
+
+            //db.executeSql("PRAGMA foreign_keys=ON;")
+        } else {
+            db = window.openDatabase("face.db", "1.0", "Dev Database", 200000); //To test in web browser with ionic serve
+        }
         /* A RETIRER */
         /* A RETIRER */
         /* A RETIRER */
@@ -30,19 +33,19 @@ var app = angular.module('myApp', ['ionic', 'ngCordova']).run(function($ionicPla
         /* A RETIRER */
         /* A RETIRER */
 
-        // $cordovaSQLite.execute(db, "DROP table word");
-        // $cordovaSQLite.execute(db, "DROP table sign");
-        // $cordovaSQLite.execute(db, "DROP table video");
-        // $cordovaSQLite.execute(db, "DROP table wording");
-        // $cordovaSQLite.execute(db, "DROP table configuration");
-        // $cordovaSQLite.execute(db, "DROP table subtitle");
-        // $cordovaSQLite.execute(db, "DROP table dialog");
-        // $cordovaSQLite.execute(db, "DROP table genealogy");
-        // $cordovaSQLite.execute(db, "DROP table videoQCM");
-        // $cordovaSQLite.execute(db, "DROP table sentenceQCM");
-        // $cordovaSQLite.execute(db, "DROP table position");
-        // $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");
-
+/*        $cordovaSQLite.execute(db, "DROP table word");
+        $cordovaSQLite.execute(db, "DROP table sign");
+        $cordovaSQLite.execute(db, "DROP table video");
+        $cordovaSQLite.execute(db, "DROP table wording");
+        $cordovaSQLite.execute(db, "DROP table configuration");
+        $cordovaSQLite.execute(db, "DROP table subtitle");
+        $cordovaSQLite.execute(db, "DROP table dialog");
+        $cordovaSQLite.execute(db, "DROP table genealogy");
+        $cordovaSQLite.execute(db, "DROP table videoQCM");
+        $cordovaSQLite.execute(db, "DROP table sentenceQCM");
+        $cordovaSQLite.execute(db, "DROP table position");
+        $cordovaSQLite.execute(db, "DROP table positionConfigurationSign");
+*/
         /*___________________*/
 
         $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS word(id INTEGER PRIMARY KEY, frenchWord TEXT, englishWord TEXT, signIDLSF INTEGER, signIDASL INTEGER,FOREIGN KEY(signIDLSF) REFERENCES sign(id), FOREIGN KEY(signIDASL) REFERENCES sign(id))");
@@ -380,56 +383,72 @@ app.controller("HomeCtrl", function($scope, $ionicLoading, $http, $cordovaSQLite
         });
     };
 
-    // $scope.insertNewSignExplanation(1, "Le signe-ancêtre commun, attesté pour la première fois en France en 1784 et importé aux USA au début du XXème siècle, comportait deux parties.", "There is a lot of interesting things to say about this sign.", "https://www.youtube.com/embed/87tCKyr5sa4", "https://www.youtube.com/embed/jP5-qP-LTE8");
 
+/*$scope.insertNewSignExplanation(1, "Le signe-ancêtre commun, attesté pour la première fois en France en 1784 et importé aux USA au début du XXème siècle, comportait deux parties.", "There is a lot of interesting things to say about this sign.", "https://www.youtube.com/embed/87tCKyr5sa4", "https://www.youtube.com/embed/jP5-qP-LTE8");
 
-    // $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
-    // $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
+    $scope.insertNewWord("Racine", "Root", "https://www.youtube.com/embed/XQEFR5YmIP4", "https://www.youtube.com/embed/9IMWwkhv610");
+    $scope.insertNewWord("Rang", "Rank", "https://www.youtube.com/embed/-TBhtvoJFmM", "https://www.youtube.com/embed/1D0WPo2wTSA");
+    $scope.insertNewWord("Bonjour", "Hello", "https://www.youtube.com/embed/PpqdgFM8zSU", "https://www.youtube.com/embed/3BNwhl2rsh8");
+    $scope.insertNewWord("Manger", "Eat", "https://www.youtube.com/embed/DGFSZB6BLLc", "https://www.youtube.com/embed/0eSPRR3Hsqw");
+    $scope.insertNewWord("Curriculum Vitae", "Curriculum Vitae", "https://www.youtube.com/embed/lz5twAfM5Ns", "https://www.youtube.com/embed/lz5twAfM5Ns");
+    $scope.insertNewWord("Crise", "Crisis", "https://www.youtube.com/embed/vyZ9ol-ga8s", "https://www.youtube.com/embed/vyZ9ol-ga8s");
+    $scope.insertNewWord("Crédit", "Credit", "https://www.youtube.com/embed/CjYnhxeOds0", "https://www.youtube.com/embed/CjYnhxeOds0");
+    $scope.insertNewWord("Mairie", "Town hall", "https://www.youtube.com/embed/jhM1aF3Rm_s", "https://www.youtube.com/embed/jhM1aF3Rm_s");
+    $scope.insertNewWord("Licencier", "Lay off", "https://www.youtube.com/embed/sLzRZEIjKTY", "https://www.youtube.com/embed/sLzRZEIjKTY");
+    $scope.insertNewWord("Confiance", "Trust", "https://www.youtube.com/embed/t43jcqLeG4M", "https://www.youtube.com/embed/t43jcqLeG4M");
+    $scope.insertNewWord("Condition", "Condition", "https://www.youtube.com/embed/iR7O07ioHMs", "https://www.youtube.com/embed/iR7O07ioHMs");
+    $scope.insertNewWord("Compétitivité", "Compititivity", "https://www.youtube.com/embed/eWONckY4G50", "https://www.youtube.com/embed/eWONckY4G50");
+    $scope.insertNewWord("Monopole", "Monopoly", "https://www.youtube.com/embed/RgHwuRn8UHk", "https://www.youtube.com/embed/RgHwuRn8UHk");
+    $scope.insertNewWord("Investir", "Invest", "https://www.youtube.com/embed/Ic4Xj6cotXk", "https://www.youtube.com/embed/Ic4Xj6cotXk");
+    $scope.insertNewWord("Ingénieur", "Engineer", "https://www.youtube.com/embed/5DczWsJh5sM", "https://www.youtube.com/embed/5DczWsJh5sM");
+    $scope.insertNewWord("Police", "Police", "https://www.youtube.com/embed/jt2RPJN4ejY", "https://www.youtube.com/embed/jt2RPJN4ejY");
+    $scope.insertNewWord("Prix exorbitant", "Steep price", "https://www.youtube.com/embed/DRsH2yR1BBU", "https://www.youtube.com/embed/DRsH2yR1BBU");
+    $scope.insertNewWord("Publier", "Publish", "https://www.youtube.com/embed/153mx51kWGY", "https://www.youtube.com/embed/153mx51kWGY");
+    $scope.insertNewWord("Réseau", "Network", "https://www.youtube.com/embed/nh9dbo6CMLw", "https://www.youtube.com/embed/nh9dbo6CMLw");
+    $scope.insertNewWord("Retraite", "Retirement", "https: //www.youtube.com/embed/uOwc2kp4kMM", "https: //www.youtube.com/embed/uOwc2kp4kMM");
 
-    // $scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
+    $scope.insertNewWording(1, "https://www.youtube.com/embed/60pdCwdN-kg", "https://www.youtube.com/embed/yhy19VUoKAY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/9mp2E58UlR4");
 
-    // $scope.insertNewDialog(1, 1, "https://www.youtube.com/embed/yhy19VUoKAY");
+    $scope.insertNewDialog(1, 1, "https://www.youtube.com/embed/yhy19VUoKAY");
 
-    // for (i = 0; i < 46; i++) {
-    //     $scope.insertConfiguration(0, "../config_" + (i + 1) + ".jpg");
-    // }
+    for (i = 0; i < 46; i++) {
+        $scope.insertConfiguration(0, "../config_" + (i + 1) + ".jpg");
+    }
 
-    // $scope.insertNewVideoQCM(1, "https://www.youtube.com/embed/9mp2E58UlR4", "https://www.youtube.com/embed/YVP6M2u2sf0", "Maybe", "Peut-être", "Not sure", "Pas sûr", "Oh yes", "Oh oui", "Cat", "Chat", "B");
+    $scope.insertNewVideoQCM(1, "https://www.youtube.com/embed/9mp2E58UlR4", "https://www.youtube.com/embed/YVP6M2u2sf0", "Maybe", "Peut-être", "Not sure", "Pas sûr", "Oh yes", "Oh oui", "Cat", "Chat", "B");
 
-    // $scope.insertNewSentenceQCM(1, "Bob est perdu dans toutes ces lignes de code", "Bob is lost in all those lines of code", "https://www.youtube.com/embed/QL8N4QcnpWE", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "B");
+    $scope.insertNewSentenceQCM(1, "Bob est perdu dans toutes ces lignes de code", "Bob is lost in all those lines of code", "https://www.youtube.com/embed/QL8N4QcnpWE", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "B");
 
-    // $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");
+    $scope.insertNewSentenceQCM(1, "Bob a nettoyé quelques lignes de codes et n'est plus autant perdu qu'avant.", "Bob cleaned some lines of codes and isn't as lost as before.", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/wZZ7oFKsKzY", "https://www.youtube.com/embed/YVP6M2u2sf0", "https://www.youtube.com/embed/YVP6M2u2sf0", "A");
 
-    // $scope.insertPosition(0, "mouth");
-    // $scope.insertPosition(1, "chin");
-    // $scope.insertPosition(2, "throat");
-    // $scope.insertPosition(3, "cheek");
-    // $scope.insertPosition(4, "temple");
-    // $scope.insertPosition(5, "eyes");
-    // $scope.insertPosition(6, "forehead");
-    // $scope.insertPosition(7, "rightpectoral");
-    // $scope.insertPosition(8, "leftpectoral");
-    // $scope.insertPosition(9, "thorax");
-    // $scope.insertPosition(10, "stomach");
-    // $scope.insertPosition(11, "rightarm");
-    // $scope.insertPosition(12, "rightforearm");
-    // $scope.insertPosition(13, "rightelbow");
-    // $scope.insertPosition(14, "lefthand");
-    // $scope.insertPosition(15, "righthand");
+    $scope.insertPosition(0, "mouth");
+    $scope.insertPosition(1, "chin");
+    $scope.insertPosition(2, "throat");
+    $scope.insertPosition(3, "cheek");
+    $scope.insertPosition(4, "temple");
+    $scope.insertPosition(5, "eyes");
+    $scope.insertPosition(6, "forehead");
+    $scope.insertPosition(7, "rightpectoral");
+    $scope.insertPosition(8, "leftpectoral");
+    $scope.insertPosition(9, "thorax");
+    $scope.insertPosition(10, "stomach");
+    $scope.insertPosition(11, "rightarm");
+    $scope.insertPosition(12, "rightforearm");
+    $scope.insertPosition(13, "rightelbow");
+    $scope.insertPosition(14, "handpalm");
+    $scope.insertPosition(15, "righthand");
+    $scope.insertPosition(16, "ear");
+    $scope.insertPosition(17, "armpit");
+    $scope.insertPosition(18, "wrist");
+    $scope.insertPosition(19, "tophead");
+    $scope.insertPosition(20, "chinneck");
 
-    // //first configuration Mouth  first configuration Chin
-    // $scope.insertPositionConfigurationSign(1, 1, 0, 1, 1);
-    // $scope.insertPositionConfigurationSign(3, 1, 0, 1, 1);
-    // $scope.insertPositionConfigurationSign(2, 2, 0, 1, 1);
-    // $scope.insertPositionConfigurationSign(3, 1, 0);
-
-    /*$scope.searchFrenchWord("Romain");
-    setTimeout(function(){
-        console.log($scope.word.frenchWord);
-        //$scope.deleteWord("Romain");
-    }, 2000);*/
-
-
+    //first configuration Mouth  first configuration Chin
+    $scope.insertPositionConfigurationSign(1, 1, 0, 1, 1);
+    $scope.insertPositionConfigurationSign(3, 1, 0, 1, 1);
+    $scope.insertPositionConfigurationSign(2, 2, 0, 1, 1);
+    $scope.insertPositionConfigurationSign(3, 1, 0);
+*/
 });
 
 // Factory service to share word between controllers
@@ -601,7 +620,7 @@ app.controller("LSFSearch", function($scope, $ionicLoading, $http, $ionicScrollD
         } else {
             //Display alert message
             $ionicPopup.alert({
-                title: 'Vous devez obligatoirement choisir une configuration pour la main active.',
+                title: 'You must choose a configuration at least for the active hand.',
                 cssClass: 'alert-popup'
             });
         }
@@ -626,16 +645,16 @@ app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDe
     $scope.activateSelection = function(handDivID) {
         if (handDivID == "first-hand-picture") {
             activeHandPosition['src'] = $scope.activeHand.src;
-            activeHandPosition['signID'] = $scope.activeHand.id;
+            activeHandPosition['configurationID'] = $scope.activeHand.id;
         } else if (handDivID == "second-hand-picture" && $scope.passiveHand != null) {
             passiveHandPosition['src'] = $scope.passiveHand.src;
-            passiveHandPosition['signID'] = $scope.passiveHand.id;
+            passiveHandPosition['configurationID'] = $scope.passiveHand.id;
         }
         currentSelectedHand = handDivID;
     };
 
     $scope.setPosition = function(positionName, positionID) {
-        if (activeHandPosition['src'] != null && activeHandPosition['signID'] != null && currentSelectedHand == "first-hand-picture") {
+        if (activeHandPosition['src'] != null && activeHandPosition['configurationID'] != null && currentSelectedHand == "first-hand-picture") {
             if (activeHandPosition['position']) {
                 document.getElementsByClassName(activeHandPosition['position'])[0].style.backgroundColor = "red";
             }
@@ -706,7 +725,7 @@ app.controller("Skeleton", function($scope, $ionicLoading, $http, $ionicScrollDe
         } else {
             //Display alert message
             $ionicPopup.alert({
-                title: 'Aucun mot ne correspond à cette combinaison.',
+                title: 'Aucun mot ou signe ne correspond à la combinaison de configurations et de positions données !',
                 cssClass: 'alert-popup'
             });
         }
@@ -725,7 +744,6 @@ app.controller("ASLSearch", function($scope, $ionicLoading, $http) {
             });
         };
     }
-
 });
 
 app.controller("WordSearch", function($scope, $ionicLoading, $http, $cordovaSQLite, $state, SharingWordInformation) {
@@ -859,10 +877,10 @@ app.controller("WordingPresentation", function($scope, $sce, $ionicLoading, $htt
 
         // Set information for the other wording button
         if ($scope.wordingChoice == 0) {
-            $scope.otherWordingName = "Enoncé n°2";
+            $scope.otherWordingName = "Second Wording";
             $scope.otherWordingNumber = 2;
         } else {
-            $scope.otherWordingName = "Enoncé n°1";
+            $scope.otherWordingName = "First Wording";
             $scope.otherWordingNumber = 1;
         }
 
@@ -1185,8 +1203,6 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
         }
 
         $scope.actualQuestion = sentenceQCMList[numberChosen];
-
-
     };
 
     // Load all the Videos QCM questions with the corresponding difficulty level
@@ -1306,28 +1322,355 @@ app.controller("QCMController", function($scope, $sce, $ionicLoading, $http, $co
 
 });
 
-app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $ionicPopup, $http, $cordovaSQLite, $state, $location, $sce, SharingSentenceQCMInformation, SharingVideoQCMInformation) {
+app.controller("DataManagementController", function($scope, $sce, $ionicLoading, $ionicPopup, $http, $cordovaSQLite, $state, $location, $sce, SharingSentenceQCMInformation, SharingVideoQCMInformation, SharingWordInformation) {
 
+
+    /**********************
+    Variables to add a word
+    **********************/
+    $scope.images = [];
+    $scope.selectedHand = "";
+    $scope.selectedConfigurationsLSF = [null, null];
+    $scope.selectedConfigurationsASL = [null, null]
     $scope.youtubeURLArray = [];
     $scope.qcmList = [];
+    $scope.words = [];
 
 
     // Trust the URL so Angular can load the corresponding template
     $scope.trustUrl = function(url) {
-            return $sce.trustAsResourceUrl(url);
+        return $sce.trustAsResourceUrl(url);
+    };
+
+    $scope.getAllWords = function() {
+        var query = "SELECT * from word";
+        $cordovaSQLite.execute(db, query, []).then(function(res) {
+            if (res.rows.length > 0) {
+
+                for (var i = 0; i < res.rows.length; i++) {
+                    $scope.words.push(res.rows[i]);
+                }
+
+            } else {
+                console.log("No results found");
+            }
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.deleteSign = function(id) {
+        var query = "SELECT videoID from sign WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [id]).then(function(res) {
+            if (res.rows.length > 0) {
+                query = "DELETE FROM video WHERE id = ?";
+                $cordovaSQLite.execute(db, query, [res.rows[0].id]);
+            }
+
+            query = "DELETE FROM sign WHERE id = ?";
+            $cordovaSQLite.execute(db, query, [id]);
+
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+
+    $scope.deleteWord = function(id, index) {
+        $scope.deleteSign($scope.words[index].idSignLSF);
+        $scope.deleteSign($scope.words[index].idSignASL);
+
+        query = "DELETE FROM word WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [id]);
+
+        query = "DELETE FROM dialog WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [id]);
+
+        query = "DELETE FROM wording WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [id]);
+
+        query = "DELETE FROM SignExplanation WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [id]);
+
+        query = "DELETE FROM PositionConfigurationSign WHERE id = ? OR id = ?";
+        $cordovaSQLite.execute(db, query, [$scope.words[index].idSignLSF, $scope.words[index].idSignASL]);
+
+        $scope.words.splice(index, 1);
+    };
+
+    $scope.searchSignVideos = function(idLSF, idASL, index) {
+        var query = "SELECT * FROM video WHERE id = ? OR id = ?";
+        $cordovaSQLite.execute(db, query, [idLSF, idASL]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                for (var i = 0; i < res.rows.length; i++) {
+                    switch (res.rows[i].id) {
+                        case idLSF:
+                            $scope.words[index].signLSF.youtubeURL = res.rows[i].youtubeURL;
+                            break;
+
+                        case idASL:
+                            $scope.words[index].signASL.youtubeURL = res.rows[i].youtubeURL;
+                            break;
+                    }
+                }
+
+            }
+        })
+    };
+
+    $scope.searchSigns = function(index) {
+
+        var query = "SELECT * FROM sign WHERE id = ? or id = ?";
+        $cordovaSQLite.execute(db, query, [$scope.words[index].signIDLSF, $scope.words[index].signIDASL]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                for (var i = 0; i < res.rows.length; i++) {
+                    switch (res.rows[i].id) {
+                        case $scope.words[index].signIDLSF:
+                            $scope.words[index].signLSF = res.rows[i];
+                            break;
+
+                        case $scope.words[index].signIDASL:
+                            $scope.words[index].signASL = res.rows[i];
+
+                                break;
+                    }
+                }
+
+                $scope.searchSignVideos($scope.words[index].signLSF.videoID, $scope.words[index].signASL.videoID, index);
+
+            }
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.searchWordingVideo = function(idLSF, idASL, wordIndex, wordingIndex) {
+        var query = "SELECT * FROM video WHERE id = ? OR id = ?";
+        $cordovaSQLite.execute(db, query, [idLSF, idASL]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                for (var i = 0; i < res.rows.length; i++) {
+                    switch (res.rows[i].id) {
+                        case idLSF:
+                            $scope.words[wordIndex].wordings[wordingIndex].youtubeURLLSF = res.rows[i].youtubeURL;
+                            break;
+                        case idASL:
+                            $scope.words[wordIndex].wordings[wordingIndex].youtubeURLASL = res.rows[i].youtubeURL;
+                            break;
+                    }
+                }
+            }
+        })
+    };
+
+    $scope.searchWordings = function(index) {
+        var query = "SELECT * FROM wording WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [$scope.words[index].id]).then(function(res) {
+            if (res.rows.length > 0) {
+                $scope.words[index].wordings = [];
+
+                for (var i = 0; i < res.rows.length; i++) {
+                    $scope.words[index].wordings[i] = res.rows[i];
+
+                    $scope.searchWordingVideo(res.rows[i].videoIDLSF, res.rows[i].videoIDASL, index, i);
+                }
+            }
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.searchDialogVideo = function(idLSF, idASL, wordIndex, dialogIndex) {
+        var query = "SELECT youtubeURL FROM video WHERE id = ? OR id = ?";
+        $cordovaSQLite.execute(db, query, [idLSF, idSL]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                for (var i = 0; i < res.rows.length; i++) {
+                    switch (res.rows[i].id) {
+                        case idLSF:
+                            $scope.words[wordIndex].dialogs[dialogIndex].youtubeURLLSF = res.rows[i].youtubeURL;
+                            break;
+                        case idASL:
+                            $scope.words[wordIndex].dialogs[dialogIndex].youtubeURLASL = res.rows[i].youtubeURL;
+                            break;
+                    }
+                }
+            }
+        })
+    };
+
+    $scope.searchDialogs = function(index) {
+        var query = "SELECT * FROM dialog WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [$scope.words[index].wordID]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                $scope.words[i].dialogs = [];
+
+                for (var i = 0; i < res.rows.length; i++) {
+                    $scope.words[index].dialogs[i] = res.rows[i];
+
+                    $scope.searchDialogVideo(res.rows[i].videoIDLSF, res.rows[i].videoIDASL, index, i);
+                }
+            }
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.searchSignExplanationVideos = function(idLSF, idASL, index) {
+        var query = "SELECT * FROM video WHERE id = ? or id = ?";
+        $cordovaSQLite.execute(db, query, [idLSF, idASL]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                for (var i = 0; i < res.rows.length; i++) {
+                    switch (res.rows[i].id) {
+                        case idLSF:
+                            $scope.words[index].signExplanation.youtubeURLLSF = res.rows[i].youtubeURL;
+                            break;
+                        case idASL:
+                            $scope.words[index].signExplanation.youtubeURLASL = res.rows[i].youtubeURL;
+                            break;
+                    }
+                }
+            }
+        })
+    };
+
+    $scope.searchSignExplanations = function(index) {
+        var query = "SELECT * FROM signExplanation WHERE wordID = ?";
+        $cordovaSQLite.execute(db, query, [$scope.words[index].id]).then(function(res) {
+            if (res.rows.length > 0) {
+
+                $scope.words[index].signExplanation = res.rows[0];
+
+                $scope.searchSignExplanationVideos(res.rows[0].videoIDLSFExplanation, res.rows[0].videoIDASLExplanation, index);
+            }
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.fillWord = function(index) {
+        $scope.searchSigns(index);
+        $scope.searchWordings(index);
+        $scope.searchDialogs(index);
+        $scope.searchSignExplanations(index);
+
+        SharingWordInformation.setWord($scope.words[index]);
+    };
+
+    $scope.initWordEdition = function() {
+        $scope.word = SharingWordInformation.getWord();
+    };
+
+    $scope.updateWord = function(frenchWordEdit, englishWordEdit, videoURLLSFEdit, videoURLASLEdit, wordingLSF1Edit, wordingASL1Edit, wordingLSF2Edit, wordingASL2Edit, signExplanationFrenchEdit, signExplanationEnglishEdit, signExplanationLSFEdit, signExplanationASLEdit) {
+        if (frenchWordEdit != undefined && frenchWordEdit != $scope.word.frenchWord) {
+            var query = "UPDATE word SET frenchWord = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [frenchWordEdit, $scope.word.id]);
         }
-        //# A Retirer!
-    var query = "SELECT * FROM video WHERE id = ?";
-    $cordovaSQLite.execute(db, query, [14]).then(function(res) {
-        if (res.rows.length > 0) {
-            console.log("Test du on delete cascade")
-            console.log(res.rows.item(0));
-        } else {
-            console.log("No results found");
+        if (englishWordEdit != undefined && englishWordEdit != $scope.word.englishWord) {
+            var query = "UPDATE word SET englishWord = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [englishWordEdit, $scope.word.id]);
         }
-    }, function(err) {
-        console.error(err);
-    });
+        if (videoURLLSFEdit != undefined && videoURLLSFEdit != $scope.word.signLSF.youtubeURL) {
+            if ($scope.word.signLSF.youtubeURL == "undefined") {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?)";
+                $cordovaSQLite.execute(db, query, [videoURLLSFEdit]);
+            } else {
+                var query = "UPDATE video SET youtubeURL = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [videoURLLSFEdit, $scope.word.signLSF.videoID]);
+            }
+        }
+        if (videoURLASLEdit != undefined && videoURLASLEdit != $scope.word.signASL.youtubeURL) {
+            if ($scope.word.signASL.youtubeURL == "undefined") {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?)";
+                $cordovaSQLite.execute(db, query, [videoURLASLEdit]);
+            } else {
+                var query = "UPDATE video SET youtubeURL = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [videoURLASLEdit, $scope.word.signASL.videoID]);
+            }
+        }
+        if ($scope.word.wordings == undefined || (wordingLSF1Edit != undefined && wordingLSF1Edit != $scope.word.wordings[0].youtubeURLLSF)) {
+            if ($scope.word.wordings == undefined) {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?)";
+                $cordovaSQLite.execute(db, query, [wordingLSF1Edit]).then(function(res) {
+                    var secondQuery = "INSERT INTO wording(wordID, videoIDLSF) VALUES (?, ?)";
+                    $cordovaSQLite.execute(db, secondQuery, [$scope.word.id, res.insertId])
+                });
+            } else {
+                var query = "UPDATE video SET youtubeURL = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [wordingLSF1Edit, $scope.word.wordings[0].videoIDLSF]);
+            }
+        }
+        if ($scope.word.wordings == undefined || $scope.word.wordings.length < 2 || (wordingLSF2Edit != undefined && wordingLSF2Edit != $scope.word.wordings[1].youtubeURLLSF)) {
+            if ($scope.word.wordings == undefined || $scope.word.wordings.length < 2) {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?)";
+                $cordovaSQLite.execute(db, query, [wordingLSF2Edit]).then(function(res) {
+                    var secondQuery = "INSERT INTO wording(wordID, videoIDLSF) VALUES (?, ?)";
+                    $cordovaSQLite.execute(db, secondQuery, [$scope.word.id, res.insertId])
+                });
+            } else {
+                var query = "UPDATE video SET youtubeURL = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [wordingLSF2Edit, $scope.word.wordings[1].videoIDLSF]);
+            }
+        }
+        if ($scope.word.wordings == undefined || (wordingASL1Edit != undefined && wordingASL1Edit != $scope.word.wordings[0].youtubeURLASL)) {
+            if ($scope.word.wordings == undefined) {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?)";
+                $cordovaSQLite.execute(db, secondQuery, [wordingASL1Edit]).then(function(res) {
+                    var secondQuery = "UPDATE wording SET videoIDASL = ? WHERE wordID = ?";
+                    $cordovaSQLite.execute(db, query, [res.insertId, $scope.word.id])
+                });
+            } else {
+                var query = "UPDATE video SET youtubeURL = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [wordingASL1Edit, $scope.word.wordings[0].videoIDASL]);
+            }
+        }
+        if ($scope.word.wordings == undefined || $scope.word.wordings.length < 2 || (wordingASL2Edit != undefined && wordingASL2Edit != $scope.word.wordings[1].youtubeURLASL)) {
+            if ($scope.word.wordings == undefined || $scope.word.wordings.length < 2) {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?)";
+                $cordovaSQLite.execute(db, query, [wordingASL2Edit]).then(function(res) {
+                    var query = "UPDATE wording SET videoIDASL = ? WHERE wordID = ?";
+                    $cordovaSQLite.execute(db, query, [res.insertId, $scope.word.id])
+                });
+            } else {
+                var query = "UPDATE video SET youtubeURL = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [wordingASL2Edit, $scope.word.wordings[1].videoIDASL]);
+            }
+        }
+        if (signExplanationFrenchEdit != undefined && ($scope.word.signExplanation == undefined || signExplanationFrenchEdit != $scope.word.signExplanation.frenchExplanation)) {
+            if ($scope.word.signExplanation == undefined) {
+                var query = "INSERT INTO video(youtubeURL) VALUES (?),(?)";
+                $cordovaSQLite.execute(db, query, [signExplanationLSFEdit, signExplanationASLEdit]).then(function(res) {
+                    var query = "INSERT INTO signExplanation(wordID, frenchExplanation, englishExplanation, videoIDLSFExplanation, videoIDASLExplanation) VALUES (?, ?,?,?,?)";
+                    $cordovaSQLite.execute(db, query, [$scope.word.id, signExplanationFrenchEdit, signExplanationEnglishEdit, res.insertId-1, res.insertId])
+                });
+            } else {
+                var query = "UPDATE signExplanation SET frenchExplanation = ? where id = ?";
+                $cordovaSQLite.execute(db, query, [signExplanationFrenchEdit, $scope.word.signExplanation.id]);
+            }
+        }
+        if (signExplanationEnglishEdit != undefined && signExplanationEnglishEdit != $scope.word.signExplanation.englishExplanation && $scope.word.signExplanation != undefined) {
+            var query = "UPDATE signExplanation SET englishExplanation = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [signExplanationEnglishEdit, $scope.word.signExplanation.id]);
+        }
+        if (signExplanationLSFEdit != undefined && signExplanationLSFEdit != $scope.word.signExplanation.youtubeURLLSF && $scope.word.signExplanation != undefined) {
+            var query = "UPDATE video SET youtubeURL = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [signExplanationLSFEdit, $scope.word.signExplanation.videoIDLSFExplanation]);
+        }
+        if (signExplanationASLEdit != undefined && signExplanationASLEdit != $scope.word.signExplanation.youtubeURLASL && $scope.word.signExplanation != undefined) {
+            var query = "UPDATE video SET youtubeURL = ? where id = ?";
+            $cordovaSQLite.execute(db, query, [signExplanationASLEdit, $scope.word.signExplanation.videoIDASLExplanation]);
+        }
+    };
 
 
     $scope.insertSentenceQCMVideos = function(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer, callback) {
@@ -1368,7 +1711,7 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         $scope.insertVideoQCMVideos(difficultyLevel, youtubeURLLSF, youtubeURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer, $scope.insertVideoQCM);
     };
 
-        $scope.insertVideoQCMVideos = function(difficultyLevel, youtubeURLLSF, youtubeURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer, callback) {
+    $scope.insertVideoQCMVideos = function(difficultyLevel, youtubeURLLSF, youtubeURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer, callback) {
         var query = "INSERT INTO video (youtubeURL) values (?),(?)";
         $cordovaSQLite.execute(db, query, [youtubeURLLSF, youtubeURLASL]).then(function(res) {
             console.log("VideoQCM successfully added -> " + res.insertId);
@@ -1403,6 +1746,9 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         //A FAIRE: Gérer les champs sinon l'utilisateur pourra insérér n'importe quoi
 
         $scope.insertNewSentenceQCM(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer);
+
+        $scope.getAllSentenceQCMs();
+        $state.go("list-sentence-qcm");
     };
 
     $scope.addVideoQCM = function(difficultyLevel, videoURLLSF, videoURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer) {
@@ -1413,6 +1759,8 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         //A FAIRE: Gérer les champs sinon l'utilisateur pourra insérér n'importe quoi
 
         $scope.insertNewVideoQCM(difficultyLevel, videoURLLSF, videoURLASL, englishSentenceA, frenchSentenceA, englishSentenceB, frenchSentenceB, englishSentenceC, frenchSentenceC, englishSentenceD, frenchSentenceD, goodAnswer);
+        $scope.getAllVideoQCMs();
+        $state.go("list-video-qcm");
     }
 
     $scope.updateSentenceQCM = function(id, difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer) {
@@ -1454,9 +1802,11 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
             $cordovaSQLite.execute(db, query, [videoURLDASL, $scope.qcm.videoIDDASL]);
         }
         var query = "UPDATE sentenceQCM set frenchSentence = ?, englishSentence = ?, difficultyLevel = ?, goodAnswer = ? where id = ?"
-        $cordovaSQLite.execute(db, query, [frenchSentence, englishSentence, difficultyLevel, goodAnswer, id]);
+        $cordovaSQLite.execute(db, query, [frenchSentence, englishSentence, difficultyLevel, goodAnswer, id]).then(function() {
+            $state.go("list-sentence-qcm");
+        });
 
-        $state.go("list-sentence-qcm");
+
 
     };
 
@@ -1596,11 +1946,12 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         $scope.insertSentenceQCMVideos(difficultyLevel, frenchSentence, englishSentence, videoURLALSF, videoURLAASL, videoURLBLSF, videoURLBASL, videoURLCLSF, videoURLCASL, videoURLDLSF, videoURLDASL, goodAnswer, $scope.insertSentenceQCM);
     };
 
-    var deleteSentenceQCMQuery = function(qcmID) {
-        var query = "DELETE FROM sentenceQCM WHERE id = ?";
-        $cordovaSQLite.execute(db, query, [qcmID]).then(function(res) {
+
+    var deleteVideoFromQCMQuery = function(videoID) {
+        var query = "DELETE from video where id = ?";
+        $cordovaSQLite.execute(db, query, [videoID]).then(function(res) {
             if (res.rows.length > 0) {
-                console.log(rows);
+                console.log(res.rows);
             } else {
                 console.log("No delete corresponding to the ID found");
             }
@@ -1609,8 +1960,32 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         });
     }
 
+    var deleteSentenceQCMQuery = function(qcmID, index) {
+        var query = "SELECT * FROM sentenceQCM WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [qcmID]).then(function(res) {
+            if (res.rows.length > 0) {
+                deleteVideoFromQCMQuery(res.rows[0].videoIDAASL);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDALSF);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDBASL);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDBLSF);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDCASL);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDCLSF);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDDASL);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDDLSF);
+                query = "DELETE FROM sentenceQCM WHERE id = ?";
+                $cordovaSQLite.execute(db, query, [qcmID])
+                $scope.qcmList.splice(index, 1);
+            } else {
+                console.log("No delete corresponding to the ID found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
+
     //Delete QCM with id
-    $scope.deleteSentenceQCM = function(qcmID) {
+    $scope.deleteSentenceQCM = function(qcmID, index) {
         //Display alert message
         $ionicPopup.confirm({
             title: 'Voulez vous vraiment supprimer le QCM :' + qcmID,
@@ -1620,13 +1995,248 @@ app.controller("DataManagementController", function($scope, $sce, $ionicLoading,
         }).then(function(res) {
             //If res == true then ok button was pressed, else false
             if (res === true)
-                deleteSentenceQCMQuery(qcmID);
+                deleteSentenceQCMQuery(qcmID, index);
         });
-    }
+    };
+
+    var deleteVideoQCMQuery = function(qcmID, index) {
+        var query = "SELECT * FROM videoQCM WHERE id = ?";
+        $cordovaSQLite.execute(db, query, [qcmID]).then(function(res) {
+            if (res.rows.length > 0) {
+                console.log(res.rows);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDASL);
+                deleteVideoFromQCMQuery(res.rows[0].videoIDLSF);
+                query = "DELETE FROM videoQCM WHERE id = ?";
+                $cordovaSQLite.execute(db, query, [qcmID])
+                $scope.qcmList.splice(index, 1);
+            } else {
+                console.log("No delete corresponding to the ID found");
+            }
+        }, function(err) {
+            console.error(err);
+        });
+    };
+
+    $scope.deleteVideoQCM = function(qcmID, index) {
+        //Display alert message
+        $ionicPopup.confirm({
+            title: 'Voulez vous vraiment supprimer le QCM :' + qcmID,
+            cssClass: 'alert-popup',
+            cancelText: 'Annuler',
+            okText: 'Oui'
+        }).then(function(res) {
+            //If res == true then ok button was pressed, else false
+            if (res === true)
+                deleteVideoQCMQuery(qcmID, index);
+        });
+    };
+
+    /************************************
+    Add a Word
+    ************************************/
+
+    // Loading french sign configurations in scope.images
+    $scope.loadImages = function() {
+        if ($scope.images.length == 0) {
+            for (var i = 1; i < 47; i++) {
+                $scope.images.push({
+                    src: "../img/sign_config/config_" + i.toString() + ".jpg",
+                    id: i
+                });
+            };
+        }
+    };
+
+    $scope.activateSelection = function(handDivisionID) {
+        $scope.selectedHand = handDivisionID;
+        console.log($scope.selectedHand);
+        if (handDivisionID == "first-hand-picture-lsf" && $scope.selectedConfigurationsLSF[0] != null)
+            $scope.activateSkeletonSelection(handDivisionID);
+        else if (handDivisionID == "second-hand-picture-lsf" && $scope.selectedConfigurationsLSF[1] != null)
+            $scope.activateSkeletonSelection(handDivisionID);
+        else if (handDivisionID == "first-hand-picture-asl" && $scope.selectedConfigurationsASL[0] != null)
+            $scope.activateSkeletonSelection(handDivisionID);
+        else if (handDivisionID == "second-hand-picture-asl" && $scope.selectedConfigurationsASL[1] != null)
+            $scope.activateSkeletonSelection(handDivisionID);
+    };
+
+    $scope.configurationSelected = function(image) {
+        if ($scope.selectedHand != "") {
+            //Check if selectedHand is the first or second to insert correctly in the array
+            if ($scope.selectedHand == "first-hand-picture-lsf")
+                $scope.selectedConfigurationsLSF[0] = image;
+            else if ($scope.selectedHand == "second-hand-picture-lsf")
+                $scope.selectedConfigurationsLSF[1] = image;
+            else if ($scope.selectedHand == "first-hand-picture-asl")
+                $scope.selectedConfigurationsASL[0] = image;
+            else if ($scope.selectedHand == "second-hand-picture-asl")
+                $scope.selectedConfigurationsASL[1] = image;
+
+            console.log($scope.selectedConfigurationsLSF);
+            console.log($scope.selectedConfigurationsASL);
+
+            document.getElementById($scope.selectedHand).style = "background-image: url(" + image.src + ");";
+
+            $scope.selectedHand = "";
+
+        }
+    };
+
+    $scope.deleteChosenConfiguration = function(handDivisionID) {
+        if (handDivisionID == "first-hand-picture-lsf")
+            $scope.selectedConfigurationsLSF[0] = null;
+        else if (handDivisionID == "second-hand-picture-lsf")
+            $scope.selectedConfigurationsLSF[1] = null;
+        else if (handDivisionID == "first-hand-picture-asl")
+            $scope.selectedConfigurationsASL[0] = null;
+        else if (handDivisionID == "second-hand-picture-asl")
+            $scope.selectedConfigurationsASL[1] = null;
+
+        console.log($scope.selectedConfigurationsLSF);
+        console.log($scope.selectedConfigurationsASL);
+
+        document.getElementById(handDivisionID).style = "background-image: url('../img/hand.png');";
+    };
+
+    var activeHandPositionLSF = {};
+    var passiveHandPositionLSF = {};
+    var activeHandPositionASL = {};
+    var passiveHandPositionASL = {};
+    var currentSelectedHand = "";
+
+    var possibleWordList = [];
+
+    $scope.activateSkeletonSelection = function(handDivID) {
+        if (handDivID == "first-hand-picture-lsf") {
+            activeHandPositionLSF['src'] = $scope.selectedConfigurationsLSF[0].src;
+            activeHandPositionLSF['configurationID'] = $scope.selectedConfigurationsLSF[0].id;
+        } else if (handDivID == "second-hand-picture-lsf" && $scope.selectedConfigurationsLSF[1] != null) {
+            passiveHandPositionLSF['src'] = $scope.selectedConfigurationsLSF[1].src;
+            passiveHandPositionLSF['configurationID'] = $scope.selectedConfigurationsLSF[1].id;
+        } else if (handDivID == "first-hand-picture-asl") {
+            activeHandPositionASL['src'] = $scope.selectedConfigurationsASL[0].src;
+            activeHandPositionASL['configurationID'] = $scope.selectedConfigurationsASL[0].id;
+        } else if (handDivID == "second-hand-picture-asl") {
+            passiveHandPositionASL['src'] = $scope.selectedConfigurationsASL[1].src;
+            passiveHandPositionASL['configurationID'] = $scope.selectedConfigurationsASL[1].id;
+        }
+        currentSelectedHand = handDivID;
+    };
+
+    //Language can either be LSF or ASL
+    $scope.setPosition = function(positionName, positionID, language) {
+        if (language == "LSF")
+            if (activeHandPositionLSF['src'] != null && activeHandPositionLSF['configurationID'] != null && currentSelectedHand == "first-hand-picture-lsf") {
+                if (activeHandPositionLSF['position']) {
+                    document.getElementsByClassName(activeHandPositionLSF['position'])[0].style.backgroundColor = "red";
+                }
+                activeHandPositionLSF['position'] = positionName;
+                activeHandPositionLSF['positionID'] = positionID;
+                document.getElementById(positionName + "-lsf").style.backgroundColor = "#00FF0C";
+                console.log(activeHandPositionLSF);
+            } else {
+                if (passiveHandPositionLSF['position']) {
+                    document.getElementById(passiveHandPositionLSF['position'] + "-lsf").style.backgroundColor = "red";
+                }
+                passiveHandPositionLSF['position'] = positionName
+                passiveHandPositionLSF['positionID'] = positionID;
+                document.getElementById(positionName + "-lsf").style.backgroundColor = "#00FF0C";
+                console.log(passiveHandPositionLSF);
+            }
+        else if (language == "ASL") {
+            if (activeHandPositionASL['src'] != null && activeHandPositionASL['configurationID'] != null && currentSelectedHand == "first-hand-picture-asl") {
+
+                if (activeHandPositionASL['position']) {
+                    document.getElementById(activeHandPositionASL['position'] + "-asl").style.backgroundColor = "red";
+                }
+                activeHandPositionASL['position'] = positionName;
+                activeHandPositionASL['positionID'] = positionID;
+                document.getElementById(positionName + "-asl").style.backgroundColor = "#00FF0C";
+                console.log(activeHandPositionASL);
+            } else {
+                if (passiveHandPositionASL['position']) {
+                    document.getElementById(passiveHandPositionASL['position'] + "-asl").style.backgroundColor = "red";
+                }
+                passiveHandPositionASL['position'] = positionName
+                passiveHandPositionASL['positionID'] = positionID;
+                document.getElementById(positionName + "-asl").style.backgroundColor = "#00FF0C";
+                console.log(passiveHandPositionASL);
+            }
+        }
+    };
+
+
+
+    // Insert a new word and all the corresponding information (first insert videos, then signs, then the word)
+    $scope.insertNewWord = function(frenchWord, englishWord, frenchYoutubeURL, englishYoutubeURL) {
+        console.log(englishWord);
+        var answer = insertNewWordVideos(frenchWord, englishWord, frenchYoutubeURL, englishYoutubeURL, insertNewWordSigns);
+    };
+
+    var insertNewWordVideos = function(frenchWord, englishWord, frenchYoutubeURL, englishYoutubeUrl, callback) {
+        var query = "INSERT INTO video (youtubeURL) values (?),(?)";
+        $cordovaSQLite.execute(db, query, [frenchYoutubeURL, englishYoutubeUrl]).then(function(res) {
+            console.log("Videos successfully added -> " + res.insertId);
+            return callback(frenchWord, englishWord, res.insertId - 1, res.insertId, insertWord);
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    var insertPositionConfigurationSign = function(signID, configurationIDDominating, positionIDDominating, configurationIDDominated, positionIDDominated) {
+        var query = "INSERT INTO positionConfigurationSign (signID, configurationIDDominating, positionIDDominating, configurationIDDominated, positionIDDominated) values(?, ?, ?, ?, ?)";
+        $cordovaSQLite.execute(db, query, [signID, configurationIDDominating, positionIDDominating, configurationIDDominated, positionIDDominated]).then(function(res) {
+            console.log("Position Configuration Sign successfully added -> " + res.insertId + " " + signID);
+            return res.insertId;
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    var insertNewWordSigns = function(frenchWord, englishWord, idFrenchVideo, idEnglishVideo, callback) {
+        var query = "INSERT INTO sign (language, videoID) VALUES(0, ?),(1, ?)";
+        $cordovaSQLite.execute(db, query, [idFrenchVideo, idEnglishVideo]).then(function(res) {
+            console.log("Signs successfully added -> " + res.insertId);
+            insertPositionConfigurationSign(res.insertId, activeHandPositionLSF['configurationID'], activeHandPositionLSF['positionID'], passiveHandPositionLSF['configurationID'], passiveHandPositionLSF['positionID']);
+            insertPositionConfigurationSign(res.insertId, activeHandPositionASL['configurationID'], activeHandPositionASL['positionID'], passiveHandPositionASL['configurationID'], passiveHandPositionASL['positionID']);
+
+            return callback(frenchWord, englishWord, res.insertId - 1, res.insertId);
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    var insertWord = function(frenchWord, englishWord, idFrenchSign, idEnglishSign) {
+        var query = "INSERT INTO word (frenchWord, englishWord, signIDLSF, signIDASL) values(?, ?, ?, ?)";
+        $cordovaSQLite.execute(db, query, [frenchWord, englishWord, idFrenchSign, idEnglishSign]).then(function(res) {
+            console.log("Word successfully added -> " + res.insertId);
+            return res.insertId;
+        }, function(err) {
+            console.error(err);
+            return -1;
+        });
+    };
+
+    $scope.selectPositions = function() {
+        if ($scope.selectedConfigurations[0] != null) {
+            SharingConfigurationsLSF.setConfigurationsLSF($scope.selectedConfigurations);
+            $state.go("position-skeleton");
+        } else {
+            //Display alert message
+            $ionicPopup.alert({
+                title: 'Vous devez obligatoirement choisir une configuration pour la main active.',
+                cssClass: 'alert-popup'
+            });
+        }
+    };
 });
 
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
+    $ionicConfigProvider.views.maxCache(0);
     $stateProvider.state('home', {
         url: '/home',
         templateUrl: 'templates/home.html',
@@ -1726,6 +2336,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider.state('add-word', {
         url: '/manage/word/add',
         templateUrl: 'templates/add-word.html',
+        controller: 'DataManagementController'
+    })
+
+        $stateProvider.state('list-word', {
+        url: '/manage/word/list-word',
+        templateUrl: 'templates/list-word.html',
         controller: 'DataManagementController'
     })
 

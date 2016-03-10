@@ -16,8 +16,8 @@
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
     <script src="js/ng-cordova.min.js"></script>
+    <script src="cordova.js"></script>
     <!-- your app's js -->
     <script src="js/app.js"></script>
     <!-- js styling -->
@@ -44,50 +44,36 @@
         <ion-side-menu side="left">
             <ion-list>
                 <a menu-close class="item item-avatar" ui-sref="home">
-                    <img src="../img/home-icon.png"></img>
+                    <img src="img/home-icon.png"></img>
                     <h2 class="menu">Home</h2>
                 </a>
                 <a menu-close class="item item-avatar" ui-sref="lsf-search">
-                    <img src="../img/lsf-search-icon.png"></img>
+                    <img src="img/lsf-search-icon.png"></img>
                     <h2 class="menu">Recherche LSF</h2>
                 </a>
                 <a menu-close class="item item-avatar" ui-sref="fr-search">
-                    <img src="../img/fr-search-icon.png"></img>
+                    <img src="img/fr-search-icon.png"></img>
                     <h2 class="menu">Recherche Mot</h2>
                 </a>
                 <a menu-close class="item item-avatar" ui-sref="asl-search">
-                    <img src="../img/asl-search-icon.png"></img>
+                    <img src="img/asl-search-icon.png"></img>
                     <h2 class="menu">ASL Search</h2>
                 </a>
                 <a menu-close class="item item-avatar" ui-sref="en-search">
-                    <img src="../img/eng-search-icon.png"></img>
+                    <img src="img/eng-search-icon.png"></img>
                     <h2 class="menu">Word Search</h2>
                 </a>
                 <a menu-close class="item item-avatar" ui-sref="qcm-difficulty-selection">
-                    <img src="../img/exercise-icon.png"></img>
+                    <img src="img/exercise-icon.png"></img>
                     <h2 class="menu">Exercices</h2>
                 </a>
                 <a menu-close class="item item-avatar" ui-sref="data-management">
-                    <img src="../img/manage-content-icon.png"></img>
+                    <img src="img/manage-content-icon.png"></img>
                     <h2 class="menu">Data Management</h2>
                 </a>
             </ion-list>
         </ion-side-menu>
     </ion-side-menus>
-    <!--     <ion-tabs class="tabs-positive tabs-icon-only">
-        <ion-tab title="Home" icon-on="ion-home" icon-off="ion-home" ui-sref="home">
-        </ion-tab>
-        <ion-tab title="About" icon-on="ion-person" icon-off="ion-ios-person" ui-sref="about">
-        </ion-tab>
-    </ion-tabs> -->
-    <div class="tabs tabs-icon-top0">
-        <a ui-sref="home" class="tab-item">
-            <i class="icon ion-home"></i> Home
-        </a>
-        <a ui-sref="about" class="tab-item">
-            <i class="icon ion-star"></i> About
-        </a>
-    </div>
 </body>
 
 </html>

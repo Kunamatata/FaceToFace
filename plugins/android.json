@@ -22,10 +22,13 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.ionicframework.facetoface654008"
         },
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.ionicframework.facetoface654008"
+        },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ionicframework.facetoface654008"
         },
-        "cordova-sqlite-storage": {
+        "me.rahul.plugins.sqlDB": {
             "PACKAGE_NAME": "com.ionicframework.facetoface654008"
         }
     },
